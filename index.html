@@ -1916,7 +1916,9 @@
         <label>Any specific requirement?</label>
         <textarea placeholder="Budget, guest count, theme…" id="m-details" style="min-height: 70px;"></textarea>
       </div>
-      <button class="form-submit" onclick="submitModal()">Send Enquiry →</button>
+      <button class="form-submit" onclick="sendModalToWhatsApp()">
+      Send Enquiry →
+      </button>
       <p class="form-note">✦ We'll call you back within 24 hours.</p>
     </div>
   </div>
@@ -2040,5 +2042,43 @@
     window.open(whatsappURL, '_blank');
   }
   </script>
+
+  <script>
+function sendModalToWhatsApp() {
+
+    let service = document.getElementById("modalTitle").innerText;
+    let name = document.getElementById("m-name").value;
+    let phone = document.getElementById("m-phone").value;
+    let city = document.getElementById("m-city").value;
+    let date = document.getElementById("m-date").value;
+    let details = document.getElementById("m-details").value;
+
+    // Validation
+    if(name === "" || phone === "") {
+        alert("Please enter Name and Phone Number");
+        return;
+    }
+
+    let whatsappNumber = "919799033115"; // Replace with your number
+
+    let message =
+`🎉 *New Quick Enquiry - EaseMyBooking*
+
+📌 Service: ${service}
+
+👤 Name: ${name}
+📞 Phone: ${phone}
+📍 City: ${city}
+📅 Event Date: ${date}
+
+📝 Requirement:
+${details}`;
+
+    let whatsappURL =
+`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+    window.open(whatsappURL, '_blank');
+}
+</script>
   </body>
   </html>
