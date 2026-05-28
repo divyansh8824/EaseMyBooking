@@ -1,0 +1,1962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EaseMyBooking – Vendor Discovery for Events</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Josefin+Sans:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-pale: #F5E6B8;
+      --gold-dark: #8B6914;
+      --cream: #FAF6EE;
+      --cream-dark: #F0E8D6;
+      --ivory: #FFFDF7;
+      --charcoal: #1A1410;
+      --brown: #3D2B1F;
+      --brown-light: #6B4C38;
+      --text-muted: #7A6852;
+      --white: #FFFFFF;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Josefin Sans', sans-serif;
+      background: var(--cream);
+      color: var(--charcoal);
+      overflow-x: hidden;
+    }
+
+    /* NOISE TEXTURE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--cream-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 10px 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.4s ease;
+      background: transparent;
+    }
+    nav.scrolled {
+      background: rgba(250,246,238,0.96);
+      backdrop-filter: blur(12px);
+      padding: 14px 60px;
+      border-bottom: 1px solid rgba(201,168,76,0.2);
+      box-shadow: 0 4px 30px rgba(139,105,20,0.08);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: var(--charcoal);
+      letter-spacing: 0.02em;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--brown);
+      text-decoration: none;
+      transition: color 0.3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0; right: 0;
+      height: 1px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold-dark); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-cta {
+      background: var(--gold);
+      color: var(--ivory) !important;
+      padding: 10px 24px;
+      border-radius: 2px;
+      letter-spacing: 0.15em !important;
+      font-size: 0.68rem !important;
+      transition: background 0.3s, transform 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--gold-dark) !important; transform: translateY(-1px); }
+    .nav-cta::after { display: none !important; }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background: var(--charcoal);
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse 80% 80% at 70% 40%, rgba(201,168,76,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 10% 80%, rgba(201,168,76,0.07) 0%, transparent 50%),
+        linear-gradient(135deg, #0e0b08 0%, #1a1410 40%, #211A12 100%);
+    }
+    .hero-pattern {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 40px,
+          rgba(201,168,76,0.025) 40px,
+          rgba(201,168,76,0.025) 41px
+        );
+    }
+    .hero-ornament {
+      position: absolute;
+      right: -100px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 700px;
+      height: 700px;
+      border: 1px solid rgba(201,168,76,0.1);
+      border-radius: 50%;
+    }
+    .hero-ornament::before {
+      content: '';
+      position: absolute;
+      inset: 40px;
+      border: 1px solid rgba(201,168,76,0.08);
+      border-radius: 50%;
+    }
+    .hero-ornament::after {
+      content: '';
+      position: absolute;
+      inset: 80px;
+      border: 1px solid rgba(201,168,76,0.06);
+      border-radius: 50%;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 110px 60px 0;
+      max-width: 760px;
+    }
+    .hero-eyebrow {
+      font-size: 0.68rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.3s forwards;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.2rem, 6vw, 5.5rem);
+      font-weight: 300;
+      line-height: 1.08;
+      color: var(--ivory);
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.5s forwards;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+    .hero-subtitle {
+      font-size: 0.85rem;
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      color: rgba(255,253,247,0.55);
+      line-height: 1.9;
+      max-width: 500px;
+      margin-bottom: 52px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.7s forwards;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.9s forwards;
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--charcoal);
+      padding: 16px 38px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(201,168,76,0.3);
+    }
+    .btn-outline {
+      border: 1px solid rgba(201,168,76,0.4);
+      color: var(--gold-pale);
+      padding: 15px 38px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-outline:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(201,168,76,0.06);
+    }
+    .hero-stats {
+      position: absolute;
+      bottom: 60px;
+      right: 60px;
+      display: flex;
+      gap: 48px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 1.1s forwards;
+    }
+    .stat { text-align: right; }
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem;
+      font-weight: 300;
+      color: var(--gold-light);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,253,247,0.35);
+      margin-top: 6px;
+    }
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 60px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 1.3s forwards;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s ease infinite;
+    }
+    .scroll-text {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,253,247,0.35);
+      writing-mode: vertical-rl;
+    }
+
+    /* ===== SEARCH BAR ===== */
+    .search-section {
+      background: var(--ivory);
+      padding: 60px;
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+    .search-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .search-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      display: block;
+    }
+    .search-bar {
+      display: flex;
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 3px;
+      overflow: hidden;
+      background: var(--white);
+      box-shadow: 0 4px 30px rgba(139,105,20,0.06);
+    }
+    .search-bar select, .search-bar input {
+      border: none;
+      outline: none;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      color: var(--brown);
+      background: transparent;
+      padding: 18px 22px;
+    }
+    .search-bar select {
+      border-right: 1px solid rgba(201,168,76,0.2);
+      cursor: pointer;
+      min-width: 200px;
+      color: var(--text-muted);
+    }
+    .search-bar input {
+      flex: 1;
+      border-right: 1px solid rgba(201,168,76,0.2);
+    }
+    .search-bar input::placeholder { color: rgba(122,104,82,0.5); }
+    .search-btn {
+      background: var(--gold);
+      border: none;
+      padding: 18px 36px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .search-btn:hover { background: var(--gold-light); }
+    .search-tags {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .search-tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      border: 1px solid rgba(201,168,76,0.25);
+      padding: 6px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .search-tag:hover {
+      border-color: var(--gold);
+      color: var(--gold-dark);
+      background: rgba(201,168,76,0.05);
+    }
+
+    /* ===== SECTION HEADER ===== */
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .section-eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+    .section-eyebrow::before, .section-eyebrow::after {
+      content: '';
+      width: 30px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.5;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 300;
+      color: var(--charcoal);
+      line-height: 1.15;
+    }
+    .section-title em {
+      font-style: italic;
+      color: var(--gold-dark);
+    }
+    .section-subtitle {
+      font-size: 0.78rem;
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-top: 16px;
+      line-height: 1.8;
+    }
+
+    /* ===== EVENT CATEGORIES ===== */
+    .categories-section {
+      padding: 100px 60px;
+      background: var(--cream);
+    }
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .category-card {
+      position: relative;
+      height: 280px;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--brown);
+    }
+    .category-card:first-child {
+      grid-column: span 2;
+      height: 360px;
+    }
+    .category-card:nth-child(2) { height: 360px; }
+    .category-card-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--brown) 0%, var(--charcoal) 100%);
+      transition: transform 0.6s ease;
+    }
+    .cat-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.06;
+      background-image: repeating-linear-gradient(
+        -45deg,
+        var(--gold) 0px,
+        var(--gold) 1px,
+        transparent 1px,
+        transparent 14px
+      );
+    }
+    .category-card:hover .category-card-bg { transform: scale(1.04); }
+    .category-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,7,4,0.85) 0%, rgba(10,7,4,0.1) 60%);
+    }
+    .category-icon {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      width: 48px;
+      height: 48px;
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+    .category-content {
+      position: absolute;
+      bottom: 30px;
+      left: 30px;
+      right: 30px;
+    }
+    .category-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: var(--ivory);
+      margin-bottom: 8px;
+    }
+    .category-desc {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      color: rgba(255,253,247,0.5);
+      text-transform: uppercase;
+    }
+    .category-arrow {
+      position: absolute;
+      bottom: 30px;
+      right: 30px;
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(201,168,76,0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 0.9rem;
+      transform: translateX(-10px);
+      opacity: 0;
+      transition: all 0.3s;
+    }
+    .category-card:hover .category-arrow { transform: translateX(0); opacity: 1; }
+    .category-tag {
+      display: inline-block;
+      background: rgba(201,168,76,0.2);
+      border: 1px solid rgba(201,168,76,0.3);
+      color: var(--gold-light);
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+
+    /* ===== VENDOR CATEGORIES ===== */
+    .vendors-section {
+      padding: 100px 60px;
+      background: var(--ivory);
+    }
+    .vendors-outer {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .vendor-group {
+      margin-bottom: 70px;
+    }
+    .vendor-group-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+    .vendor-group-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .vendor-group-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--brown);
+    }
+    .vendor-group-count {
+      margin-left: auto;
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(201,168,76,0.3);
+      padding: 6px 14px;
+      border-radius: 20px;
+    }
+    .vendor-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .vendor-card {
+      background: var(--white);
+      border: 1px solid rgba(201,168,76,0.12);
+      border-radius: 4px;
+      padding: 22px 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .vendor-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px;
+      height: 0;
+      background: linear-gradient(to bottom, var(--gold), var(--gold-dark));
+      transition: height 0.3s;
+    }
+    .vendor-card:hover {
+      border-color: rgba(201,168,76,0.35);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(139,105,20,0.1);
+    }
+    .vendor-card:hover::before { height: 100%; }
+    .vendor-card-title {
+      font-size: 0.82rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--brown);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .vendor-card-cta {
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: gap 0.3s;
+    }
+    .vendor-card:hover .vendor-card-cta { gap: 12px; }
+    .vendor-card-cta::after { content: '→'; }
+
+    /* ===== HOW IT WORKS ===== */
+    .hiw-section {
+      padding: 100px 60px;
+      background: var(--charcoal);
+      position: relative;
+      overflow: hidden;
+    }
+    .hiw-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(201,168,76,0.05) 0%, transparent 70%);
+    }
+    .hiw-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .hiw-grid::before {
+      content: '';
+      position: absolute;
+      top: 36px;
+      left: 12%;
+      right: 12%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(201,168,76,0.3), transparent);
+    }
+    .hiw-step {
+      padding: 40px 30px;
+      text-align: center;
+      position: relative;
+    }
+    .hiw-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: rgba(201,168,76,0.4);
+      margin-bottom: 20px;
+    }
+    .hiw-icon-wrap {
+      width: 72px;
+      height: 72px;
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 1.6rem;
+      background: rgba(201,168,76,0.05);
+    }
+    .hiw-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--ivory);
+      margin-bottom: 14px;
+    }
+    .hiw-desc {
+      font-size: 0.72rem;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: rgba(255,253,247,0.4);
+      line-height: 1.9;
+    }
+
+    /* ===== LEAD FORM ===== */
+    .lead-section {
+      padding: 100px 60px;
+      background: var(--cream-dark);
+      position: relative;
+      overflow: hidden;
+    }
+    .lead-section::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
+      border: 1px solid rgba(201,168,76,0.1);
+      border-radius: 50%;
+    }
+    .lead-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .lead-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .lead-text .section-header { text-align: left; }
+    .lead-text .section-eyebrow { justify-content: flex-start; }
+    .lead-text .section-eyebrow::before { display: none; }
+    .lead-benefits {
+      list-style: none;
+      margin-top: 30px;
+    }
+    .lead-benefits li {
+      font-size: 0.75rem;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: var(--brown-light);
+      line-height: 1.8;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(201,168,76,0.12);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .lead-benefits li::before {
+      content: '✦';
+      color: var(--gold);
+      font-size: 0.6rem;
+      flex-shrink: 0;
+    }
+    .lead-form {
+      background: var(--white);
+      padding: 48px 40px;
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 4px;
+      box-shadow: 0 20px 60px rgba(139,105,20,0.08);
+    }
+    .form-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--brown);
+      margin-bottom: 30px;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 2px;
+      padding: 12px 16px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.78rem;
+      color: var(--brown);
+      background: var(--ivory);
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--gold);
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-submit {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      border: none;
+      padding: 15px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ivory);
+      cursor: pointer;
+      border-radius: 2px;
+      margin-top: 8px;
+      transition: all 0.3s;
+    }
+    .form-submit:hover {
+      box-shadow: 0 8px 25px rgba(201,168,76,0.35);
+      transform: translateY(-1px);
+    }
+    .form-note {
+      font-size: 0.6rem;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 14px;
+    }
+
+    /* ===== TESTIMONIALS ===== */
+    .testimonials-section {
+      padding: 100px 60px;
+      background: var(--ivory);
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .testimonial-card {
+      background: var(--white);
+      border: 1px solid rgba(201,168,76,0.12);
+      border-radius: 4px;
+      padding: 36px 30px;
+      position: relative;
+    }
+    .testimonial-card::before {
+      content: '\201C';
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5rem;
+      color: rgba(201,168,76,0.12);
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      line-height: 1;
+    }
+    .testimonial-text {
+      font-size: 0.8rem;
+      font-weight: 300;
+      letter-spacing: 0.03em;
+      color: var(--brown-light);
+      line-height: 1.9;
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .testimonial-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-pale), var(--cream-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      color: var(--gold-dark);
+      border: 1px solid rgba(201,168,76,0.2);
+    }
+    .testimonial-name {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--brown);
+    }
+    .testimonial-event {
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+    .testimonial-stars {
+      color: var(--gold);
+      font-size: 0.7rem;
+      margin-bottom: 18px;
+      letter-spacing: 3px;
+    }
+
+    /* ===== CITIES ===== */
+    .cities-section {
+      padding: 80px 60px;
+      background: var(--cream);
+      text-align: center;
+    }
+    .cities-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      max-width: 900px;
+      margin: 40px auto 0;
+    }
+    .city-pill {
+      border: 1px solid rgba(201,168,76,0.25);
+      padding: 10px 24px;
+      border-radius: 30px;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: var(--brown-light);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .city-pill:hover, .city-pill.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--charcoal);
+    }
+
+    /* ===== VENDOR CTA BANNER ===== */
+    .vendor-banner {
+      background: linear-gradient(135deg, var(--brown) 0%, #0e0b08 100%);
+      padding: 80px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .vendor-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 80px,
+        rgba(201,168,76,0.03) 80px,
+        rgba(201,168,76,0.03) 81px
+      );
+    }
+    .vendor-banner-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 300;
+      color: var(--ivory);
+      margin-bottom: 16px;
+    }
+    .vendor-banner-title em { color: var(--gold-light); font-style: italic; }
+    .vendor-banner-sub {
+      font-size: 0.75rem;
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      color: rgba(255,253,247,0.45);
+      margin-bottom: 38px;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #0d0a07;
+      padding: 70px 60px 40px;
+      border-top: 1px solid rgba(201,168,76,0.1);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 60px;
+      max-width: 1200px;
+      margin: 0 auto 60px;
+    }
+    .footer-brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--ivory);
+      margin-bottom: 16px;
+    }
+    .footer-brand-name span { color: var(--gold); }
+    .footer-brand-desc {
+      font-size: 0.72rem;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: rgba(255,253,247,0.35);
+      line-height: 1.9;
+    }
+    .footer-social {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .social-icon {
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: rgba(255,253,247,0.4);
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+    .social-icon:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .footer-col-title {
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 22px;
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .footer-links a {
+      font-size: 0.72rem;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: rgba(255,253,247,0.35);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .footer-links a:hover { color: var(--gold-pale); }
+    .footer-contact p {
+      font-size: 0.72rem;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      color: rgba(255,253,247,0.35);
+      line-height: 1.8;
+      margin-bottom: 8px;
+    }
+    .footer-contact a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-copy {
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      color: rgba(255,253,247,0.2);
+    }
+    .footer-legal {
+      display: flex;
+      gap: 24px;
+    }
+    .footer-legal a {
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      color: rgba(255,253,247,0.2);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .footer-legal a:hover { color: var(--gold); }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,7,4,0.85);
+      z-index: 9998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--ivory);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 4px;
+      padding: 50px;
+      max-width: 520px;
+      width: 90%;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.4s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .modal-close:hover { color: var(--gold-dark); }
+    .modal-eyebrow {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 400;
+      color: var(--brown);
+      margin-bottom: 28px;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.15); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      background: var(--charcoal);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 3px;
+      padding: 16px 24px;
+      z-index: 9999;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.4s;
+      pointer-events: none;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast-text {
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      color: var(--ivory);
+    }
+    .toast-text span { color: var(--gold); }
+
+    /* ===== MOBILE ===== */
+    .hamburger { display: none; }
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      nav.scrolled { padding: 12px 24px; }
+      .nav-links { display: none; }
+      .hamburger {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+        background: none;
+        border: none;
+        padding: 4px;
+      }
+      .hamburger span {
+        display: block;
+        width: 24px;
+        height: 1px;
+        background: var(--gold);
+        transition: all 0.3s;
+      }
+      .hero-content { padding: 0 24px; }
+      .hero-stats { bottom: 24px; right: 24px; gap: 24px; }
+      .stat-number { font-size: 1.8rem; }
+      .scroll-indicator { left: 24px; }
+      .search-section { padding: 40px 24px; }
+      .search-bar { flex-direction: column; }
+      .search-bar select, .search-bar input { border: none; border-bottom: 1px solid rgba(201,168,76,0.15); }
+      .categories-section { padding: 60px 24px; }
+      .categories-grid { grid-template-columns: 1fr 1fr; }
+      .category-card:first-child { grid-column: span 2; }
+      .vendors-section { padding: 60px 24px; }
+      .hiw-section { padding: 60px 24px; }
+      .hiw-grid { grid-template-columns: 1fr 1fr; }
+      .hiw-grid::before { display: none; }
+      .lead-section { padding: 60px 24px; }
+      .lead-layout { grid-template-columns: 1fr; gap: 40px; }
+      .testimonials-section { padding: 60px 24px; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .cities-section { padding: 60px 24px; }
+      .vendor-banner { padding: 60px 24px; }
+      footer { padding: 60px 24px 30px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">Ease<span>My</span>Booking</a>
+  <ul class="nav-links">
+    <li><a href="#categories">Events</a></li>
+    <li><a href="#vendors">Vendors</a></li>
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#cities">Cities</a></li>
+    <li><a href="#inquiry" class="nav-cta">Get a Quote</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+  <div class="hero-ornament"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">India's Premier Event Vendor Platform</p>
+    <h1 class="hero-title">
+      Discover Curated Vendors for Every <em>Celebration</em>
+    </h1>
+    <p class="hero-subtitle">
+      From intimate gatherings to grand weddings — find photographers, decorators, caterers, entertainers, and 40+ vendor categories across India.
+    </p>
+    <div class="hero-actions">
+      <a href="#vendors" class="btn-primary">Explore Vendors</a>
+      <a href="#inquiry" class="btn-outline">Enquire Now</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-number">500+</div>
+      <div class="stat-label">Vendors Listed</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">40+</div>
+      <div class="stat-label">Categories</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">Pan</div>
+      <div class="stat-label">India Network</div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    <span class="scroll-text">Scroll</span>
+  </div>
+</section>
+
+<!-- SEARCH -->
+<section class="search-section">
+  <div class="search-wrapper">
+    <span class="search-label">Find vendors in your city</span>
+    <div class="search-bar">
+      <select>
+        <option value="">All Event Types</option>
+        <option>Wedding</option>
+        <option>Corporate Event</option>
+        <option>Birthday Party</option>
+        <option>Religious Event</option>
+        <option>College / Fest</option>
+        <option>House Party</option>
+      </select>
+      <input type="text" placeholder="Search vendor, service, or city…" />
+      <button class="search-btn">Search</button>
+    </div>
+    <div class="search-tags">
+      <span class="search-tag">📸 Photography</span>
+      <span class="search-tag">🌸 Decoration</span>
+      <span class="search-tag">🎵 DJ & Music</span>
+      <span class="search-tag">🍽️ Catering</span>
+      <span class="search-tag">💄 Bridal Makeup</span>
+      <span class="search-tag">🏨 Venues</span>
+      <span class="search-tag">🎤 Anchor / Emcee</span>
+      <span class="search-tag">🚗 Transport</span>
+    </div>
+  </div>
+</section>
+
+<!-- EVENT CATEGORIES -->
+<section class="categories-section" id="categories">
+  <div class="section-header reveal">
+    <p class="section-eyebrow">Browse by Occasion</p>
+    <h2 class="section-title">Every Event, <em>Every Dream</em></h2>
+    <p class="section-subtitle">We cater to all kinds of celebrations — big or small, traditional or modern.</p>
+  </div>
+  <div class="categories-grid">
+    <div class="category-card" onclick="openModal('Weddings')">
+      <div class="category-card-bg" style="background: linear-gradient(135deg, #2d1a0f 0%, #5c3420 100%);"></div>
+      <div class="cat-pattern"></div>
+      <div class="category-overlay"></div>
+      <div class="category-icon">💍</div>
+      <div class="category-content">
+        <span class="category-tag">Most Popular</span>
+        <h3 class="category-name">Weddings</h3>
+        <p class="category-desc">Décor · Photography · Catering · Makeup · Venues</p>
+      </div>
+      <div class="category-arrow">→</div>
+    </div>
+    <div class="category-card" onclick="openModal('Corporate Events')">
+      <div class="category-card-bg" style="background: linear-gradient(135deg, #0f1a2d 0%, #1a2f4a 100%);"></div>
+      <div class="cat-pattern"></div>
+      <div class="category-overlay"></div>
+      <div class="category-icon">🏢</div>
+      <div class="category-content">
+        <h3 class="category-name">Corporate Events</h3>
+        <p class="category-desc">AV Setup · Fabrication · Staffing · Travel</p>
+      </div>
+      <div class="category-arrow">→</div>
+    </div>
+    <div class="category-card" onclick="openModal('Birthdays & House Parties')">
+      <div class="category-card-bg" style="background: linear-gradient(135deg, #2d1a28 0%, #4a2040 100%);"></div>
+      <div class="cat-pattern"></div>
+      <div class="category-overlay"></div>
+      <div class="category-icon">🎂</div>
+      <div class="category-content">
+        <h3 class="category-name">Birthdays & Parties</h3>
+        <p class="category-desc">Cakes · DJs · Decoration · Venues</p>
+      </div>
+      <div class="category-arrow">→</div>
+    </div>
+    <div class="category-card" onclick="openModal('Religious Events')">
+      <div class="category-card-bg" style="background: linear-gradient(135deg, #1a2010 0%, #2d3a1a 100%);"></div>
+      <div class="cat-pattern"></div>
+      <div class="category-overlay"></div>
+      <div class="category-icon">🪔</div>
+      <div class="category-content">
+        <h3 class="category-name">Religious Events</h3>
+        <p class="category-desc">Mandap · Puja Décor · Catering · Priests</p>
+      </div>
+      <div class="category-arrow">→</div>
+    </div>
+    <div class="category-card" onclick="openModal('College & Fest Events')">
+      <div class="category-card-bg" style="background: linear-gradient(135deg, #1a100f 0%, #3d2010 100%);"></div>
+      <div class="cat-pattern"></div>
+      <div class="category-overlay"></div>
+      <div class="category-icon">🎓</div>
+      <div class="category-content">
+        <h3 class="category-name">College & Fests</h3>
+        <p class="category-desc">Stage · Sound · Artists · Anchors · Volunteers</p>
+      </div>
+      <div class="category-arrow">→</div>
+    </div>
+    <div class="category-card" onclick="openModal('Travel & Stay')">
+      <div class="category-card-bg" style="background: linear-gradient(135deg, #0f1e1a 0%, #1a3028 100%);"></div>
+      <div class="cat-pattern"></div>
+      <div class="category-overlay"></div>
+      <div class="category-icon">✈️</div>
+      <div class="category-content">
+        <h3 class="category-name">Travel & Stay</h3>
+        <p class="category-desc">Hotels · Farmhouses · Luxury Vehicles · Staycations</p>
+      </div>
+      <div class="category-arrow">→</div>
+    </div>
+    <div class="category-card" onclick="openModal('Entertainment & Production')">
+      <div class="category-card-bg" style="background: linear-gradient(135deg, #1a1520 0%, #2d2040 100%);"></div>
+      <div class="cat-pattern"></div>
+      <div class="category-overlay"></div>
+      <div class="category-icon">🎭</div>
+      <div class="category-content">
+        <h3 class="category-name">Entertainment</h3>
+        <p class="category-desc">DJs · Artists · Choreographers · Emcees</p>
+      </div>
+      <div class="category-arrow">→</div>
+    </div>
+    <div class="category-card" onclick="openModal('Staffing & Logistics')">
+      <div class="category-card-bg" style="background: linear-gradient(135deg, #1a1510 0%, #302510 100%);"></div>
+      <div class="cat-pattern"></div>
+      <div class="category-overlay"></div>
+      <div class="category-icon">🤝</div>
+      <div class="category-content">
+        <h3 class="category-name">Staffing & Logistics</h3>
+        <p class="category-desc">Crew · Hostesses · Manpower · Transport</p>
+      </div>
+      <div class="category-arrow">→</div>
+    </div>
+  </div>
+</section>
+
+<!-- VENDORS -->
+<section class="vendors-section" id="vendors">
+  <div class="section-header reveal">
+    <p class="section-eyebrow">Our Services</p>
+    <h2 class="section-title">40+ Vendor <em>Categories</em></h2>
+    <p class="section-subtitle">Every service you need, all in one place.</p>
+  </div>
+  <div class="vendors-outer">
+
+    <!-- Group 1 -->
+    <div class="vendor-group reveal">
+      <div class="vendor-group-header">
+        <div class="vendor-group-icon">🎯</div>
+        <h3 class="vendor-group-title">Event Planning & Management</h3>
+        <span class="vendor-group-count">5 Services</span>
+      </div>
+      <div class="vendor-cards">
+        <div class="vendor-card" onclick="openModal('Event Planning & Coordination')"><div class="vendor-card-title">Event Planning & Coordination</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Wedding Planning Services')"><div class="vendor-card-title">Wedding Planning Services</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Venue & Banquet Discovery')"><div class="vendor-card-title">Venue & Banquet Discovery</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Farmhouse & Party Venue')"><div class="vendor-card-title">Farmhouse & Party Venue Booking</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Hotel & Stay Arrangements')"><div class="vendor-card-title">Hotel & Stay Arrangements</div><div class="vendor-card-cta">Enquire</div></div>
+      </div>
+    </div>
+
+    <!-- Group 2 -->
+    <div class="vendor-group reveal">
+      <div class="vendor-group-header">
+        <div class="vendor-group-icon">📸</div>
+        <h3 class="vendor-group-title">Photography & Content Creation</h3>
+        <span class="vendor-group-count">4 Services</span>
+      </div>
+      <div class="vendor-cards">
+        <div class="vendor-card" onclick="openModal('Photography Services')"><div class="vendor-card-title">Photography Services</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Videography & Cinematic Shoots')"><div class="vendor-card-title">Videography & Cinematic Shoots</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Event Content Creators')"><div class="vendor-card-title">Event Content Creators (Reels, BTS, Social Media)</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Pre-Wedding Shoots')"><div class="vendor-card-title">Pre-Wedding Shoots</div><div class="vendor-card-cta">Enquire</div></div>
+      </div>
+    </div>
+
+    <!-- Group 3 -->
+    <div class="vendor-group reveal">
+      <div class="vendor-group-header">
+        <div class="vendor-group-icon">🔊</div>
+        <h3 class="vendor-group-title">Audio, Visual & Production</h3>
+        <span class="vendor-group-count">5 Services</span>
+      </div>
+      <div class="vendor-cards">
+        <div class="vendor-card" onclick="openModal('Sound System Setup')"><div class="vendor-card-title">Sound System Setup</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Lights & AV Setup')"><div class="vendor-card-title">Lights & AV Setup</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Stage Setup & Event Production')"><div class="vendor-card-title">Stage Setup & Event Production</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Fabrication & Branding Solutions')"><div class="vendor-card-title">Fabrication & Branding Solutions</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Printing Services')"><div class="vendor-card-title">Printing Services (Flex, Banners, Branding)</div><div class="vendor-card-cta">Enquire</div></div>
+      </div>
+    </div>
+
+    <!-- Group 4 -->
+    <div class="vendor-group reveal">
+      <div class="vendor-group-header">
+        <div class="vendor-group-icon">🍽️</div>
+        <h3 class="vendor-group-title">Catering & Food Services</h3>
+        <span class="vendor-group-count">4 Services</span>
+      </div>
+      <div class="vendor-cards">
+        <div class="vendor-card" onclick="openModal('Catering Services')"><div class="vendor-card-title">Catering Services</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Chaat Stalls & Live Food Counters')"><div class="vendor-card-title">Chaat Stalls & Live Food Counters</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Cake & Bakery Services')"><div class="vendor-card-title">Cake & Bakery Services</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Bartender Services')"><div class="vendor-card-title">Bartender Services</div><div class="vendor-card-cta">Enquire</div></div>
+      </div>
+    </div>
+
+    <!-- Group 5 -->
+    <div class="vendor-group reveal">
+      <div class="vendor-group-header">
+        <div class="vendor-group-icon">🌸</div>
+        <h3 class="vendor-group-title">Decoration & Styling</h3>
+        <span class="vendor-group-count">4 Services</span>
+      </div>
+      <div class="vendor-cards">
+        <div class="vendor-card" onclick="openModal('Event Decoration Services')"><div class="vendor-card-title">Event Decoration Services</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Wedding Décor & Theme Setup')"><div class="vendor-card-title">Wedding Décor & Theme Setup</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Floral Decoration')"><div class="vendor-card-title">Floral Decoration</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Entry Gate & Stage Decoration')"><div class="vendor-card-title">Entry Gate & Stage Decoration</div><div class="vendor-card-cta">Enquire</div></div>
+      </div>
+    </div>
+
+    <!-- Group 6 -->
+    <div class="vendor-group reveal">
+      <div class="vendor-group-header">
+        <div class="vendor-group-icon">💄</div>
+        <h3 class="vendor-group-title">Beauty & Wedding Services</h3>
+        <span class="vendor-group-count">4 Services</span>
+      </div>
+      <div class="vendor-cards">
+        <div class="vendor-card" onclick="openModal('Bridal Makeup Artists')"><div class="vendor-card-title">Bridal Makeup Artists</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Groom Styling Services')"><div class="vendor-card-title">Groom Styling Services</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Mehndi Artists')"><div class="vendor-card-title">Mehndi Artists</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Wedding Styling Assistance')"><div class="vendor-card-title">Wedding Styling Assistance</div><div class="vendor-card-cta">Enquire</div></div>
+      </div>
+    </div>
+
+    <!-- Group 7 -->
+    <div class="vendor-group reveal">
+      <div class="vendor-group-header">
+        <div class="vendor-group-icon">🎭</div>
+        <h3 class="vendor-group-title">Entertainment & Experiences</h3>
+        <span class="vendor-group-count">6 Services</span>
+      </div>
+      <div class="vendor-cards">
+        <div class="vendor-card" onclick="openModal('Event Entertainment Services')"><div class="vendor-card-title">Event Entertainment Services</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Mascots & Character Performers')"><div class="vendor-card-title">Mascots & Character Performers</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Anchors / Emcees')"><div class="vendor-card-title">Anchors / Emcees</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Choreographers')"><div class="vendor-card-title">Choreographers</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('DJs & Live Performers')"><div class="vendor-card-title">DJs & Live Performers</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Artists & Celebrity Arrangements')"><div class="vendor-card-title">Artists & Celebrity Arrangements</div><div class="vendor-card-cta">Enquire</div></div>
+      </div>
+    </div>
+
+    <!-- Group 8 -->
+    <div class="vendor-group reveal">
+      <div class="vendor-group-header">
+        <div class="vendor-group-icon">🤝</div>
+        <h3 class="vendor-group-title">Staffing & Support</h3>
+        <span class="vendor-group-count">3 Services</span>
+      </div>
+      <div class="vendor-cards">
+        <div class="vendor-card" onclick="openModal('Student Volunteers')"><div class="vendor-card-title">Student Volunteers</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Event Crew & Manpower')"><div class="vendor-card-title">Event Crew & Manpower</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Hostesses & Promoters')"><div class="vendor-card-title">Hostesses & Promoters</div><div class="vendor-card-cta">Enquire</div></div>
+      </div>
+    </div>
+
+    <!-- Group 9 -->
+    <div class="vendor-group reveal">
+      <div class="vendor-group-header">
+        <div class="vendor-group-icon">🚗</div>
+        <h3 class="vendor-group-title">Transportation & Rentals</h3>
+        <span class="vendor-group-count">3 Services</span>
+      </div>
+      <div class="vendor-cards">
+        <div class="vendor-card" onclick="openModal('Car Rental Services')"><div class="vendor-card-title">Car Rental Services</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Guest Pickup & Drop Services')"><div class="vendor-card-title">Guest Pickup & Drop Services</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Luxury Vehicle Arrangements')"><div class="vendor-card-title">Luxury Vehicle Arrangements</div><div class="vendor-card-cta">Enquire</div></div>
+      </div>
+    </div>
+
+    <!-- Group 10 -->
+    <div class="vendor-group reveal">
+      <div class="vendor-group-header">
+        <div class="vendor-group-icon">☕</div>
+        <h3 class="vendor-group-title">Lifestyle & Leisure</h3>
+        <span class="vendor-group-count">3 Services</span>
+      </div>
+      <div class="vendor-cards">
+        <div class="vendor-card" onclick="openModal('Couple-Friendly Café Discovery')"><div class="vendor-card-title">Couple-Friendly Café Discovery</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Flats for House Parties')"><div class="vendor-card-title">Flats for House Parties</div><div class="vendor-card-cta">Enquire</div></div>
+        <div class="vendor-card" onclick="openModal('Staycation & Group Stay Booking')"><div class="vendor-card-title">Staycation & Group Stay Booking</div><div class="vendor-card-cta">Enquire</div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="hiw-section" id="how-it-works">
+  <div class="hiw-bg"></div>
+  <div class="section-header reveal" style="color: var(--ivory);">
+    <p class="section-eyebrow">Simple Process</p>
+    <h2 class="section-title" style="color: var(--ivory);">How <em>It Works</em></h2>
+    <p class="section-subtitle" style="color: rgba(255,253,247,0.4);">Get connected to the best vendors in just a few steps.</p>
+  </div>
+  <div class="hiw-grid">
+    <div class="hiw-step reveal">
+      <p class="hiw-number">01</p>
+      <div class="hiw-icon-wrap">🔍</div>
+      <h3 class="hiw-title">Browse & Discover</h3>
+      <p class="hiw-desc">Explore 40+ vendor categories by event type, service, or city across India.</p>
+    </div>
+    <div class="hiw-step reveal">
+      <p class="hiw-number">02</p>
+      <div class="hiw-icon-wrap">📋</div>
+      <h3 class="hiw-title">Share Your Requirements</h3>
+      <p class="hiw-desc">Fill a quick enquiry form with your event date, location, and service needs.</p>
+    </div>
+    <div class="hiw-step reveal">
+      <p class="hiw-number">03</p>
+      <div class="hiw-icon-wrap">📞</div>
+      <h3 class="hiw-title">Get Matched</h3>
+      <p class="hiw-desc">Our team connects you with the right vendors who fit your budget and vision.</p>
+    </div>
+    <div class="hiw-step reveal">
+      <p class="hiw-number">04</p>
+      <div class="hiw-icon-wrap">✨</div>
+      <h3 class="hiw-title">Celebrate Perfectly</h3>
+      <p class="hiw-desc">Finalize, confirm, and let us handle the rest while you enjoy your event.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LEAD FORM -->
+<section class="lead-section" id="inquiry">
+  <div class="lead-inner">
+    <div class="lead-layout">
+      <div class="lead-text reveal">
+        <div class="section-header">
+          <p class="section-eyebrow">Get a Free Quote</p>
+          <h2 class="section-title">Tell Us About Your <em>Event</em></h2>
+          <p class="section-subtitle">Share your requirements and our team will reach out within 24 hours with curated vendor recommendations.</p>
+        </div>
+        <ul class="lead-benefits">
+          <li>Free vendor discovery and consultation</li>
+          <li>Curated matches based on your budget and event type</li>
+          <li>Compare multiple vendors in one place</li>
+          <li>No booking fees — we work on your behalf</li>
+          <li>Pan-India network across 50+ cities</li>
+        </ul>
+      </div>
+      <div class="lead-form reveal">
+        <h3 class="form-title">Send an Enquiry</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" placeholder="Rahul Sharma" id="f-name"/>
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" placeholder="+91 98765 43210" id="f-phone"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="rahul@example.com" id="f-email"/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Event Type</label>
+            <select id="f-event">
+              <option value="">Select Event</option>
+              <option>Wedding</option>
+              <option>Corporate Event</option>
+              <option>Birthday Party</option>
+              <option>Religious Event</option>
+              <option>College / Fest</option>
+              <option>House Party</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Event City</label>
+            <input type="text" placeholder="Delhi, Mumbai…" id="f-city"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Services Required</label>
+          <select id="f-service">
+            <option value="">Select Service Category</option>
+            <option>Event Planning & Management</option>
+            <option>Photography & Content</option>
+            <option>Audio, Visual & Production</option>
+            <option>Catering & Food</option>
+            <option>Decoration & Styling</option>
+            <option>Beauty & Wedding Services</option>
+            <option>Entertainment & Experiences</option>
+            <option>Staffing & Support</option>
+            <option>Transportation & Rentals</option>
+            <option>Lifestyle & Leisure</option>
+            <option>Multiple / All-in-One</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Additional Details</label>
+          <textarea placeholder="Event date, guest count, budget range, special requirements…" id="f-details"></textarea>
+        </div>
+        <button class="form-submit" onclick="submitForm()">Send Enquiry →</button>
+        <p class="form-note">✦ We respond within 24 hours · No spam, ever.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+  <div class="section-header reveal">
+    <p class="section-eyebrow">Client Stories</p>
+    <h2 class="section-title">Celebrations They'll <em>Remember Forever</em></h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card reveal">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">EaseMyBooking made our wedding planning completely stress-free. From the decorator to the caterer — every vendor they recommended was exceptional. Couldn't have done it without them.</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">P</div>
+        <div>
+          <p class="testimonial-name">Priya & Arjun Mehta</p>
+          <p class="testimonial-event">Wedding · Jaipur</p>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">We used them for our company's annual conference. The AV team, stage setup crew, and the anchor they suggested were all top-notch. Will definitely use again for future events.</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">R</div>
+        <div>
+          <p class="testimonial-name">Rohit Agarwal</p>
+          <p class="testimonial-event">Corporate Event · Delhi</p>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">Found the most amazing bridal makeup artist and floral decorator through EaseMyBooking. The whole team was responsive and helped us stick to our budget without compromising quality.</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">S</div>
+        <div>
+          <p class="testimonial-name">Sneha Kapoor</p>
+          <p class="testimonial-event">Wedding · Mumbai</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CITIES -->
+<section class="cities-section" id="cities">
+  <div class="section-header reveal">
+    <p class="section-eyebrow">Pan India Network</p>
+    <h2 class="section-title">Vendors Across <em>India</em></h2>
+  </div>
+  <div class="cities-grid">
+    <span class="city-pill active">🌟 All India</span>
+    <span class="city-pill" onclick="cityClick(this)">Delhi NCR</span>
+    <span class="city-pill" onclick="cityClick(this)">Mumbai</span>
+    <span class="city-pill" onclick="cityClick(this)">Jaipur</span>
+    <span class="city-pill" onclick="cityClick(this)">Bangalore</span>
+    <span class="city-pill" onclick="cityClick(this)">Hyderabad</span>
+    <span class="city-pill" onclick="cityClick(this)">Chennai</span>
+    <span class="city-pill" onclick="cityClick(this)">Kolkata</span>
+    <span class="city-pill" onclick="cityClick(this)">Pune</span>
+    <span class="city-pill" onclick="cityClick(this)">Ahmedabad</span>
+    <span class="city-pill" onclick="cityClick(this)">Chandigarh</span>
+    <span class="city-pill" onclick="cityClick(this)">Lucknow</span>
+    <span class="city-pill" onclick="cityClick(this)">Udaipur</span>
+    <span class="city-pill" onclick="cityClick(this)">Kochi</span>
+    <span class="city-pill" onclick="cityClick(this)">Indore</span>
+    <span class="city-pill" onclick="cityClick(this)">+ More Cities</span>
+  </div>
+</section>
+
+<!-- VENDOR BANNER -->
+<section class="vendor-banner">
+  <h2 class="vendor-banner-title">Are You a <em>Vendor or Service Provider?</em></h2>
+  <p class="vendor-banner-sub">List your services on EaseMyBooking and connect with thousands of event planners across India.</p>
+  <a href="#inquiry" class="btn-primary">List Your Business</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <p class="footer-brand-name">Ease<span>My</span>Booking</p>
+      <p class="footer-brand-desc">India's trusted vendor discovery platform for events. From weddings to corporate galas — we connect you with the best in the business.</p>
+      <div class="footer-social">
+        <a class="social-icon" href="#">in</a>
+        <a class="social-icon" href="#">ig</a>
+        <a class="social-icon" href="#">fb</a>
+        <a class="social-icon" href="#">yt</a>
+      </div>
+    </div>
+    <div>
+      <p class="footer-col-title">Explore</p>
+      <ul class="footer-links">
+        <li><a href="#categories">Event Categories</a></li>
+        <li><a href="#vendors">All Vendors</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#cities">Our Cities</a></li>
+        <li><a href="#inquiry">Get a Quote</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Popular Services</p>
+      <ul class="footer-links">
+        <li><a href="#">Wedding Planning</a></li>
+        <li><a href="#">Photography</a></li>
+        <li><a href="#">Event Decoration</a></li>
+        <li><a href="#">Catering</a></li>
+        <li><a href="#">DJs & Artists</a></li>
+        <li><a href="#">Bridal Makeup</a></li>
+      </ul>
+    </div>
+    <div class="footer-contact">
+      <p class="footer-col-title">Contact Us</p>
+      <p>📧 <a href="mailto:hello@easemybooking.in">hello@easemybooking.in</a></p>
+      <p>📞 <a href="tel:+919999999999">+91 8824880979</a></p>
+      <p>🕐 Mon–Sat, 10am – 7pm IST</p>
+      <p style="margin-top: 16px; font-size: 0.65rem; letter-spacing: 0.08em; color: rgba(255,253,247,0.2);">For vendor partnerships & listings, email us at <a href="mailto:vendors@easemybooking.in" style="color: var(--gold);">vendors@easemybooking.in</a></p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 EaseMyBooking. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Refund Policy</a>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <p class="modal-eyebrow">Quick Enquiry</p>
+    <h3 class="modal-title" id="modalTitle">Service Enquiry</h3>
+    <div class="form-group">
+      <label>Your Name</label>
+      <input type="text" placeholder="Your full name" id="m-name"/>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="tel" placeholder="+91 ···" id="m-phone"/>
+      </div>
+      <div class="form-group">
+        <label>Event City</label>
+        <input type="text" placeholder="City" id="m-city"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Event Date (approximate)</label>
+      <input type="date" id="m-date"/>
+    </div>
+    <div class="form-group">
+      <label>Any specific requirement?</label>
+      <textarea placeholder="Budget, guest count, theme…" id="m-details" style="min-height: 70px;"></textarea>
+    </div>
+    <button class="form-submit" onclick="submitModal()">Send Enquiry →</button>
+    <p class="form-note">✦ We'll call you back within 24 hours.</p>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <p class="toast-text"><span>✦ Thank you!</span> Your enquiry has been received. We'll be in touch shortly.</p>
+</div>
+
+<script>
+  // NAV SCROLL
+  window.addEventListener('scroll', () => {
+    document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // REVEAL ON SCROLL
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+
+  // MODAL
+  let currentService = '';
+  function openModal(service) {
+    currentService = service;
+    document.getElementById('modalTitle').textContent = service;
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function closeModalOnOverlay(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  }
+
+  // FORM SUBMIT
+  function submitForm() {
+    const name = document.getElementById('f-name').value;
+    const phone = document.getElementById('f-phone').value;
+    if (!name || !phone) { alert('Please fill in your name and phone number.'); return; }
+    showToast();
+    ['f-name','f-phone','f-email','f-city','f-details'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('f-event').selectedIndex = 0;
+    document.getElementById('f-service').selectedIndex = 0;
+  }
+
+  function submitModal() {
+    const name = document.getElementById('m-name').value;
+    const phone = document.getElementById('m-phone').value;
+    if (!name || !phone) { alert('Please fill in your name and phone number.'); return; }
+    closeModal();
+    showToast();
+    ['m-name','m-phone','m-city','m-date','m-details'].forEach(id => document.getElementById(id).value = '');
+  }
+
+  function showToast() {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 4000);
+  }
+
+  // CITY PILLS
+  function cityClick(el) {
+    document.querySelectorAll('.city-pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // HAMBURGER
+  function toggleMenu() {
+    // Basic mobile toggle — expand nav links
+    const nav = document.querySelector('.nav-links');
+    if (nav.style.display === 'flex') {
+      nav.style.display = 'none';
+    } else {
+      nav.style.cssText = 'display:flex; flex-direction:column; position:fixed; top:60px; left:0; right:0; background:rgba(250,246,238,0.98); padding:30px 40px; gap:24px; border-bottom:1px solid rgba(201,168,76,0.15); z-index:999;';
+    }
+  }
+
+  // CLOSE MOBILE MENU ON LINK CLICK
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      const nav = document.querySelector('.nav-links');
+      if (window.innerWidth <= 900) nav.style.display = 'none';
+    });
+  });
+</script>
+</body>
+</html>
