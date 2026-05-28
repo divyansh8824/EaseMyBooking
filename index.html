@@ -129,9 +129,11 @@
       position: absolute;
       inset: 0;
       background: 
-        radial-gradient(ellipse 80% 80% at 70% 40%, rgba(201,168,76,0.12) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 60% at 10% 80%, rgba(201,168,76,0.07) 0%, transparent 50%),
-        linear-gradient(135deg, #0e0b08 0%, #1a1410 40%, #211A12 100%);
+        linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65)),
+        url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=2000&auto=format&fit=crop');
+
+        background-size: cover;
+        background-position: center;
     }
     .hero-pattern {
       position: absolute;
@@ -954,11 +956,12 @@
 
     /* ===== VENDOR CTA BANNER ===== */
     .vendor-banner {
-      background: linear-gradient(135deg, var(--brown) 0%, #0e0b08 100%);
-      padding: 80px 60px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
+      background:
+      linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+      url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1600&auto=format&fit=crop');
+
+      background-size: cover;
+      background-position: center;
     }
     .vendor-banner::before {
       content: '';
@@ -1336,7 +1339,13 @@
   </div>
   <div class="categories-grid">
     <div class="category-card" onclick="openModal('Weddings')">
-      <div class="category-card-bg" style="background: linear-gradient(135deg, #2d1a0f 0%, #5c3420 100%);"></div>
+      <div class="category-card-bg"
+      style="
+      background:
+      linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.55)),
+      url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1200&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;"></div>
       <div class="cat-pattern"></div>
       <div class="category-overlay"></div>
       <div class="category-icon">💍</div>
@@ -1348,7 +1357,13 @@
       <div class="category-arrow">→</div>
     </div>
     <div class="category-card" onclick="openModal('Corporate Events')">
-      <div class="category-card-bg" style="background: linear-gradient(135deg, #0f1a2d 0%, #1a2f4a 100%);"></div>
+      <div class="category-card-bg"
+      style="
+      background:
+      linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.55)),
+      url('https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;"></div>
       <div class="cat-pattern"></div>
       <div class="category-overlay"></div>
       <div class="category-icon">🏢</div>
@@ -1359,7 +1374,13 @@
       <div class="category-arrow">→</div>
     </div>
     <div class="category-card" onclick="openModal('Birthdays & House Parties')">
-      <div class="category-card-bg" style="background: linear-gradient(135deg, #2d1a28 0%, #4a2040 100%);"></div>
+      <div class="category-card-bg"
+      style="
+      background:
+      linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.55)),
+      url('https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=1200&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;"></div>
       <div class="cat-pattern"></div>
       <div class="category-overlay"></div>
       <div class="category-icon">🎂</div>
@@ -1369,8 +1390,14 @@
       </div>
       <div class="category-arrow">→</div>
     </div>
-    <div class="category-card" onclick="openModal('Religious Events')">
-      <div class="category-card-bg" style="background: linear-gradient(135deg, #1a2010 0%, #2d3a1a 100%);"></div>
+    <div class="category-card" onclick="openModal('Religious Events')"> 
+      <div class="category-card-bg"
+      style="
+      background:
+      linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.55)),
+      url('https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=1200&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;"></div>
       <div class="cat-pattern"></div>
       <div class="category-overlay"></div>
       <div class="category-icon">🪔</div>
@@ -1381,7 +1408,13 @@
       <div class="category-arrow">→</div>
     </div>
     <div class="category-card" onclick="openModal('College & Fest Events')">
-      <div class="category-card-bg" style="background: linear-gradient(135deg, #1a100f 0%, #3d2010 100%);"></div>
+     <div class="category-card-bg"
+    style="
+    background:
+    linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.55)),
+    url('https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=1200&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;"></div>
       <div class="cat-pattern"></div>
       <div class="category-overlay"></div>
       <div class="category-icon">🎓</div>
@@ -1392,7 +1425,13 @@
       <div class="category-arrow">→</div>
     </div>
     <div class="category-card" onclick="openModal('Travel & Stay')">
-      <div class="category-card-bg" style="background: linear-gradient(135deg, #0f1e1a 0%, #1a3028 100%);"></div>
+      <div class="category-card-bg"
+      style="
+      background:
+      linear-gradient(rgba(0,0,0,0.40), rgba(0,0,0,0.60)),
+      url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1200&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;"></div>
       <div class="cat-pattern"></div>
       <div class="category-overlay"></div>
       <div class="category-icon">✈️</div>
@@ -1403,7 +1442,13 @@
       <div class="category-arrow">→</div>
     </div>
     <div class="category-card" onclick="openModal('Entertainment & Production')">
-      <div class="category-card-bg" style="background: linear-gradient(135deg, #1a1520 0%, #2d2040 100%);"></div>
+      <div class="category-card-bg"
+      style="
+      background:
+      linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.60)),
+      url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=1200&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;"></div>
       <div class="cat-pattern"></div>
       <div class="category-overlay"></div>
       <div class="category-icon">🎭</div>
@@ -1414,7 +1459,13 @@
       <div class="category-arrow">→</div>
     </div>
     <div class="category-card" onclick="openModal('Staffing & Logistics')">
-      <div class="category-card-bg" style="background: linear-gradient(135deg, #1a1510 0%, #302510 100%);"></div>
+      <div class="category-card-bg"
+      style="
+      background:
+      linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.65)),
+      url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;"></div>
       <div class="cat-pattern"></div>
       <div class="category-overlay"></div>
       <div class="category-icon">🤝</div>
