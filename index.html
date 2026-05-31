@@ -403,10 +403,14 @@
       }
 
       /* ===== SECTION HEADER ===== */
-      .section-header {
-        text-align: center;
-        margin-bottom: 64px;
-      }
+      .section-header{
+       display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      margin:0 auto 60px;
+    }
       .section-eyebrow {
         font-size: 0.65rem;
         letter-spacing: 0.35em;
@@ -425,13 +429,14 @@
         background: var(--gold);
         opacity: 0.5;
       }
-      .section-title {
-        font-family: 'Cormorant Garamond', serif;
-        font-size: clamp(2rem, 4vw, 3.2rem);
-        font-weight: 300;
-        color: var(--charcoal);
-        line-height: 1.15;
+      .section-title{
+        font-size:72px;
+        line-height:1.1;
+        text-align:center;
+        width:100%;
+        margin:0 auto;
       }
+
       .section-title em {
         font-style: italic;
         color: var(--gold-dark);
@@ -456,16 +461,20 @@
         gap: 2px;
         max-width: 1200px;
         margin: 0 auto;
+
+        /* FIX EMPTY SPACE */
+        grid-auto-flow:dense;
+        align-items:stretch;
       }
-      .category-card {
-        position: relative;
-        height: 280px;
-        overflow: hidden;
-        cursor: pointer;
-        background: var(--brown);
+      .category-card{
+        position:relative;
+        min-height:220px;
+        overflow:hidden;
+        display:flex;
       }
+    
       .category-card:first-child {
-        grid-column: span 2;
+        grid-column: span 1;
         height: 360px;
       }
       .category-card:nth-child(2) { height: 360px; }
@@ -604,7 +613,7 @@
         border-radius: 20px;
       }
       .vendor-cards {
-        display: grid;
+        display: scroll;
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
         gap: 14px;
       }
@@ -1243,6 +1252,46 @@
         .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
         .form-row { grid-template-columns: 1fr; }
       }
+
+      /* ===== Vendor HORIZONTAL SCROLL ===== */
+
+/* ===== HORIZONTAL VENDOR CARDS ===== */
+
+.vendor-cards{
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    overflow-x:auto;
+    gap:20px;
+    padding:20px 0;
+    scroll-behavior:smooth;
+
+    scrollbar-width:none;
+}
+
+.vendor-cards::-webkit-scrollbar{
+    display:none;
+}
+
+/* CARD DESIGN */
+.vendor-card{
+    min-width:320px !important;
+    flex:0 0 auto !important;
+
+    background:#fff;
+    border-radius:24px;
+    padding:30px;
+    border:1px solid rgba(201,168,76,0.12);
+
+    transition:all 0.3s ease;
+    cursor:pointer;
+}
+
+.vendor-card:hover{
+    transform:translateY(-8px);
+    box-shadow:0 18px 35px rgba(0,0,0,0.12);
+    border-color:#c9a84c;
+}
+
     </style>
   </head>
   <body>
@@ -1277,7 +1326,7 @@
       </p>
       <div class="hero-actions">
         <a href="#vendors" class="btn-primary">Explore Vendors</a>
-        <a href="#inquiry" class="btn-outline">Enquire Now</a>
+        <a href="#inquiry" class="btn-outline">Get Best Quote</a>
       </div>
     </div>
     <div class="hero-stats">
@@ -1579,12 +1628,23 @@
   </section>
 
   <!-- VENDORS -->
-  <section class="vendors-section" id="vendors">
-    <div class="section-header reveal">
-      <p class="section-eyebrow">Our Services</p>
-      <h2 class="section-title">40+ Vendor <em>Categories</em></h2>
-      <p class="section-subtitle">Every service you need, all in one place.</p>
-    </div>
+ <div class="section-header reveal">
+
+  <p class="section-eyebrow">
+    Our Services
+  </p>
+
+  <div class="title-row">
+      <h2 class="section-title fadeUp ">
+        40+ Vendor <em>Categories</em>
+      </h2>
+  </div>
+
+  <p class="section-subtitle">
+    Every service you need, all in one place.
+  </p>
+
+</div>
     <div class="vendors-outer">
 
       <!-- Group 1 -->
@@ -1595,11 +1655,11 @@
           <span class="vendor-group-count">5 Services</span>
         </div>
         <div class="vendor-cards">
-          <div class="vendor-card" onclick="openModal('Event Planning & Coordination')"><div class="vendor-card-title">Event Planning & Coordination</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Wedding Planning Services')"><div class="vendor-card-title">Wedding Planning Services</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Venue & Banquet Discovery')"><div class="vendor-card-title">Venue & Banquet Discovery</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Farmhouse & Party Venue')"><div class="vendor-card-title">Farmhouse & Party Venue Booking</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Hotel & Stay Arrangements')"><div class="vendor-card-title">Hotel & Stay Arrangements</div><div class="vendor-card-cta">Enquire</div></div>
+          <div class="vendor-card" onclick="openModal('Event Planning & Coordination')"><div class="vendor-card-title">Event Planning & Coordination</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Wedding Planning Services')"><div class="vendor-card-title">Wedding Planning Services</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Venue & Banquet Discovery')"><div class="vendor-card-title">Venue & Banquet Discovery</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Farmhouse & Party Venue')"><div class="vendor-card-title">Farmhouse & Party Venue Booking</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Hotel & Stay Arrangements')"><div class="vendor-card-title">Hotel & Stay Arrangements</div><div class="vendor-card-cta">Get Best Quote</div></div>
         </div>
       </div>
 
@@ -1611,10 +1671,10 @@
           <span class="vendor-group-count">4 Services</span>
         </div>
         <div class="vendor-cards">
-          <div class="vendor-card" onclick="openModal('Photography Services')"><div class="vendor-card-title">Photography Services</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Videography & Cinematic Shoots')"><div class="vendor-card-title">Videography & Cinematic Shoots</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Event Content Creators')"><div class="vendor-card-title">Event Content Creators (Reels, BTS, Social Media)</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Pre-Wedding Shoots')"><div class="vendor-card-title">Pre-Wedding Shoots</div><div class="vendor-card-cta">Enquire</div></div>
+          <div class="vendor-card" onclick="openModal('Photography Services')"><div class="vendor-card-title">Photography Services</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Videography & Cinematic Shoots')"><div class="vendor-card-title">Videography & Cinematic Shoots</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Event Content Creators')"><div class="vendor-card-title">Event Content Creators (Reels, BTS, Social Media)</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Pre-Wedding Shoots')"><div class="vendor-card-title">Pre-Wedding Shoots</div><div class="vendor-card-cta">Get Best Quote</div></div>
         </div>
       </div>
 
@@ -1626,11 +1686,11 @@
           <span class="vendor-group-count">5 Services</span>
         </div>
         <div class="vendor-cards">
-          <div class="vendor-card" onclick="openModal('Sound System Setup')"><div class="vendor-card-title">Sound System Setup</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Lights & AV Setup')"><div class="vendor-card-title">Lights & AV Setup</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Stage Setup & Event Production')"><div class="vendor-card-title">Stage Setup & Event Production</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Fabrication & Branding Solutions')"><div class="vendor-card-title">Fabrication & Branding Solutions</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Printing Services')"><div class="vendor-card-title">Printing Services (Flex, Banners, Branding)</div><div class="vendor-card-cta">Enquire</div></div>
+          <div class="vendor-card" onclick="openModal('Sound System Setup')"><div class="vendor-card-title">Sound System Setup</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Lights & AV Setup')"><div class="vendor-card-title">Lights & AV Setup</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Stage Setup & Event Production')"><div class="vendor-card-title">Stage Setup & Event Production</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Fabrication & Branding Solutions')"><div class="vendor-card-title">Fabrication & Branding Solutions</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Printing Services')"><div class="vendor-card-title">Printing Services (Flex, Banners, Branding)</div><div class="vendor-card-cta">Get Best Quote</div></div>
         </div>
       </div>
 
@@ -1642,10 +1702,10 @@
           <span class="vendor-group-count">4 Services</span>
         </div>
         <div class="vendor-cards">
-          <div class="vendor-card" onclick="openModal('Catering Services')"><div class="vendor-card-title">Catering Services</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Chaat Stalls & Live Food Counters')"><div class="vendor-card-title">Chaat Stalls & Live Food Counters</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Cake & Bakery Services')"><div class="vendor-card-title">Cake & Bakery Services</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Bartender Services')"><div class="vendor-card-title">Bartender Services</div><div class="vendor-card-cta">Enquire</div></div>
+          <div class="vendor-card" onclick="openModal('Catering Services')"><div class="vendor-card-title">Catering Services</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Chaat Stalls & Live Food Counters')"><div class="vendor-card-title">Chaat Stalls & Live Food Counters</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Cake & Bakery Services')"><div class="vendor-card-title">Cake & Bakery Services</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Bartender Services')"><div class="vendor-card-title">Bartender Services</div><div class="vendor-card-cta">Get Best Quote</div></div>
         </div>
       </div>
 
@@ -1657,10 +1717,10 @@
           <span class="vendor-group-count">4 Services</span>
         </div>
         <div class="vendor-cards">
-          <div class="vendor-card" onclick="openModal('Event Decoration Services')"><div class="vendor-card-title">Event Decoration Services</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Wedding Décor & Theme Setup')"><div class="vendor-card-title">Wedding Décor & Theme Setup</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Floral Decoration')"><div class="vendor-card-title">Floral Decoration</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Entry Gate & Stage Decoration')"><div class="vendor-card-title">Entry Gate & Stage Decoration</div><div class="vendor-card-cta">Enquire</div></div>
+          <div class="vendor-card" onclick="openModal('Event Decoration Services')"><div class="vendor-card-title">Event Decoration Services</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Wedding Décor & Theme Setup')"><div class="vendor-card-title">Wedding Décor & Theme Setup</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Floral Decoration')"><div class="vendor-card-title">Floral Decoration</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Entry Gate & Stage Decoration')"><div class="vendor-card-title">Entry Gate & Stage Decoration</div><div class="vendor-card-cta">Get Best Quote</div></div>
         </div>
       </div>
 
@@ -1672,10 +1732,10 @@
           <span class="vendor-group-count">4 Services</span>
         </div>
         <div class="vendor-cards">
-          <div class="vendor-card" onclick="openModal('Bridal Makeup Artists')"><div class="vendor-card-title">Bridal Makeup Artists</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Groom Styling Services')"><div class="vendor-card-title">Groom Styling Services</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Mehndi Artists')"><div class="vendor-card-title">Mehndi Artists</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Wedding Styling Assistance')"><div class="vendor-card-title">Wedding Styling Assistance</div><div class="vendor-card-cta">Enquire</div></div>
+          <div class="vendor-card" onclick="openModal('Bridal Makeup Artists')"><div class="vendor-card-title">Bridal Makeup Artists</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Groom Styling Services')"><div class="vendor-card-title">Groom Styling Services</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Mehndi Artists')"><div class="vendor-card-title">Mehndi Artists</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Wedding Styling Assistance')"><div class="vendor-card-title">Wedding Styling Assistance</div><div class="vendor-card-cta">Get Best Quote</div></div>
         </div>
       </div>
 
@@ -1687,12 +1747,12 @@
           <span class="vendor-group-count">6 Services</span>
         </div>
         <div class="vendor-cards">
-          <div class="vendor-card" onclick="openModal('Event Entertainment Services')"><div class="vendor-card-title">Event Entertainment Services</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Mascots & Character Performers')"><div class="vendor-card-title">Mascots & Character Performers</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Anchors / Emcees')"><div class="vendor-card-title">Anchors / Emcees</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Choreographers')"><div class="vendor-card-title">Choreographers</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('DJs & Live Performers')"><div class="vendor-card-title">DJs & Live Performers</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Artists & Celebrity Arrangements')"><div class="vendor-card-title">Artists & Celebrity Arrangements</div><div class="vendor-card-cta">Enquire</div></div>
+          <div class="vendor-card" onclick="openModal('Event Entertainment Services')"><div class="vendor-card-title">Event Entertainment Services</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Mascots & Character Performers')"><div class="vendor-card-title">Mascots & Character Performers</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Anchors / Emcees')"><div class="vendor-card-title">Anchors / Emcees</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Choreographers')"><div class="vendor-card-title">Choreographers</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('DJs & Live Performers')"><div class="vendor-card-title">DJs & Live Performers</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Artists & Celebrity Arrangements')"><div class="vendor-card-title">Artists & Celebrity Arrangements</div><div class="vendor-card-cta">Get Best Quote</div></div>
         </div>
       </div>
 
@@ -1704,9 +1764,9 @@
           <span class="vendor-group-count">3 Services</span>
         </div>
         <div class="vendor-cards">
-          <div class="vendor-card" onclick="openModal('Student Volunteers')"><div class="vendor-card-title">Student Volunteers</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Event Crew & Manpower')"><div class="vendor-card-title">Event Crew & Manpower</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Hostesses & Promoters')"><div class="vendor-card-title">Hostesses & Promoters</div><div class="vendor-card-cta">Enquire</div></div>
+          <div class="vendor-card" onclick="openModal('Student Volunteers')"><div class="vendor-card-title">Student Volunteers</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Event Crew & Manpower')"><div class="vendor-card-title">Event Crew & Manpower</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Hostesses & Promoters')"><div class="vendor-card-title">Hostesses & Promoters</div><div class="vendor-card-cta">Get Best Quote</div></div>
         </div>
       </div>
 
@@ -1718,9 +1778,9 @@
           <span class="vendor-group-count">3 Services</span>
         </div>
         <div class="vendor-cards">
-          <div class="vendor-card" onclick="openModal('Car Rental Services')"><div class="vendor-card-title">Car Rental Services</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Guest Pickup & Drop Services')"><div class="vendor-card-title">Guest Pickup & Drop Services</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Luxury Vehicle Arrangements')"><div class="vendor-card-title">Luxury Vehicle Arrangements</div><div class="vendor-card-cta">Enquire</div></div>
+          <div class="vendor-card" onclick="openModal('Car Rental Services')"><div class="vendor-card-title">Car Rental Services</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Guest Pickup & Drop Services')"><div class="vendor-card-title">Guest Pickup & Drop Services</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Luxury Vehicle Arrangements')"><div class="vendor-card-title">Luxury Vehicle Arrangements</div><div class="vendor-card-cta">Get Best Quote</div></div>
         </div>
       </div>
 
@@ -1732,9 +1792,9 @@
           <span class="vendor-group-count">3 Services</span>
         </div>
         <div class="vendor-cards">
-          <div class="vendor-card" onclick="openModal('Couple-Friendly Café Discovery')"><div class="vendor-card-title">Couple-Friendly Café Discovery</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Flats for House Parties')"><div class="vendor-card-title">Flats for House Parties</div><div class="vendor-card-cta">Enquire</div></div>
-          <div class="vendor-card" onclick="openModal('Staycation & Group Stay Booking')"><div class="vendor-card-title">Staycation & Group Stay Booking</div><div class="vendor-card-cta">Enquire</div></div>
+          <div class="vendor-card" onclick="openModal('Couple-Friendly Café Discovery')"><div class="vendor-card-title">Couple-Friendly Café Discovery</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Flats for House Parties')"><div class="vendor-card-title">Flats for House Parties</div><div class="vendor-card-cta">Get Best Quote</div></div>
+          <div class="vendor-card" onclick="openModal('Staycation & Group Stay Booking')"><div class="vendor-card-title">Staycation & Group Stay Booking</div><div class="vendor-card-cta">Get Best Quote</div></div>
         </div>
       </div>
 
@@ -2181,6 +2241,7 @@ ${details}`;
 }
 </script>
 
+//whatsapp flot button
 <a href="https://wa.me/919799033115" class="whatsapp-float" target="_blank">
   💬
 </a>
@@ -2203,6 +2264,174 @@ ${details}`;
   box-shadow:0 8px 25px rgba(0,0,0,0.25);
 }
 </style>
+
+<!-- VENDOR MATCH QUIZ -->
+<section class="quiz-section">
+  <div class="quiz-box">
+
+    <p class="quiz-tag">AI Vendor Match</p>
+    <h2>Find Your Best Event Vendors</h2>
+    <p class="quiz-subtitle">
+      Answer a few questions & get matched with the best vendors.
+    </p>
+
+    <div class="form-group">
+      <label>Event Type</label>
+      <select id="quiz-event">
+        <option>Wedding</option>
+        <option>Birthday Party</option>
+        <option>Corporate Event</option>
+        <option>Religious Event</option>
+        <option>College Fest</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Event City</label>
+      <input type="text" id="quiz-city" placeholder="Enter city">
+    </div>
+
+    <div class="form-group">
+      <label>Budget Range</label>
+      <select id="quiz-budget">
+        <option>₹50,000 - ₹1 Lakh</option>
+        <option>₹1 - ₹3 Lakhs</option>
+        <option>₹3 - ₹5 Lakhs</option>
+        <option>₹5 Lakhs+</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Guest Count</label>
+      <select id="quiz-guest">
+        <option>0 - 50 Guests</option>
+        <option>50 - 100 Guests</option>
+        <option>100 - 300 Guests</option>
+        <option>300+ Guests</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Phone Number</label>
+      <input type="tel" id="quiz-phone" placeholder="+91">
+    </div>
+
+    <button class="quiz-btn" onclick="matchVendor()">
+      Get Best Vendor Match →
+    </button>
+
+  </div>
+</section>
+
+<style>
+  /* ===== QUIZ SECTION ===== */
+
+.quiz-section{
+  padding:80px 20px;
+  background:#111;
+}
+
+.quiz-box{
+  max-width:700px;
+  margin:auto;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(201,168,76,0.2);
+  border-radius:30px;
+  padding:50px;
+}
+
+.quiz-tag{
+  color:#c9a84c;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  font-size:14px;
+  margin-bottom:10px;
+}
+
+.quiz-box h2{
+  color:white;
+  margin-bottom:10px;
+}
+
+.quiz-subtitle{
+  color:#aaa;
+  margin-bottom:30px;
+}
+
+.quiz-btn{
+  width:100%;
+  padding:18px;
+  border:none;
+  background:#c9a84c;
+  color:black;
+  font-size:18px;
+  border-radius:15px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.title-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.scroll-controls{
+    display:flex;
+    gap:10px;
+}
+
+.scroll-controls button{
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    border:none;
+    cursor:pointer;
+    font-size:18px;
+}
+
+</style>
+
+<script>
+function matchVendor(){
+
+let eventType =
+document.getElementById("quiz-event").value;
+
+let city =
+document.getElementById("quiz-city").value;
+
+let budget =
+document.getElementById("quiz-budget").value;
+
+let guest =
+document.getElementById("quiz-guest").value;
+
+let phone =
+document.getElementById("quiz-phone").value;
+
+if(phone === ""){
+  alert("Please enter phone number");
+  return;
+}
+
+let whatsappNumber = "919876543210"; // Replace your number
+
+let message =
+`🎯 *New Vendor Match Lead*
+
+🎉 Event Type: ${eventType}
+📍 City: ${city}
+💰 Budget: ${budget}
+👥 Guests: ${guest}
+📞 Phone: ${phone}`;
+
+let whatsappURL =
+`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+window.open(whatsappURL, '_blank');
+}
+</script>
 
   </body>
   </html>
