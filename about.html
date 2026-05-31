@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>About Us | EaseMyBooking</title>
+<meta name="description" content="Learn about EaseMyBooking – India's premium event vendor discovery platform helping users book trusted venues, caterers, decorators, photographers, entertainers, hotels, and more.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Inter',sans-serif;
+background:#f8f5ef;
+color:#1d1a17;
+overflow-x:hidden;
+}
+
+/* NAVBAR */
+
+.navbar{
+position:fixed;
+top:0;
+width:100%;
+background:rgba(255,255,255,0.95);
+backdrop-filter: blur(12px);
+padding:20px 8%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+z-index:1000;
+border-bottom:1px solid rgba(0,0,0,0.08);
+}
+
+.logo{
+font-family:'Cormorant Garamond',serif;
+font-size:42px;
+font-weight:600;
+text-decoration:none;
+color:#111;
+}
+
+.logo span{
+color:#c89d2d;
+}
+
+.nav-links{
+display:flex;
+gap:40px;
+}
+
+.nav-links a{
+text-decoration:none;
+color:#111;
+font-size:14px;
+letter-spacing:2px;
+text-transform:uppercase;
+}
+
+.quote-btn{
+background:#c89d2d;
+padding:14px 30px;
+color:white;
+border-radius:8px;
+text-decoration:none;
+font-weight:600;
+}
+
+/* HERO */
+
+.about-hero{
+height:85vh;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+padding:0 8%;
+background:
+linear-gradient(rgba(0,0,0,0.55),rgba(0,0,0,0.65)),
+url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2000&auto=format&fit=crop');
+background-size:cover;
+background-position:center;
+color:white;
+}
+
+.about-hero h1{
+font-family:'Cormorant Garamond',serif;
+font-size:85px;
+font-weight:600;
+margin-bottom:20px;
+}
+
+.about-hero p{
+font-size:20px;
+max-width:850px;
+line-height:1.8;
+opacity:0.95;
+}
+
+/* SECTION */
+
+.section{
+padding:100px 8%;
+}
+
+.section-title{
+font-family:'Cormorant Garamond',serif;
+font-size:60px;
+text-align:center;
+margin-bottom:20px;
+}
+
+.section-subtitle{
+max-width:900px;
+margin:auto;
+text-align:center;
+font-size:18px;
+line-height:1.9;
+color:#555;
+}
+
+/* GRID */
+
+.about-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:50px;
+margin-top:60px;
+align-items:center;
+}
+
+.about-grid img{
+width:100%;
+border-radius:24px;
+height:550px;
+object-fit:cover;
+}
+
+.about-text h3{
+font-family:'Cormorant Garamond',serif;
+font-size:45px;
+margin-bottom:20px;
+}
+
+.about-text p{
+font-size:18px;
+line-height:1.9;
+color:#555;
+margin-bottom:20px;
+}
+
+/* CARDS */
+
+.features{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:30px;
+margin-top:60px;
+}
+
+.feature-card{
+background:white;
+padding:40px;
+border-radius:24px;
+text-align:center;
+box-shadow:0 8px 30px rgba(0,0,0,0.06);
+transition:0.3s;
+}
+
+.feature-card:hover{
+transform:translateY(-10px);
+}
+
+.feature-card h4{
+font-size:24px;
+margin-bottom:12px;
+}
+
+.feature-card p{
+color:#666;
+line-height:1.8;
+}
+
+/* STATS */
+
+.stats{
+background:#111;
+color:white;
+padding:100px 8%;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+text-align:center;
+}
+
+.stat h2{
+font-size:60px;
+color:#c89d2d;
+}
+
+.stat p{
+letter-spacing:2px;
+text-transform:uppercase;
+font-size:13px;
+}
+
+/* CTA */
+
+.cta{
+padding:120px 8%;
+text-align:center;
+background:#f0ebe2;
+}
+
+.cta h2{
+font-family:'Cormorant Garamond',serif;
+font-size:65px;
+margin-bottom:20px;
+}
+
+.cta p{
+font-size:20px;
+max-width:800px;
+margin:auto;
+margin-bottom:40px;
+color:#555;
+}
+
+.cta a{
+display:inline-block;
+background:#c89d2d;
+padding:18px 45px;
+border-radius:12px;
+text-decoration:none;
+color:white;
+font-weight:600;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.about-hero h1{
+font-size:52px;
+}
+
+.about-grid{
+grid-template-columns:1fr;
+}
+
+.features{
+grid-template-columns:1fr;
+}
+
+.stats{
+grid-template-columns:1fr 1fr;
+gap:40px;
+}
+
+.nav-links{
+display:none;
+}
+
+.section-title{
+font-size:42px;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+<a href="index.html" class="logo">
+Ease<span>My</span>Booking
+</a>
+
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="index.html#vendors">Vendors</a>
+<a href="about.html">About</a>
+<a href="contact.html">Contact</a>
+</div>
+
+<a href="#quote" class="quote-btn">
+Get A Quote
+</a>
+</nav>
+
+<!-- HERO -->
+
+<section class="about-hero">
+<div>
+<h1>About EaseMyBooking</h1>
+<p>
+India’s premium event vendor discovery platform helping users
+find trusted venues, decorators, caterers, photographers,
+entertainers, hotels, and 40+ curated vendor categories —
+all in one place.
+</p>
+</div>
+</section>
+
+<!-- WHO WE ARE -->
+
+<section class="section">
+
+<h2 class="section-title">
+Who We Are
+</h2>
+
+<p class="section-subtitle">
+EaseMyBooking was built to simplify event planning.
+Whether you're planning a wedding, birthday, corporate event,
+house party, religious function, or celebration — we help you
+discover verified vendors without the hassle of endless searching.
+</p>
+
+<div class="about-grid">
+
+<img src="https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1600&auto=format&fit=crop">
+
+<div class="about-text">
+<h3>Your One-Stop Event Booking Platform</h3>
+
+<p>
+We bridge the gap between customers and trusted event vendors,
+making bookings faster, smarter, and more reliable.
+</p>
+
+<p>
+From photographers and decorators to hotels,
+entertainment, travel, AV setup, catering, and luxury experiences —
+everything comes under one roof.
+</p>
+</div>
+
+</div>
+</section>
+
+<!-- WHY CHOOSE -->
+
+<section class="section">
+
+<h2 class="section-title">
+Why Choose EaseMyBooking
+</h2>
+
+<div class="features">
+
+<div class="feature-card">
+<h4>40+ Categories</h4>
+<p>Everything you need for any event in one place.</p>
+</div>
+
+<div class="feature-card">
+<h4>Verified Vendors</h4>
+<p>Trusted partners for premium event experiences.</p>
+</div>
+
+<div class="feature-card">
+<h4>Best Pricing</h4>
+<p>Get competitive quotes from multiple vendors.</p>
+</div>
+
+<div class="feature-card">
+<h4>Easy Booking</h4>
+<p>Save time and plan events stress-free.</p>
+</div>
+
+</div>
+
+</section>
+
+<!-- STATS -->
+
+<section class="stats">
+
+<div class="stat">
+<h2>500+</h2>
+<p>Vendor Partners</p>
+</div>
+
+<div class="stat">
+<h2>40+</h2>
+<p>Categories</p>
+</div>
+
+<div class="stat">
+<h2>10+</h2>
+<p>Cities</p>
+</div>
+
+<div class="stat">
+<h2>1000+</h2>
+<p>Bookings Assisted</p>
+</div>
+
+</section>
+
+<!-- CTA -->
+
+<section class="cta">
+
+<h2>
+Let's Plan Something Amazing
+</h2>
+
+<p>
+Discover curated vendors for weddings, parties,
+corporate events, and every celebration.
+</p>
+
+<a href="index.html#vendors">
+Explore Vendors
+</a>
+
+</section>
+
+</body>
+</html>
