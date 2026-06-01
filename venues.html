@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Venues | EaseMyBooking</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Inter',sans-serif;
+background:#fafafa;
+color:#222;
+overflow-x:hidden;
+}
+
+/* NAVBAR */
+
+.navbar{
+position:fixed;
+top:0;
+width:100%;
+padding:22px 7%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:rgba(255,255,255,0.92);
+backdrop-filter:blur(18px);
+z-index:999;
+box-shadow:0 2px 20px rgba(0,0,0,0.05);
+}
+
+.logo{
+font-size:38px;
+font-family:'Cormorant Garamond',serif;
+font-weight:700;
+text-decoration:none;
+color:#111;
+}
+
+.logo span{
+color:#d4af37;
+}
+
+.nav-links{
+display:flex;
+gap:30px;
+}
+
+.nav-links a{
+text-decoration:none;
+font-size:14px;
+font-weight:500;
+letter-spacing:0.5px;
+color:#222;
+text-transform:uppercase;
+}
+
+.quote-btn{
+background:#111;
+color:#fff;
+padding:14px 26px;
+border-radius:14px;
+text-decoration:none;
+font-weight:600;
+}
+
+/* HERO */
+
+.hero{
+padding:180px 8% 70px;
+text-align:center;
+background:
+linear-gradient(rgba(255,255,255,0.75),
+rgba(255,255,255,0.92)),
+url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=2000&auto=format&fit=crop');
+background-size:cover;
+background-position:center;
+}
+
+.hero h1{
+font-family:'Cormorant Garamond',serif;
+font-size:78px;
+font-weight:700;
+margin-bottom:18px;
+}
+
+.hero p{
+font-size:20px;
+max-width:760px;
+margin:auto;
+line-height:1.8;
+color:#555;
+}
+
+/* VENUE SECTION */
+
+.venue-section{
+padding:80px 8%;
+}
+
+.section-title{
+font-size:48px;
+font-family:'Cormorant Garamond',serif;
+margin-bottom:50px;
+text-align:center;
+}
+
+/* VENUE GRID */
+
+.venue-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:35px;
+}
+
+/* VENUE CARD */
+
+.venue-card{
+background:#fff;
+border-radius:28px;
+overflow:hidden;
+box-shadow:0 10px 35px rgba(0,0,0,0.08);
+transition:0.35s ease;
+cursor:pointer;
+}
+
+.venue-card:hover{
+transform:translateY(-10px);
+box-shadow:0 22px 50px rgba(0,0,0,0.14);
+}
+
+.venue-image{
+height:320px;
+overflow:hidden;
+}
+
+.venue-image img{
+width:100%;
+height:100%;
+object-fit:cover;
+transition:0.5s;
+}
+
+.venue-card:hover img{
+transform:scale(1.08);
+}
+
+.venue-content{
+padding:28px;
+}
+
+.venue-name{
+font-size:32px;
+font-family:'Cormorant Garamond',serif;
+margin-bottom:14px;
+color:#111;
+}
+
+.capacity{
+display:flex;
+align-items:center;
+gap:10px;
+font-size:17px;
+color:#555;
+margin-bottom:28px;
+}
+
+.quote-button{
+display:inline-block;
+width:100%;
+padding:18px;
+text-align:center;
+background:#111;
+color:#fff;
+border-radius:16px;
+text-decoration:none;
+font-weight:600;
+transition:0.3s;
+}
+
+.quote-button:hover{
+background:#d4af37;
+color:#111;
+}
+
+/* MOBILE */
+
+@media(max-width:992px){
+
+.venue-grid{
+grid-template-columns:1fr 1fr;
+}
+
+}
+
+@media(max-width:768px){
+
+.hero h1{
+font-size:52px;
+}
+
+.hero p{
+font-size:17px;
+}
+
+.nav-links{
+display:none;
+}
+
+.venue-grid{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+<a href="index.html" class="logo">
+Ease<span>My</span>Booking
+</a>
+
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="venues.html">Venues</a>
+<a href="packages.html">Packages</a>
+<a href="about.html">About</a>
+</div>
+
+<a href="https://wa.me/91YOURNUMBER"
+class="quote-btn">
+Enquire Now
+</a>
+
+</nav>
+
+<!-- HERO -->
+
+<section class="hero">
+
+<h1>Find Premium Venues</h1>
+
+<p>
+Discover elegant banquet halls, luxury resorts,
+farmhouses, cafés and celebration spaces curated
+for weddings, birthdays, corporate events and unforgettable experiences.
+</p>
+
+</section>
+
+<!-- VENUE LIST -->
+
+<section class="venue-section">
+<!-- SEARCH FILTER -->
+
+<section class="venue-search">
+
+<h2 class="search-title">
+Find Venues By City
+</h2>
+
+<div class="search-container">
+
+<select id="cityFilter" onchange="filterVenues()">
+
+<option value="all">
+Select City
+</option>
+
+<option value="jaipur">
+Jaipur
+</option>
+
+<option value="udaipur">
+Udaipur
+</option>
+
+<option value="delhi">
+Delhi
+</option>
+
+<option value="mumbai">
+Mumbai
+</option>
+
+</select>
+
+</div>
+
+</section>
+
+<!-- VENUE SECTION -->
+
+<section class="venue-section">
+
+<div class="venue-grid">
+
+<!-- JAIPUR VENUE -->
+
+<div class="venue-card venue jaipur"
+onclick="window.location.href='venues/royal-orchid-jaipur.html'">
+
+<div class="venue-image">
+<img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=1600&auto=format&fit=crop">
+</div>
+
+<div class="venue-content">
+
+<h3 class="venue-name">
+Royal Orchid Jaipur
+</h3>
+
+<div class="capacity">
+👥 Capacity: 100 – 1200 Guests
+</div>
+
+<a href="https://wa.me/91YOURNUMBER"
+class="quote-button">
+Get Best Quote
+</a>
+
+</div>
+</div>
+
+<!-- UDAIPUR VENUE -->
+
+<div class="venue-card venue udaipur"
+onclick="window.location.href='venues/udaipur-palace.html'">
+
+<div class="venue-image">
+<img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1600&auto=format&fit=crop">
+</div>
+
+<div class="venue-content">
+
+<h3 class="venue-name">
+The Udaipur Palace Resort
+</h3>
+
+<div class="capacity">
+👥 Capacity: 200 – 1500 Guests
+</div>
+
+<a href="https://wa.me/91YOURNUMBER"
+class="quote-button">
+Get Best Quote
+</a>
+
+</div>
+</div>
+
+</div>
+
+</section>
+
+<style>
+
+.venue-search{
+padding:60px 8% 20px;
+text-align:center;
+}
+
+.search-title{
+font-family:'Cormorant Garamond', serif;
+font-size:52px;
+margin-bottom:25px;
+}
+
+.search-container select{
+width:340px;
+padding:18px 24px;
+font-size:16px;
+border-radius:18px;
+border:none;
+outline:none;
+box-shadow:0 8px 25px rgba(0,0,0,0.08);
+cursor:pointer;
+}
+
+</style>
+
+<script>
+
+function filterVenues() {
+
+const city =
+document.getElementById("cityFilter").value;
+
+const venues =
+document.querySelectorAll(".venue");
+
+venues.forEach(venue => {
+
+if(city === "all"){
+
+venue.style.display = "block";
+
+}
+
+else if(venue.classList.contains(city)){
+
+venue.style.display = "block";
+
+}
+
+else{
+
+venue.style.display = "none";
+
+}
+
+});
+
+}
+
+</script>
+```
+
+
+</section>
+
+</body>
+</html>
