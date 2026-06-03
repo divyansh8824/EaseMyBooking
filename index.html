@@ -402,6 +402,134 @@
         background: rgba(201,168,76,0.05);
       }
 
+      /* =========================
+OUR PACKAGES SECTION
+========================= */
+
+.packages-section{
+    padding:100px 6%;
+    background:#f8f5ef;
+}
+
+.section-heading{
+    text-align:center;
+    margin-bottom:60px;
+}
+
+.section-heading span{
+    color:#C8A44D;
+    text-transform:uppercase;
+    letter-spacing:3px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.section-heading h2{
+    font-size:52px;
+    margin-top:10px;
+    color:#1d1d1d;
+}
+
+.section-heading h2 em{
+    color:#C8A44D;
+    font-style:normal;
+}
+
+.section-heading p{
+    color:#666;
+    margin-top:12px;
+    font-size:18px;
+}
+
+.packages-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:25px;
+}
+
+.package-card{
+    position:relative;
+    border-radius:28px;
+    overflow:hidden;
+    height:520px;
+    cursor:pointer;
+    transition:0.4s ease;
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+.package-card img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:0.7s ease;
+}
+
+.package-card:hover img{
+    transform:scale(1.08);
+}
+
+.package-overlay{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        to top,
+        rgba(0,0,0,0.85),
+        rgba(0,0,0,0.15)
+    );
+
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    padding:35px;
+    color:white;
+}
+
+.package-overlay h3{
+    font-size:30px;
+    margin-bottom:12px;
+    font-weight:700;
+}
+
+.package-overlay p{
+    font-size:15px;
+    line-height:1.6;
+    margin-bottom:20px;
+    color:#f3f3f3;
+}
+
+.package-btn{
+    display:inline-block;
+    width:fit-content;
+    background:#C8A44D;
+    color:white;
+    padding:14px 24px;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:600;
+    transition:0.3s;
+}
+
+.package-btn:hover{
+    transform:translateY(-3px);
+}
+
+/* MOBILE */
+
+@media(max-width:992px){
+
+    .packages-grid{
+        grid-template-columns:1fr;
+    }
+
+    .section-heading h2{
+        font-size:38px;
+    }
+
+    .package-card{
+        height:420px;
+    }
+}
+
       /* ===== SECTION HEADER ===== */
       .section-header{
        display:flex;
@@ -1678,6 +1806,77 @@
       </div>
     </div>
   </section>
+
+  <!-- Our Packages Section-->
+  <section class="packages-section" id="packages">
+
+    <div class="section-heading">
+        <span>Curated Experiences</span>
+        <h2>Our Premium <em>Packages</em></h2>
+        <p>Luxury experiences curated for unforgettable moments.</p>
+    </div>
+
+    <div class="packages-grid">
+
+        <!-- Card 1 -->
+        <div class="package-card">
+            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80" alt="Farmhouse & Villa">
+
+            <div class="package-overlay">
+                <h3>Farmhouse & Villa Booking</h3>
+                <p>Luxury villas, farmhouses & private staycation venues.</p>
+
+                <a href="farmhouse-villa.html" class="package-btn">
+                    Explore Package
+                </a>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="package-card">
+            <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&q=80" alt="Romantic Setup">
+
+            <div class="package-overlay">
+                <h3>Romantic & Celebration Setup</h3>
+                <p>Surprise decorations, birthdays, anniversaries & proposals.</p>
+
+                <a href="romantic-celebration.html" class="package-btn">
+                    Explore Package
+                </a>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="package-card">
+            <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=1200&q=80" alt="Premium Experience">
+
+            <div class="package-overlay">
+                <h3>Premium Experience</h3>
+                <p>Luxury curated experiences for unforgettable memories.</p>
+
+                <a href="premium-experience.html" class="package-btn">
+                    Explore Package
+                </a>
+            </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="package-card">
+            <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=80" alt="Travel Stay">
+
+            <div class="package-overlay">
+                <h3>Travel & Stay</h3>
+                <p>Weekend trips, staycations, hotels & luxury getaways.</p>
+
+                <a href="travel-stay.html" class="package-btn">
+                    Explore Package
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</section>
 
   <!-- EVENT CATEGORIES -->
   <section class="categories-section" id="categories">
