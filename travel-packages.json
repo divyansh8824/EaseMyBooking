@@ -1,0 +1,145 @@
+[
+  {
+    "id": 1,
+    "title": "Luxury Bali Escape",
+    "type": "International",
+    "destination": "Bali, Indonesia",
+    "duration": "5D / 4N",
+    "price": "₹49,999",
+    "category": "Luxury",
+    "image": "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1200&q=80",
+    "highlights": [
+      "Private Pool Villa",
+      "Floating Breakfast",
+      "Airport Transfers"
+    ]
+  },
+
+  {
+    "id": 2,
+    "title": "Royal Kashmir Retreat",
+    "type": "Domestic",
+    "destination": "Kashmir",
+    "duration": "6D / 5N",
+    "price": "₹28,999",
+    "category": "Honeymoon",
+    "image": "https://images.unsplash.com/photo-1598091383021-15ddea10925d?w=1200&q=80",
+    "highlights": [
+      "Houseboat Stay",
+      "Gulmarg Tour",
+      "Private Cab"
+    ]
+  },
+
+  {
+    "id": 3,
+    "title": "Dubai Luxury Getaway",
+    "type": "International",
+    "destination": "Dubai, UAE",
+    "duration": "4D / 3N",
+    "price": "₹59,999",
+    "category": "Luxury",
+    "image": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&q=80",
+    "highlights": [
+      "Burj Khalifa",
+      "Desert Safari",
+      "Luxury Hotel"
+    ]
+  },
+
+  {
+    "id": 4,
+    "title": "Goa Beach Escape",
+    "type": "Domestic",
+    "destination": "Goa",
+    "duration": "4D / 3N",
+    "price": "₹18,999",
+    "category": "Friends Trip",
+    "image": "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1200&q=80",
+    "highlights": [
+      "Beach Resort",
+      "Water Sports",
+      "Nightlife"
+    ]
+  },
+
+  {
+    "id": 5,
+    "title": "Maldives Honeymoon Bliss",
+    "type": "International",
+    "destination": "Maldives",
+    "duration": "5D / 4N",
+    "price": "₹89,999",
+    "category": "Honeymoon",
+    "image": "https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=1200&q=80",
+    "highlights": [
+      "Water Villa",
+      "Candle Light Dinner",
+      "Private Transfers"
+    ]
+  },
+
+  {
+    "id": 6,
+    "title": "Royal Rajasthan Tour",
+    "type": "Domestic",
+    "destination": "Jaipur • Udaipur • Jodhpur",
+    "duration": "7D / 6N",
+    "price": "₹34,999",
+    "category": "Family",
+    "image": "https://images.unsplash.com/photo-1477587458883-47145ed94245?w=1200&q=80",
+    "highlights": [
+      "Luxury Heritage Stay",
+      "Private Cab",
+      "Sightseeing"
+    ]
+  },
+
+  {
+    "id": 7,
+    "title": "Thailand Party Escape",
+    "type": "International",
+    "destination": "Phuket • Pattaya",
+    "duration": "5D / 4N",
+    "price": "₹42,999",
+    "category": "Friends Trip",
+    "image": "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=1200&q=80",
+    "highlights": [
+      "Island Tour",
+      "Beach Clubs",
+      "Luxury Stay"
+    ]
+  },
+
+  {
+    "id": 8,
+    "title": "Manali & Kasol Escape",
+    "type": "Domestic",
+    "destination": "Manali • Kasol",
+    "duration": "5D / 4N",
+    "price": "₹19,999",
+    "category": "Adventure",
+    "image": "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=1200&q=80",
+    "highlights": [
+      "Mountain Stay",
+      "River Camping",
+      "Adventure Activities"
+    ]
+  },
+
+  {
+    "id": 9,
+    "title": "Pushkar excape",
+    "type": "Domestic",
+    "destination": "Manali • Kasol",
+    "duration": "5D / 4N",
+    "price": "₹19,999",
+    "category": "Adventure",
+    "image": "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=1200&q=80",
+    "highlights": [
+      "Mountain Stay",
+      "River Camping",
+      "Adventure Activities"
+    ]
+  }
+]
