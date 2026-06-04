@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Farmhouse & Villa Booking | EaseMyBooking</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+    /* FILTER BAR */
+
+.filter-section{
+padding:10px 8% 20px;
+}
+
+.filter-bar{
+background:white;
+padding:18px;
+border-radius:22px;
+display:flex;
+gap:14px;
+flex-wrap:wrap;
+align-items:center;
+box-shadow:
+0 8px 30px rgba(0,0,0,0.08);
+}
+
+.filter-bar select,
+.filter-bar input{
+
+padding:14px 18px;
+border:1px solid #ddd;
+border-radius:14px;
+font-size:15px;
+min-width:180px;
+outline:none;
+font-family:'Poppins',sans-serif;
+}
+
+.filter-bar input{
+flex:1;
+min-width:220px;
+}
+
+#resetBtn{
+background:#c9a24b;
+border:none;
+padding:14px 24px;
+border-radius:14px;
+color:white;
+font-weight:600;
+cursor:pointer;
+transition:0.3s;
+}
+
+#resetBtn:hover{
+transform:translateY(-2px);
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Poppins',sans-serif;
+background:#f5f3ee;
+color:#222;
+}
+
+/* NAVBAR */
+
+.navbar{
+position:sticky;
+top:0;
+background:white;
+padding:18px 8%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+z-index:1000;
+box-shadow:0 2px 20px rgba(0,0,0,0.05);
+}
+
+.logo{
+font-family:'Playfair Display',serif;
+font-size:34px;
+font-weight:700;
+}
+
+.nav-links{
+display:flex;
+gap:30px;
+}
+
+.nav-links a{
+text-decoration:none;
+color:#222;
+font-weight:500;
+}
+
+.quote-btn{
+background:#c9a24b;
+color:white;
+padding:12px 24px;
+border-radius:10px;
+text-decoration:none;
+font-weight:600;
+}
+
+/* HERO */
+
+/* HERO */
+
+.hero{
+height:65vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:80px 8%;
+position:relative;
+overflow:hidden;
+
+/* Background Image */
+
+background:
+linear-gradient(
+rgba(0,0,0,0.45),
+rgba(0,0,0,0.45)
+),
+
+url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=2000&q=80');
+
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+border-radius:0 0 40px 40px;
+}
+
+.hero h1{
+font-family:'Playfair Display',serif;
+font-size:72px;
+line-height:1.1;
+margin-bottom:18px;
+color:white;
+max-width:1000px;
+}
+
+.hero p{
+font-size:22px;
+color:rgba(255,255,255,0.9);
+max-width:700px;
+}
+
+/* CARD GRID */
+
+.property-grid{
+padding:40px 8%;
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(320px,1fr));
+gap:28px;
+}
+
+/* CARD */
+
+.card{
+background:white;
+border-radius:22px;
+overflow:hidden;
+box-shadow:0 5px 25px rgba(0,0,0,0.08);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.carousel{
+position:relative;
+height:240px;
+overflow:hidden;
+}
+
+.carousel img{
+width:100%;
+height:240px;
+object-fit:cover;
+display:none;
+}
+
+.carousel img.active{
+display:block;
+}
+
+.arrow{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+background:rgba(255,255,255,0.8);
+border:none;
+width:38px;
+height:38px;
+border-radius:50%;
+cursor:pointer;
+font-size:18px;
+}
+
+.prev{
+left:12px;
+}
+
+.next{
+right:12px;
+}
+
+.card-content{
+padding:20px;
+}
+
+.location{
+font-size:14px;
+color:#777;
+margin-bottom:8px;
+}
+
+.card h3{
+font-size:24px;
+margin-bottom:12px;
+font-family:'Playfair Display',serif;
+}
+
+.capacity{
+font-size:15px;
+color:#555;
+margin-bottom:18px;
+}
+
+.btn-group{
+display:flex;
+gap:12px;
+}
+
+.quote{
+flex:1;
+background:#c9a24b;
+color:white;
+text-align:center;
+padding:12px;
+border-radius:10px;
+text-decoration:none;
+font-weight:600;
+}
+
+.whatsapp{
+flex:1;
+background:#25D366;
+color:white;
+text-align:center;
+padding:12px;
+border-radius:10px;
+text-decoration:none;
+font-weight:600;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.hero{
+height:55vh;
+padding:60px 20px;
+border-radius:0 0 25px 25px;
+}
+
+.hero h1{
+font-size:42px;
+}
+
+.hero p{
+font-size:16px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+<div class="logo">
+EaseMyBooking
+</div>
+
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="#">Packages</a>
+<a href="#">Venues</a>
+</div>
+
+<a href="#" class="quote-btn">
+Get Quote
+</a>
+
+</nav>
+
+<section class="hero">
+
+<h1>
+Luxury Farmhouses & Villas
+</h1>
+
+<p>
+Curated private stays for parties,
+staycations & celebrations.
+</p>
+
+</section>
+
+<!-- FILTER BAR -->
+
+<section class="filter-section">
+
+<div class="filter-bar">
+
+<select id="cityFilter">
+<option value="">All Cities</option>
+<option value="Jaipur">Jaipur</option>
+<option value="Udaipur">Udaipur</option>
+<option value="Delhi">Delhi</option>
+</select>
+
+<select id="guestFilter">
+<option value="">Guests</option>
+<option value="20">20+ Guests</option>
+<option value="50">50+ Guests</option>
+<option value="100">100+ Guests</option>
+</select>
+
+<select id="typeFilter">
+<option value="">Property Type</option>
+<option value="Villa">Villa</option>
+<option value="Farmhouse">Farmhouse</option>
+<option value="Pool Villa">
+Pool Villa
+</option>
+</select>
+
+<select id="budgetFilter">
+<option value="">Budget</option>
+<option value="10000">Under ₹10K</option>
+<option value="20000">Under ₹20K</option>
+<option value="50000">Luxury ₹50K+</option>
+</select>
+
+<input
+type="text"
+id="searchFilter"
+placeholder="Search property...">
+
+<button id="resetBtn">
+Reset
+</button>
+
+</div>
+
+</section>
+
+<div class="property-grid"
+id="propertyGrid">
+
+</div>
+
+fetch('villas.json')<script>
+
+let villasData = [];
+
+fetch('villas.json')
+.then(res => res.json())
+.then(data => {
+
+villasData = data;
+renderProperties(villasData);
+
+});
+
+function renderProperties(data){
+
+const grid =
+document.getElementById('propertyGrid');
+
+grid.innerHTML = '';
+
+data.forEach((villa,index)=>{
+
+grid.innerHTML += `
+
+<div class="card">
+
+<div class="carousel"
+id="carousel-${index}">
+
+${villa.images.map((img,i)=>
+
+`<img src="${img}"
+class="${i===0?'active':''}">`
+
+).join('')}
+
+<button class="arrow prev"
+onclick="changeSlide(${index},-1)">
+❮
+</button>
+
+<button class="arrow next"
+onclick="changeSlide(${index},1)">
+❯
+</button>
+
+</div>
+
+<div class="card-content">
+
+<div class="location">
+📍 ${villa.city}
+</div>
+
+<h3>${villa.name}</h3>
+
+<div class="capacity">
+👥 ${villa.capacity}
+</div>
+
+<div class="btn-group">
+
+<a href="#"
+class="quote">
+Get Quote
+</a>
+
+<a href="https://wa.me/918824880979"
+target="_blank"
+class="whatsapp">
+WhatsApp
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+/* FILTER */
+
+document.querySelectorAll(
+'#cityFilter,#searchFilter'
+).forEach(el => {
+
+el.addEventListener('input',
+filterProperties);
+
+});
+
+function filterProperties(){
+
+const city =
+document.getElementById(
+'cityFilter'
+).value.toLowerCase();
+
+const search =
+document.getElementById(
+'searchFilter'
+).value.toLowerCase();
+
+const filtered =
+villasData.filter(villa => {
+
+return (
+
+(city === '' ||
+villa.city.toLowerCase()
+.includes(city))
+
+&&
+
+(search === '' ||
+villa.name.toLowerCase()
+.includes(search))
+
+);
+
+});
+
+renderProperties(filtered);
+
+}
+
+/* RESET */
+
+document.getElementById(
+'resetBtn'
+).addEventListener('click',()=>{
+
+document.getElementById(
+'cityFilter'
+).value='';
+
+document.getElementById(
+'searchFilter'
+).value='';
+
+renderProperties(villasData);
+
+});
+
+function changeSlide(cardIndex,direction){
+
+const carousel =
+document.querySelector(
+`#carousel-${cardIndex}`
+);
+
+const images =
+carousel.querySelectorAll('img');
+
+let activeIndex =
+Array.from(images)
+.findIndex(img =>
+img.classList.contains('active')
+);
+
+images[activeIndex]
+.classList.remove('active');
+
+activeIndex += direction;
+
+if(activeIndex < 0)
+activeIndex =
+images.length - 1;
+
+if(activeIndex >= images.length)
+activeIndex = 0;
+
+images[activeIndex]
+.classList.add('active');
+
+}
+
+</script>
+
+</body>
+</html>
