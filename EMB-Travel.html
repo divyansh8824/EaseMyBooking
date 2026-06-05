@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>EaseMyBooking — Travel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --ink:#04080f;
+  --deep:#080c14;
+  --card:#0d1220;
+  --panel:#111828;
+  --border:rgba(180,148,80,.16);
+  --gold:#B49450;
+  --gold2:#d4af6a;
+  --cream:#f8f2e6;
+  --muted:rgba(248,242,230,.45);
+  --sky:#4A90D9;
+  --ff-d:'Playfair Display',serif;
+  --ff-b:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--cream);font-family:var(--ff-b);font-weight:300;overflow-x:hidden;cursor:none;}
+
+/* CURSOR */
+#cur{position:fixed;top:0;left:0;z-index:9999;width:9px;height:9px;background:var(--gold);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:width .25s,height .25s,background .25s;}
+#cur-r{position:fixed;top:0;left:0;z-index:9998;width:34px;height:34px;border:1px solid var(--gold);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:left .35s cubic-bezier(.23,1,.32,1),top .35s cubic-bezier(.23,1,.32,1),width .35s,height .35s;opacity:.55;}
+body:has(a:hover) #cur,body:has(button:hover) #cur{width:16px;height:16px;background:var(--gold2);}
+body:has(a:hover) #cur-r,body:has(button:hover) #cur-r{width:50px;height:50px;opacity:.25;}
+
+/* NOISE */
+body::after{content:'';position:fixed;inset:0;z-index:9997;pointer-events:none;opacity:.03;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:var(--ink);}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:2px;}
+
+/* ─── NAV ─── */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:24px 64px;display:flex;align-items:center;justify-content:space-between;transition:all .5s;}
+nav.scrolled{background:rgba(4,8,15,.92);backdrop-filter:blur(20px);padding:16px 64px;border-bottom:1px solid var(--border);}
+.nav-logo{font-family:var(--ff-d);font-size:1.45rem;font-weight:400;color:var(--cream);text-decoration:none;letter-spacing:.03em;}
+.nav-logo span{color:var(--gold);}
+.nav-links{display:flex;gap:32px;list-style:none;}
+.nav-links a{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;position:relative;padding-bottom:3px;transition:color .3s;}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--gold);transition:width .3s;}
+.nav-links a:hover{color:var(--cream);}
+.nav-links a:hover::after{width:100%;}
+.nav-links a.active{color:var(--gold);}
+.nav-links a.active::after{width:100%;}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.nav-btn{font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);background:var(--gold);border:none;padding:10px 26px;cursor:none;transition:background .3s,transform .2s;}
+.nav-btn:hover{background:var(--gold2);transform:translateY(-1px);}
+.nav-btn-ghost{font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cream);background:transparent;border:1px solid var(--border);padding:9px 22px;cursor:none;transition:border-color .3s,color .3s;}
+.nav-btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ─── HERO ─── */
+.hero{position:relative;height:100vh;min-height:720px;overflow:hidden;display:flex;align-items:center;}
+.hero-img{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1800&q=80') center/cover no-repeat;filter:brightness(.38) saturate(.85);transform:scale(1.04);animation:heroZoom 18s ease-in-out infinite alternate;}
+@keyframes heroZoom{0%{transform:scale(1.04);}100%{transform:scale(1.0);}  }
+.hero-gradient{position:absolute;inset:0;background:linear-gradient(100deg,rgba(4,8,15,.85) 40%,transparent 100%),linear-gradient(to top,rgba(4,8,15,.7) 0%,transparent 55%);}
+.hero-lines{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(180,148,80,.035) 80px);z-index:1;}
+
+.hero-content{position:relative;z-index:2;max-width:760px;padding:0 64px;}
+.hero-badge{display:inline-flex;align-items:center;gap:12px;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:24px;opacity:0;animation:fadeUp .8s .3s forwards;}
+.hero-badge::before{content:'';width:28px;height:1px;background:var(--gold);}
+h1.hero-title{font-family:var(--ff-d);font-size:clamp(3.8rem,7.5vw,7.2rem);font-weight:400;line-height:.95;letter-spacing:-.02em;opacity:0;animation:fadeUp .9s .5s forwards;}
+h1.hero-title em{font-style:italic;color:var(--gold);}
+.hero-sub{font-size:.85rem;line-height:1.85;color:var(--muted);max-width:480px;margin:24px 0 42px;letter-spacing:.03em;opacity:0;animation:fadeUp .8s .75s forwards;}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap;opacity:0;animation:fadeUp .8s .95s forwards;}
+.btn-gold{background:var(--gold);color:var(--ink);border:none;padding:14px 40px;font-family:var(--ff-b);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;cursor:none;transition:background .3s,transform .25s,box-shadow .3s;position:relative;overflow:hidden;}
+.btn-gold::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.18);transform:translateX(-100%);transition:transform .35s;}
+.btn-gold:hover::after{transform:translateX(0);}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(180,148,80,.28);}
+.btn-outline{background:transparent;color:var(--cream);border:1px solid rgba(248,242,230,.25);padding:13px 36px;font-family:var(--ff-b);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;cursor:none;transition:border-color .3s,color .3s,transform .25s;}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px);}
+
+/* hero stats */
+.hero-stats{position:absolute;bottom:48px;right:64px;z-index:2;display:flex;gap:48px;opacity:0;animation:fadeUp .8s 1.2s forwards;}
+.hero-stat-val{font-family:var(--ff-d);font-size:2rem;font-weight:400;color:var(--cream);}
+.hero-stat-lbl{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:2px;}
+
+/* scroll indicator */
+.scroll-ind{position:absolute;bottom:44px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp .7s 1.5s forwards;}
+.scroll-ind span{font-size:.56rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);}
+.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollPulse 2.2s ease-in-out infinite;}
+@keyframes scrollPulse{0%{transform:scaleY(0);transform-origin:top;}50%{transform:scaleY(1);transform-origin:top;}51%{transform:scaleY(1);transform-origin:bottom;}100%{transform:scaleY(0);transform-origin:bottom;}}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0);}from{opacity:0;transform:translateY(22px);}}
+
+/* ─── SEARCH WIDGET ─── */
+.search-wrap{position:relative;z-index:10;margin-top:-56px;padding:0 64px;}
+.search-box{max-width:1140px;margin:0 auto;background:rgba(13,18,32,.96);border:1px solid var(--border);backdrop-filter:blur(24px);}
+.search-tabs{display:flex;border-bottom:1px solid var(--border);}
+.stab{padding:14px 26px;background:none;border:none;font-family:var(--ff-b);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);cursor:none;position:relative;transition:color .3s;display:flex;align-items:center;gap:8px;}
+.stab svg{width:13px;height:13px;}
+.stab::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform .3s;}
+.stab.active{color:var(--gold);}
+.stab.active::after{transform:scaleX(1);}
+.search-fields{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;border-top:none;}
+.sf{padding:20px 24px;border-right:1px solid var(--border);cursor:none;transition:background .3s;}
+.sf:hover{background:rgba(180,148,80,.05);}
+.sf:last-of-type{border-right:none;}
+.sf-lbl{font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
+.sf-val{font-family:var(--ff-d);font-size:1rem;font-weight:400;color:var(--cream);}
+.sf-val.dim{color:var(--muted);}
+.search-go{background:var(--gold);color:var(--ink);border:none;padding:0 36px;font-family:var(--ff-b);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;cursor:none;transition:background .3s;white-space:nowrap;}
+.search-go:hover{background:var(--gold2);}
+
+/* ─── SECTION SHARED ─── */
+section{padding:110px 64px;}
+.s-eye{display:inline-flex;align-items:center;gap:12px;font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+.s-eye::before{content:'';width:22px;height:1px;background:var(--gold);}
+.s-title{font-family:var(--ff-d);font-size:clamp(2.2rem,4vw,3.4rem);font-weight:400;line-height:1.1;letter-spacing:-.01em;}
+.s-title em{font-style:italic;color:var(--gold);}
+.s-divider{width:52px;height:1px;background:var(--gold);margin:20px 0;}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(32px);transition:opacity .85s cubic-bezier(.23,1,.32,1),transform .85s cubic-bezier(.23,1,.32,1);}
+.rv.on{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}.d5{transition-delay:.5s;}
+
+/* ─── DOMESTIC ─── */
+.domestic-sec{background:var(--deep);}
+.dom-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:54px;gap:40px;}
+.dom-desc{max-width:360px;font-size:.8rem;line-height:1.9;color:var(--muted);letter-spacing:.03em;}
+.view-all{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:8px;white-space:nowrap;transition:gap .3s;}
+.view-all:hover{gap:14px;}
+.view-all svg{width:13px;height:13px;}
+
+.dom-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.pkg-card{background:var(--card);border:1px solid var(--border);overflow:hidden;cursor:none;transition:transform .4s cubic-bezier(.23,1,.32,1),border-color .4s;}
+.pkg-card:hover{transform:translateY(-6px);border-color:rgba(180,148,80,.4);}
+.pkg-img{height:220px;position:relative;overflow:hidden;}
+.pkg-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.23,1,.32,1),filter .5s;filter:brightness(.85) saturate(.9);}
+.pkg-card:hover .pkg-img img{transform:scale(1.09);filter:brightness(.7) saturate(.8);}
+.pkg-badge{position:absolute;top:14px;left:14px;background:var(--gold);color:var(--ink);font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;padding:4px 10px;}
+.pkg-rating{position:absolute;top:14px;right:14px;background:rgba(4,8,15,.8);backdrop-filter:blur(8px);color:var(--gold);font-size:.62rem;padding:4px 9px;display:flex;align-items:center;gap:4px;}
+.pkg-body{padding:20px 22px 24px;}
+.pkg-dest{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.pkg-name{font-family:var(--ff-d);font-size:1.18rem;font-weight:400;margin-bottom:8px;}
+.pkg-meta{display:flex;gap:14px;font-size:.67rem;color:var(--muted);letter-spacing:.04em;margin-bottom:14px;}
+.pkg-meta span{display:flex;align-items:center;gap:5px;}
+.pkg-meta svg{width:11px;height:11px;color:var(--gold);}
+.pkg-price-row{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid var(--border);}
+.pkg-from{font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.pkg-price{font-family:var(--ff-d);font-size:1.35rem;font-weight:400;color:var(--cream);}
+.pkg-price sup{font-size:.65rem;vertical-align:super;}
+.pkg-book{font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:6px;transition:gap .25s;}
+.pkg-book:hover{gap:10px;}
+.pkg-book svg{width:11px;height:11px;}
+
+/* ─── INTERNATIONAL ─── */
+.intl-sec{background:var(--ink);position:relative;overflow:hidden;}
+.intl-sec::before{content:'';position:absolute;right:-300px;top:-300px;width:800px;height:800px;border-radius:50%;border:1px solid rgba(180,148,80,.05);pointer-events:none;}
+.intl-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:54px;gap:40px;}
+.intl-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr;grid-template-rows:340px 260px;gap:14px;}
+.intl-card{position:relative;overflow:hidden;cursor:none;}
+.intl-card:first-child{grid-row:1/3;}
+.intl-card img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.23,1,.32,1),filter .6s;filter:brightness(.55) saturate(.85);}
+.intl-card:hover img{transform:scale(1.07);filter:brightness(.42) saturate(.7);}
+.intl-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(4,8,15,.92) 0%,rgba(4,8,15,.1) 55%);}
+.intl-body{position:absolute;bottom:0;left:0;right:0;padding:24px 28px;transform:translateY(3px);transition:transform .4s;}
+.intl-card:hover .intl-body{transform:translateY(0);}
+.intl-tag{font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
+.intl-name{font-family:var(--ff-d);font-size:1.4rem;font-weight:400;}
+.intl-card:first-child .intl-name{font-size:2.2rem;}
+.intl-detail{font-size:.7rem;color:var(--muted);margin-top:6px;opacity:0;transform:translateY(7px);transition:opacity .35s .1s,transform .35s .1s;letter-spacing:.05em;}
+.intl-card:hover .intl-detail{opacity:1;transform:translateY(0);}
+.intl-price{font-family:var(--ff-d);font-size:1.1rem;color:var(--gold);margin-top:4px;opacity:0;transition:opacity .35s .15s;}
+.intl-card:hover .intl-price{opacity:1;}
+
+/* ─── HOTELS ─── */
+.hotels-sec{background:var(--deep);}
+.hotels-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:54px;gap:40px;}
+.hotels-filter{display:flex;gap:8px;margin-bottom:40px;}
+.hf-btn{padding:8px 20px;background:none;border:1px solid var(--border);color:var(--muted);font-family:var(--ff-b);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;cursor:none;transition:all .3s;}
+.hf-btn.active,.hf-btn:hover{background:var(--gold);color:var(--ink);border-color:var(--gold);}
+.hotels-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.hotel-card{background:var(--card);border:1px solid var(--border);overflow:hidden;cursor:none;transition:transform .4s,border-color .4s;}
+.hotel-card:hover{transform:translateY(-5px);border-color:rgba(180,148,80,.4);}
+.hotel-img{height:240px;position:relative;overflow:hidden;}
+.hotel-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.23,1,.32,1);filter:brightness(.88);}
+.hotel-card:hover .hotel-img img{transform:scale(1.08);}
+.hotel-stars{position:absolute;bottom:14px;left:16px;display:flex;gap:3px;}
+.hotel-stars span{width:7px;height:7px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.hotel-grade{position:absolute;top:14px;right:14px;background:rgba(4,8,15,.82);backdrop-filter:blur(8px);color:var(--cream);font-size:.62rem;padding:5px 10px;letter-spacing:.06em;}
+.hotel-body{padding:20px 22px 24px;}
+.hotel-city{font-size:.57rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
+.hotel-name{font-family:var(--ff-d);font-size:1.2rem;font-weight:400;margin-bottom:10px;}
+.hotel-amenities{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.amenity{font-size:.6rem;letter-spacing:.08em;color:var(--muted);background:rgba(180,148,80,.07);padding:4px 9px;}
+.hotel-footer{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid var(--border);}
+.hotel-price-lbl{font-size:.54rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.hotel-price{font-family:var(--ff-d);font-size:1.3rem;color:var(--cream);}
+.hotel-night{font-size:.6rem;color:var(--muted);}
+.hotel-btn{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;background:none;border:1px solid var(--border);color:var(--gold);padding:7px 16px;cursor:none;transition:all .3s;}
+.hotel-btn:hover{background:var(--gold);color:var(--ink);border-color:var(--gold);}
+
+/* ─── VISA ─── */
+.visa-sec{background:var(--ink);position:relative;overflow:hidden;}
+.visa-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.visa-visual{position:relative;height:540px;}
+.visa-main-img{position:absolute;top:0;left:0;right:60px;bottom:50px;overflow:hidden;}
+.visa-main-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.6) saturate(.8);}
+.visa-accent{position:absolute;bottom:0;right:0;width:200px;height:180px;background:var(--gold);display:flex;flex-direction:column;justify-content:flex-end;padding:20px;z-index:2;}
+.visa-accent-num{font-family:var(--ff-d);font-size:2.8rem;font-weight:400;color:var(--ink);line-height:1;}
+.visa-accent-lbl{font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(4,8,15,.65);margin-top:4px;}
+.visa-content .s-divider{margin:18px 0 28px;}
+.visa-desc{font-size:.8rem;line-height:1.9;color:var(--muted);letter-spacing:.03em;margin-bottom:36px;}
+.visa-types{display:flex;flex-direction:column;gap:2px;margin-bottom:36px;}
+.visa-type{display:flex;align-items:center;gap:18px;padding:16px 20px;background:var(--card);border-left:2px solid transparent;cursor:none;transition:border-color .3s,background .3s,transform .3s;}
+.visa-type:hover{border-left-color:var(--gold);background:rgba(180,148,80,.04);transform:translateX(4px);}
+.visa-type-icon{width:38px;height:38px;background:rgba(180,148,80,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .3s;}
+.visa-type:hover .visa-type-icon{background:rgba(180,148,80,.18);}
+.visa-type-icon svg{width:18px;height:18px;color:var(--gold);}
+.visa-type-name{font-family:var(--ff-d);font-size:1rem;}
+.visa-type-sub{font-size:.68rem;color:var(--muted);margin-top:2px;}
+.visa-arrow{margin-left:auto;color:var(--muted);transition:transform .3s,color .3s;}
+.visa-type:hover .visa-arrow{transform:translateX(4px);color:var(--gold);}
+.visa-countries{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px;}
+.vc-badge{padding:8px 16px;border:1px solid var(--border);font-size:.62rem;letter-spacing:.1em;color:var(--muted);display:flex;align-items:center;gap:6px;cursor:none;transition:border-color .3s,color .3s;}
+.vc-badge:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ─── ACTIVITIES ─── */
+.act-sec{background:var(--deep);}
+.act-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:54px;gap:40px;}
+.act-scroll{overflow:hidden;}
+.act-row{display:flex;gap:16px;width:max-content;animation:actScroll 40s linear infinite;}
+.act-row:hover{animation-play-state:paused;}
+@keyframes actScroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.act-card{width:300px;flex-shrink:0;background:var(--card);border:1px solid var(--border);overflow:hidden;cursor:none;transition:border-color .4s,transform .4s;}
+.act-card:hover{border-color:rgba(180,148,80,.4);transform:translateY(-4px);}
+.act-img{height:190px;position:relative;overflow:hidden;}
+.act-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.23,1,.32,1);filter:brightness(.82);}
+.act-card:hover .act-img img{transform:scale(1.09);}
+.act-cat{position:absolute;bottom:12px;left:12px;background:rgba(4,8,15,.82);backdrop-filter:blur(8px);font-size:.54rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);padding:4px 10px;}
+.act-body{padding:18px 20px 22px;}
+.act-name{font-family:var(--ff-d);font-size:1.1rem;font-weight:400;margin-bottom:6px;}
+.act-loc{font-size:.65rem;color:var(--muted);letter-spacing:.06em;margin-bottom:12px;display:flex;align-items:center;gap:5px;}
+.act-loc svg{width:9px;height:9px;color:var(--gold);}
+.act-foot{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border);}
+.act-dur{font-size:.62rem;color:var(--muted);letter-spacing:.06em;}
+.act-price{font-family:var(--ff-d);font-size:1.1rem;color:var(--gold);}
+
+/* ─── FLIGHTS ─── */
+.flights-sec{background:var(--ink);}
+.flights-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:54px;gap:40px;}
+.flight-search{background:var(--card);border:1px solid var(--border);margin-bottom:48px;}
+.ftabs{display:flex;border-bottom:1px solid var(--border);}
+.ftab{padding:14px 24px;background:none;border:none;font-family:var(--ff-b);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);cursor:none;position:relative;transition:color .3s;}
+.ftab::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform .3s;}
+.ftab.active{color:var(--gold);}
+.ftab.active::after{transform:scaleX(1);}
+.ffields{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;}
+.ff{padding:18px 22px;border-right:1px solid var(--border);cursor:none;transition:background .3s;}
+.ff:hover{background:rgba(180,148,80,.04);}
+.ff-lbl{font-size:.54rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
+.ff-val{font-family:var(--ff-d);font-size:1rem;}
+.ff-val.dim{color:var(--muted);}
+.fgo{background:var(--gold);color:var(--ink);border:none;padding:0 32px;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;cursor:none;transition:background .3s;}
+.fgo:hover{background:var(--gold2);}
+
+.flights-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.flight-card{background:var(--card);border:1px solid var(--border);padding:26px 24px;cursor:none;transition:transform .35s,border-color .35s;}
+.flight-card:hover{transform:translateY(-4px);border-color:rgba(180,148,80,.4);}
+.fc-airline{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.fc-logo{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--ff-d);font-size:.75rem;font-weight:500;}
+.fc-logo.ai{background:linear-gradient(135deg,#FF6B35,#f5a623);}
+.fc-logo.ig{background:linear-gradient(135deg,#0066CC,#00aaff);}
+.fc-logo.vj{background:linear-gradient(135deg,#e60023,#ff4a6b);}
+.fc-logo.s6{background:linear-gradient(135deg,#1a1a2e,#16213e);}
+.fc-logo.ek{background:linear-gradient(135deg,#C8A951,#a08030);}
+.fc-logo.sg{background:linear-gradient(135deg,#e60023,#880011);}
+.fc-airline-name{font-size:.72rem;letter-spacing:.06em;color:var(--muted);}
+.fc-flight-no{font-size:.58rem;color:rgba(248,242,230,.25);}
+.fc-route{display:flex;align-items:center;gap:0;margin-bottom:20px;}
+.fc-airport{flex:1;}
+.fc-code{font-family:var(--ff-d);font-size:1.8rem;font-weight:400;}
+.fc-city{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:2px;}
+.fc-middle{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.fc-duration{font-size:.6rem;letter-spacing:.1em;color:var(--muted);}
+.fc-line{width:100%;display:flex;align-items:center;gap:3px;}
+.fc-dot{width:5px;height:5px;border-radius:50%;border:1px solid var(--gold);}
+.fc-dash{flex:1;height:1px;background:rgba(180,148,80,.3);}
+.fc-plane{width:14px;height:14px;color:var(--gold);}
+.fc-stops{font-size:.57rem;letter-spacing:.1em;color:var(--muted);}
+.fc-airport.right{text-align:right;}
+.fc-footer{display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid var(--border);}
+.fc-time-lbl{font-size:.54rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.fc-price{font-family:var(--ff-d);font-size:1.35rem;color:var(--cream);}
+.fc-book{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;background:none;border:1px solid var(--border);color:var(--gold);padding:7px 16px;cursor:none;transition:all .3s;}
+.fc-book:hover{background:var(--gold);color:var(--ink);border-color:var(--gold);}
+
+/* ─── WHY US STRIP ─── */
+.why-strip{background:var(--gold);padding:64px;}
+.why-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:40px;}
+.why-item{text-align:center;}
+.why-icon{width:48px;height:48px;margin:0 auto 16px;background:rgba(4,8,15,.12);display:flex;align-items:center;justify-content:center;}
+.why-icon svg{width:22px;height:22px;color:var(--ink);}
+.why-title{font-family:var(--ff-d);font-size:1.05rem;font-weight:400;color:var(--ink);margin-bottom:6px;}
+.why-desc{font-size:.72rem;line-height:1.7;color:rgba(4,8,15,.6);letter-spacing:.03em;}
+
+/* ─── CTA ─── */
+.cta-sec{position:relative;overflow:hidden;padding:140px 64px;text-align:center;}
+.cta-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1600&q=80') center/cover no-repeat;filter:brightness(.2) saturate(.6);}
+.cta-sec::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(4,8,15,.4) 0%,rgba(4,8,15,.7) 100%);}
+.cta-content{position:relative;z-index:1;}
+.cta-title{font-family:var(--ff-d);font-size:clamp(2.8rem,5.5vw,5rem);font-weight:400;line-height:1.05;margin-bottom:20px;}
+.cta-title em{font-style:italic;color:var(--gold);}
+.cta-sub{font-size:.82rem;color:var(--muted);line-height:1.9;max-width:460px;margin:0 auto 44px;letter-spacing:.04em;}
+.cta-actions{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;}
+
+/* ─── FOOTER ─── */
+footer{background:#030508;padding:70px 64px 36px;border-top:1px solid var(--border);}
+.ft-grid{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:52px;padding-bottom:50px;border-bottom:1px solid var(--border);}
+.ft-logo{font-family:var(--ff-d);font-size:1.5rem;font-weight:400;color:var(--cream);text-decoration:none;display:block;margin-bottom:14px;}
+.ft-logo span{color:var(--gold);}
+.ft-tagline{font-size:.76rem;color:var(--muted);line-height:1.85;max-width:260px;margin-bottom:24px;letter-spacing:.03em;}
+.ft-social{display:flex;gap:10px;}
+.ft-s{width:34px;height:34px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:none;text-decoration:none;transition:all .3s;}
+.ft-s:hover{border-color:var(--gold);color:var(--gold);background:rgba(180,148,80,.06);}
+.ft-s svg{width:14px;height:14px;}
+.ft-col-h{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;}
+.ft-links{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.ft-links a{font-size:.76rem;color:var(--muted);text-decoration:none;letter-spacing:.03em;transition:color .3s;}
+.ft-links a:hover{color:var(--cream);}
+.ft-bottom{padding-top:26px;display:flex;justify-content:space-between;align-items:center;}
+.ft-copy{font-size:.64rem;color:rgba(248,242,230,.22);letter-spacing:.06em;}
+.ft-legal{display:flex;gap:20px;}
+.ft-legal a{font-size:.62rem;color:rgba(248,242,230,.22);text-decoration:none;letter-spacing:.06em;transition:color .3s;}
+.ft-legal a:hover{color:var(--muted);}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Ease<span>My</span>Booking</a>
+  <ul class="nav-links">
+    <li><a href="#domestic" class="active">Domestic</a></li>
+    <li><a href="#international">International</a></li>
+    <li><a href="#hotels">Hotels</a></li>
+    <li><a href="#visa">Visa</a></li>
+    <li><a href="#activities">Activities</a></li>
+    <li><a href="#flights">Flights</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-btn-ghost">Sign In</button>
+    <button class="nav-btn">Book Now</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-img"></div>
+  <div class="hero-gradient"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-content">
+    <div class="hero-badge">EaseMyBooking · Travel Portal</div>
+    <h1 class="hero-title">Explore the<br><em>Extraordinary</em></h1>
+    <p class="hero-sub">Domestic escapes, international adventures, luxury hotels, instant visa, thrilling activities & seamless flight bookings — all in one elegant platform.</p>
+    <div class="hero-actions">
+      <button class="btn-gold">Start Exploring</button>
+      <button class="btn-outline">View All Packages</button>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat-item">
+      <div class="hero-stat-val">12K+</div>
+      <div class="hero-stat-lbl">Travellers</div>
+    </div>
+    <div class="hero-stat-item">
+      <div class="hero-stat-val">80+</div>
+      <div class="hero-stat-lbl">Destinations</div>
+    </div>
+    <div class="hero-stat-item">
+      <div class="hero-stat-val">4.9★</div>
+      <div class="hero-stat-lbl">Rating</div>
+    </div>
+  </div>
+  <div class="scroll-ind"><span>Discover</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- SEARCH WIDGET -->
+<div class="search-wrap">
+  <div class="search-box">
+    <div class="search-tabs">
+      <button class="stab active">
+        <svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="6" cy="6" r="5"/><path d="M1 6h10M6 1c-2.5 2-2.5 8 0 10M6 1c2.5 2 2.5 8 0 10"/></svg>
+        Packages
+      </button>
+      <button class="stab">
+        <svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="4" width="9" height="7"/><path d="M4 4V3a2 2 0 014 0v1"/><path d="M5 8l1 1 2-2"/></svg>
+        Hotels
+      </button>
+      <button class="stab">
+        <svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 9l3-5 3 3 3-4"/><circle cx="11" cy="3" r="1"/></svg>
+        Flights
+      </button>
+      <button class="stab">
+        <svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3 7h7M6 4v6M2 2h9v9H2z"/></svg>
+        Visa
+      </button>
+      <button class="stab">
+        <svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 1l1.5 3 3.5.5-2.5 2.5.5 3.5L6 9l-3 1.5.5-3.5L1 4.5 4.5 4z"/></svg>
+        Activities
+      </button>
+    </div>
+    <div class="search-fields">
+      <div class="sf"><div class="sf-lbl">Destination</div><div class="sf-val dim">Where to go?</div></div>
+      <div class="sf"><div class="sf-lbl">Travel Date</div><div class="sf-val dim">Departure</div></div>
+      <div class="sf"><div class="sf-lbl">Return</div><div class="sf-val dim">Return Date</div></div>
+      <div class="sf"><div class="sf-lbl">Travellers</div><div class="sf-val">2 Adults</div></div>
+      <button class="search-go">Search</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     DOMESTIC PACKAGES
+═══════════════════════════════════ -->
+<section class="domestic-sec" id="domestic">
+  <div class="dom-head rv">
+    <div>
+      <div class="s-eye">Explore India</div>
+      <h2 class="s-title">Domestic <em>Packages</em></h2>
+    </div>
+    <div style="display:flex;align-items:flex-end;flex-direction:column;gap:12px">
+      <p class="dom-desc">From the golden deserts of Rajasthan to the backwaters of Kerala — discover India's most breathtaking destinations.</p>
+      <a href="#" class="view-all">View All Packages <svg viewBox="0 0 14 14" fill="none"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></a>
+    </div>
+  </div>
+  <div class="dom-grid">
+
+    <!-- Card 1 -->
+    <div class="pkg-card rv d1">
+      <div class="pkg-img">
+        <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80" alt="Rajasthan" loading="lazy"/>
+        <div class="pkg-badge">Best Seller</div>
+        <div class="pkg-rating">★ 4.9</div>
+      </div>
+      <div class="pkg-body">
+        <div class="pkg-dest">Rajasthan</div>
+        <div class="pkg-name">Royal Rajasthan Heritage Tour</div>
+        <div class="pkg-meta">
+          <span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="6" cy="6" r="5"/><path d="M6 3v3l2 1"/></svg> 7N / 8D</span>
+          <span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 10V5l4-3 4 3v5M4 10V7h4v3"/></svg> Hotel + Flight</span>
+          <span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 1l1.2 3.6H11L8 7l1.2 3.6L6 8.5l-3.2 2.1L4 7 1 4.6h3.8z"/></svg> 4-Star</span>
+        </div>
+        <div class="pkg-price-row">
+          <div><div class="pkg-from">Starting from</div><div class="pkg-price"><sup>₹</sup>42,999</div></div>
+          <a href="#" class="pkg-book">Book <svg viewBox="0 0 12 12" fill="none"><path d="M1 6H11M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.2"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="pkg-card rv d2">
+      <div class="pkg-img">
+        <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600&q=80" alt="Kerala" loading="lazy"/>
+        <div class="pkg-badge">Trending</div>
+        <div class="pkg-rating">★ 4.8</div>
+      </div>
+      <div class="pkg-body">
+        <div class="pkg-dest">Kerala</div>
+        <div class="pkg-name">Kerala Backwaters & Spice Trail</div>
+        <div class="pkg-meta">
+          <span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="6" cy="6" r="5"/><path d="M6 3v3l2 1"/></svg> 5N / 6D</span>
+          <span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 10V5l4-3 4 3v5M4 10V7h4v3"/></svg> Resort + Houseboat</span>
+          <span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 1l1.2 3.6H11L8 7l1.2 3.6L6 8.5l-3.2 2.1L4 7 1 4.6h3.8z"/></svg> 5-Star</span>
+        </div>
+        <div class="pkg-price-row">
+          <div><div class="pkg-from">Starting from</div><div class="pkg-price"><sup>₹</sup>38,500</div></div>
+          <a href="#" class="pkg-book">Book <svg viewBox="0 0 12 12" fill="none"><path d="M1 6H11M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.2"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="pkg-card rv d3">
+      <div class="pkg-img">
+        <img src="https://images.unsplash.com/photo-1587922546307-776227941871?w=600&q=80" alt="Himachal" loading="lazy"/>
+        <div class="pkg-badge">Adventure</div>
+        <div class="pkg-rating">★ 4.7</div>
+      </div>
+      <div class="pkg-body">
+        <div class="pkg-dest">Himachal Pradesh</div>
+        <div class="pkg-name">Manali Snowscape & Solang Valley</div>
+        <div class="pkg-meta">
+          <span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="6" cy="6" r="5"/><path d="M6 3v3l2 1"/></svg> 4N / 5D</span>
+          <span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 10V5l4-3 4 3v5M4 10V7h4v3"/></svg> Hotel + Cab</span>
+          <span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 1l1.2 3.6H11L8 7l1.2 3.6L6 8.5l-3.2 2.1L4 7 1 4.6h3.8z"/></svg> 3-Star</span>
+        </div>
+        <div class="pkg-price-row">
+          <div><div class="pkg-from">Starting from</div><div class="pkg-price"><sup>₹</sup>22,000</div></div>
+          <a href="#" class="pkg-book">Book <svg viewBox="0 0 12 12" fill="none"><path d="M1 6H11M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.2"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="pkg-card rv d4">
+      <div class="pkg-img">
+        <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=600&q=80" alt="Goa" loading="lazy"/>
+        <div class="pkg-badge">Beach Escape</div>
+        <div class="pkg-rating">★ 4.8</div>
+      </div>
+      <div class="pkg-body">
+        <div class="pkg-dest">Goa</div>
+        <div class="pkg-name">Goa Luxury Beach Retreat</div>
+        <div class="pkg-meta">
+          <span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="6" cy="6" r="5"/><path d="M6 3v3l2 1"/></svg> 3N / 4D</span>
+          <span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 10V5l4-3 4 3v5M4 10V7h4v3"/></svg> Villa + Flight</span>
+          <span><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 1l1.2 3.6H11L8 7l1.2 3.6L6 8.5l-3.2 2.1L4 7 1 4.6h3.8z"/></svg> 5-Star</span>
+        </div>
+        <div class="pkg-price-row">
+          <div><div class="pkg-from">Starting from</div><div class="pkg-price"><sup>₹</sup>29,500</div></div>
+          <a href="#" class="pkg-book">Book <svg viewBox="0 0 12 12" fill="none"><path d="M1 6H11M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.2"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     INTERNATIONAL PACKAGES
+═══════════════════════════════════ -->
+<section class="intl-sec" id="international">
+  <div class="intl-head rv">
+    <div>
+      <div class="s-eye">Beyond Borders</div>
+      <h2 class="s-title">International <em>Getaways</em></h2>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+      <p class="dom-desc" style="text-align:right">Handpicked world-class destinations with premium flights, curated hotels, and visa assistance included.</p>
+      <a href="#" class="view-all">All International <svg viewBox="0 0 14 14" fill="none"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></a>
+    </div>
+  </div>
+
+  <div class="intl-grid rv">
+    <div class="intl-card">
+      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=80" alt="Switzerland"/>
+      <div class="intl-overlay"></div>
+      <div class="intl-body">
+        <div class="intl-tag">Europe · Premium</div>
+        <div class="intl-name">Switzerland</div>
+        <div class="intl-detail">8 Nights · Business Class Available · Visa Included</div>
+        <div class="intl-price">From ₹2,20,000 / person</div>
+      </div>
+    </div>
+    <div class="intl-card">
+      <img src="https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=600&q=80" alt="Maldives"/>
+      <div class="intl-overlay"></div>
+      <div class="intl-body">
+        <div class="intl-tag">Indian Ocean · Luxury</div>
+        <div class="intl-name">Maldives</div>
+        <div class="intl-detail">5 Nights · Overwater Villa</div>
+        <div class="intl-price">From ₹95,000</div>
+      </div>
+    </div>
+    <div class="intl-card">
+      <img src="https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=600&q=80" alt="Japan"/>
+      <div class="intl-overlay"></div>
+      <div class="intl-body">
+        <div class="intl-tag">Asia · Culture</div>
+        <div class="intl-name">Japan</div>
+        <div class="intl-detail">7 Nights · Cherry Blossom</div>
+        <div class="intl-price">From ₹1,40,000</div>
+      </div>
+    </div>
+    <div class="intl-card">
+      <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80" alt="Dubai"/>
+      <div class="intl-overlay"></div>
+      <div class="intl-body">
+        <div class="intl-tag">Middle East · Luxury</div>
+        <div class="intl-name">Dubai</div>
+        <div class="intl-detail">4 Nights · Burj Views</div>
+        <div class="intl-price">From ₹78,000</div>
+      </div>
+    </div>
+    <div class="intl-card">
+      <img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600&q=80" alt="Santorini"/>
+      <div class="intl-overlay"></div>
+      <div class="intl-body">
+        <div class="intl-tag">Europe · Honeymoon</div>
+        <div class="intl-name">Santorini</div>
+        <div class="intl-detail">6 Nights · Cave Suite</div>
+        <div class="intl-price">From ₹1,75,000</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     HOTEL BOOKING
+═══════════════════════════════════ -->
+<section class="hotels-sec" id="hotels">
+  <div class="hotels-head rv">
+    <div>
+      <div class="s-eye">Stay in Style</div>
+      <h2 class="s-title">Hotel <em>Bookings</em></h2>
+    </div>
+    <a href="#" class="view-all">All Hotels <svg viewBox="0 0 14 14" fill="none"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></a>
+  </div>
+
+  <div class="hotels-filter rv">
+    <button class="hf-btn active">All</button>
+    <button class="hf-btn">5 Star</button>
+    <button class="hf-btn">4 Star</button>
+    <button class="hf-btn">Budget</button>
+    <button class="hf-btn">Beach</button>
+    <button class="hf-btn">Hill</button>
+    <button class="hf-btn">City</button>
+  </div>
+
+  <div class="hotels-grid">
+
+    <div class="hotel-card rv d1">
+      <div class="hotel-img">
+        <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=700&q=80" alt="Hotel Oberoi" loading="lazy"/>
+        <div class="hotel-stars"><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="hotel-grade">Luxury</div>
+      </div>
+      <div class="hotel-body">
+        <div class="hotel-city">Jaipur</div>
+        <div class="hotel-name">The Oberoi Rajvilas</div>
+        <div class="hotel-amenities">
+          <span class="amenity">Pool</span><span class="amenity">Spa</span><span class="amenity">Fine Dining</span><span class="amenity">Butler</span>
+        </div>
+        <div class="hotel-footer">
+          <div>
+            <div class="hotel-price-lbl">Per night from</div>
+            <div><span class="hotel-price">₹24,000</span> <span class="hotel-night">/ night</span></div>
+          </div>
+          <button class="hotel-btn">Book</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="hotel-card rv d2">
+      <div class="hotel-img">
+        <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=700&q=80" alt="Taj Falaknuma" loading="lazy"/>
+        <div class="hotel-stars"><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="hotel-grade">Palace</div>
+      </div>
+      <div class="hotel-body">
+        <div class="hotel-city">Hyderabad</div>
+        <div class="hotel-name">Taj Falaknuma Palace</div>
+        <div class="hotel-amenities">
+          <span class="amenity">Heritage</span><span class="amenity">Spa</span><span class="amenity">Dining</span><span class="amenity">View</span>
+        </div>
+        <div class="hotel-footer">
+          <div>
+            <div class="hotel-price-lbl">Per night from</div>
+            <div><span class="hotel-price">₹32,000</span> <span class="hotel-night">/ night</span></div>
+          </div>
+          <button class="hotel-btn">Book</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="hotel-card rv d3">
+      <div class="hotel-img">
+        <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=700&q=80" alt="Overwater Bungalow" loading="lazy"/>
+        <div class="hotel-stars"><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="hotel-grade">Overwater</div>
+      </div>
+      <div class="hotel-body">
+        <div class="hotel-city">Maldives</div>
+        <div class="hotel-name">Anantara Kihavah Villas</div>
+        <div class="hotel-amenities">
+          <span class="amenity">Overwater</span><span class="amenity">Reef</span><span class="amenity">Spa</span><span class="amenity">All-incl.</span>
+        </div>
+        <div class="hotel-footer">
+          <div>
+            <div class="hotel-price-lbl">Per night from</div>
+            <div><span class="hotel-price">₹58,000</span> <span class="hotel-night">/ night</span></div>
+          </div>
+          <button class="hotel-btn">Book</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="hotel-card rv d1">
+      <div class="hotel-img">
+        <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=700&q=80" alt="Udaipur Palace" loading="lazy"/>
+        <div class="hotel-stars"><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="hotel-grade">Lake Palace</div>
+      </div>
+      <div class="hotel-body">
+        <div class="hotel-city">Udaipur</div>
+        <div class="hotel-name">Taj Lake Palace</div>
+        <div class="hotel-amenities">
+          <span class="amenity">Lake View</span><span class="amenity">Pool</span><span class="amenity">Heritage</span>
+        </div>
+        <div class="hotel-footer">
+          <div>
+            <div class="hotel-price-lbl">Per night from</div>
+            <div><span class="hotel-price">₹28,500</span> <span class="hotel-night">/ night</span></div>
+          </div>
+          <button class="hotel-btn">Book</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="hotel-card rv d2">
+      <div class="hotel-img">
+        <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=700&q=80" alt="Goa Beach Hotel" loading="lazy"/>
+        <div class="hotel-stars"><span></span><span></span><span></span><span></span></div>
+        <div class="hotel-grade">Beach Resort</div>
+      </div>
+      <div class="hotel-body">
+        <div class="hotel-city">Goa</div>
+        <div class="hotel-name">Taj Exotica Resort & Spa</div>
+        <div class="hotel-amenities">
+          <span class="amenity">Beach</span><span class="amenity">Pool</span><span class="amenity">Spa</span><span class="amenity">Dining</span>
+        </div>
+        <div class="hotel-footer">
+          <div>
+            <div class="hotel-price-lbl">Per night from</div>
+            <div><span class="hotel-price">₹18,000</span> <span class="hotel-night">/ night</span></div>
+          </div>
+          <button class="hotel-btn">Book</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="hotel-card rv d3">
+      <div class="hotel-img">
+        <img src="https://images.unsplash.com/photo-1455587734955-081b22074882?w=700&q=80" alt="Dubai Hotel" loading="lazy"/>
+        <div class="hotel-stars"><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="hotel-grade">Ultra Luxury</div>
+      </div>
+      <div class="hotel-body">
+        <div class="hotel-city">Dubai</div>
+        <div class="hotel-name">Atlantis The Palm</div>
+        <div class="hotel-amenities">
+          <span class="amenity">Waterpark</span><span class="amenity">Beach</span><span class="amenity">Aquarium</span>
+        </div>
+        <div class="hotel-footer">
+          <div>
+            <div class="hotel-price-lbl">Per night from</div>
+            <div><span class="hotel-price">₹42,000</span> <span class="hotel-night">/ night</span></div>
+          </div>
+          <button class="hotel-btn">Book</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     VISA APPLICATION
+═══════════════════════════════════ -->
+<section class="visa-sec" id="visa">
+  <div class="visa-inner">
+    <div class="visa-visual rv">
+      <div class="visa-main-img">
+        <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&q=80" alt="Travel Passport" loading="lazy"/>
+      </div>
+      <div class="visa-accent">
+        <div class="visa-accent-num">50+</div>
+        <div class="visa-accent-lbl">Countries Covered</div>
+      </div>
+    </div>
+
+    <div class="visa-content rv d2">
+      <div class="s-eye">Hassle-Free Travel</div>
+      <h2 class="s-title">Apply for <em>Visa</em><br>Effortlessly</h2>
+      <div class="s-divider"></div>
+      <p class="visa-desc">We handle your visa documentation, appointment scheduling, and submission across 50+ countries. Fast, reliable, and expert-guided.</p>
+
+      <div class="visa-types">
+        <div class="visa-type">
+          <div class="visa-type-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="10" cy="10" r="8"/><path d="M2 10h16M10 2c-3 3-3 11 0 16M10 2c3 3 3 11 0 16"/></svg>
+          </div>
+          <div><div class="visa-type-name">Tourist Visa</div><div class="visa-type-sub">Leisure travel · 15-30 day processing</div></div>
+          <div class="visa-arrow"><svg viewBox="0 0 14 14" fill="none" width="14"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></div>
+        </div>
+        <div class="visa-type">
+          <div class="visa-type-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="4" width="14" height="12" rx="1"/><path d="M7 4V3a3 3 0 016 0v1"/><path d="M10 10v2M9 10h2"/></svg>
+          </div>
+          <div><div class="visa-type-name">Business Visa</div><div class="visa-type-sub">Corporate travel · Priority processing</div></div>
+          <div class="visa-arrow"><svg viewBox="0 0 14 14" fill="none" width="14"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></div>
+        </div>
+        <div class="visa-type">
+          <div class="visa-type-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M10 2l1.5 4.5H16l-3.5 2.5 1.5 4.5L10 11l-4 2.5 1.5-4.5L4 6.5h4.5z"/></svg>
+          </div>
+          <div><div class="visa-type-name">E-Visa / Visa on Arrival</div><div class="visa-type-sub">Digital application · Instant for 60+ nations</div></div>
+          <div class="visa-arrow"><svg viewBox="0 0 14 14" fill="none" width="14"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></div>
+        </div>
+        <div class="visa-type">
+          <div class="visa-type-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M10 2C6.13 2 3 5.13 3 9c0 5.25 7 9 7 9s7-3.75 7-9c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1110 6a2.5 2.5 0 010 5.5z"/></svg>
+          </div>
+          <div><div class="visa-type-name">Schengen Visa</div><div class="visa-type-sub">Access 26 European countries</div></div>
+          <div class="visa-arrow"><svg viewBox="0 0 14 14" fill="none" width="14"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="s-eye" style="margin-bottom:12px">Popular Destinations</div>
+        <div class="visa-countries">
+          <div class="vc-badge">🇦🇪 Dubai</div>
+          <div class="vc-badge">🇬🇧 UK</div>
+          <div class="vc-badge">🇺🇸 USA</div>
+          <div class="vc-badge">🇸🇬 Singapore</div>
+          <div class="vc-badge">🇹🇭 Thailand</div>
+          <div class="vc-badge">🇦🇺 Australia</div>
+          <div class="vc-badge">🇨🇦 Canada</div>
+          <div class="vc-badge">🇩🇪 Germany</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     ACTIVITIES
+═══════════════════════════════════ -->
+<section class="act-sec" id="activities">
+  <div class="act-head rv">
+    <div>
+      <div class="s-eye">Experiences</div>
+      <h2 class="s-title">Activities & <em>Adventures</em></h2>
+    </div>
+    <a href="#" class="view-all">All Activities <svg viewBox="0 0 14 14" fill="none"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></a>
+  </div>
+
+  <div class="act-scroll rv">
+    <div class="act-row">
+      <!-- Set 1 -->
+      <div class="act-card">
+        <div class="act-img">
+          <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=500&q=80" alt="Scuba Diving" loading="lazy"/>
+          <div class="act-cat">Water Sports</div>
+        </div>
+        <div class="act-body">
+          <div class="act-name">Scuba Diving Experience</div>
+          <div class="act-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Andaman Islands</div>
+          <div class="act-foot"><span class="act-dur">⏱ 4 Hours</span><span class="act-price">₹4,500</span></div>
+        </div>
+      </div>
+      <div class="act-card">
+        <div class="act-img">
+          <img src="https://images.unsplash.com/photo-1501786223405-6d024d7c3b8d?w=500&q=80" alt="Paragliding" loading="lazy"/>
+          <div class="act-cat">Adventure</div>
+        </div>
+        <div class="act-body">
+          <div class="act-name">Paragliding in Bir Billing</div>
+          <div class="act-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Himachal Pradesh</div>
+          <div class="act-foot"><span class="act-dur">⏱ 2 Hours</span><span class="act-price">₹2,800</span></div>
+        </div>
+      </div>
+      <div class="act-card">
+        <div class="act-img">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&q=80" alt="Beach" loading="lazy"/>
+          <div class="act-cat">Beach</div>
+        </div>
+        <div class="act-body">
+          <div class="act-name">Private Beach Sunset Tour</div>
+          <div class="act-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Goa</div>
+          <div class="act-foot"><span class="act-dur">⏱ 3 Hours</span><span class="act-price">₹3,200</span></div>
+        </div>
+      </div>
+      <div class="act-card">
+        <div class="act-img">
+          <img src="https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=500&q=80" alt="Trekking" loading="lazy"/>
+          <div class="act-cat">Trekking</div>
+        </div>
+        <div class="act-body">
+          <div class="act-name">Valley of Flowers Trek</div>
+          <div class="act-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Uttarakhand</div>
+          <div class="act-foot"><span class="act-dur">⏱ Full Day</span><span class="act-price">₹6,500</span></div>
+        </div>
+      </div>
+      <div class="act-card">
+        <div class="act-img">
+          <img src="https://images.unsplash.com/photo-1537956965359-7573183d1f57?w=500&q=80" alt="Hot Air Balloon" loading="lazy"/>
+          <div class="act-cat">Aerial</div>
+        </div>
+        <div class="act-body">
+          <div class="act-name">Hot Air Balloon — Jaipur</div>
+          <div class="act-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Rajasthan</div>
+          <div class="act-foot"><span class="act-dur">⏱ 1.5 Hours</span><span class="act-price">₹8,000</span></div>
+        </div>
+      </div>
+      <div class="act-card">
+        <div class="act-img">
+          <img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=500&q=80" alt="Safari" loading="lazy"/>
+          <div class="act-cat">Wildlife</div>
+        </div>
+        <div class="act-body">
+          <div class="act-name">Jim Corbett Tiger Safari</div>
+          <div class="act-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Uttarakhand</div>
+          <div class="act-foot"><span class="act-dur">⏱ Half Day</span><span class="act-price">₹5,200</span></div>
+        </div>
+      </div>
+      <!-- Duplicate for loop -->
+      <div class="act-card"><div class="act-img"><img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=500&q=80" alt="Scuba" loading="lazy"/><div class="act-cat">Water Sports</div></div><div class="act-body"><div class="act-name">Scuba Diving Experience</div><div class="act-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Andaman Islands</div><div class="act-foot"><span class="act-dur">⏱ 4 Hours</span><span class="act-price">₹4,500</span></div></div></div>
+      <div class="act-card"><div class="act-img"><img src="https://images.unsplash.com/photo-1501786223405-6d024d7c3b8d?w=500&q=80" alt="Paragliding" loading="lazy"/><div class="act-cat">Adventure</div></div><div class="act-body"><div class="act-name">Paragliding in Bir Billing</div><div class="act-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Himachal Pradesh</div><div class="act-foot"><span class="act-dur">⏱ 2 Hours</span><span class="act-price">₹2,800</span></div></div></div>
+      <div class="act-card"><div class="act-img"><img src="https://images.unsplash.com/photo-1537956965359-7573183d1f57?w=500&q=80" alt="Balloon" loading="lazy"/><div class="act-cat">Aerial</div></div><div class="act-body"><div class="act-name">Hot Air Balloon — Jaipur</div><div class="act-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Rajasthan</div><div class="act-foot"><span class="act-dur">⏱ 1.5 Hours</span><span class="act-price">₹8,000</span></div></div></div>
+      <div class="act-card"><div class="act-img"><img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=500&q=80" alt="Safari" loading="lazy"/><div class="act-cat">Wildlife</div></div><div class="act-body"><div class="act-name">Jim Corbett Tiger Safari</div><div class="act-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Uttarakhand</div><div class="act-foot"><span class="act-dur">⏱ Half Day</span><span class="act-price">₹5,200</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     FLIGHTS
+═══════════════════════════════════ -->
+<section class="flights-sec" id="flights">
+  <div class="flights-head rv">
+    <div>
+      <div class="s-eye">Take Off</div>
+      <h2 class="s-title">Flight <em>Bookings</em></h2>
+    </div>
+    <a href="#" class="view-all">Search All Flights <svg viewBox="0 0 14 14" fill="none"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></a>
+  </div>
+
+  <div class="flight-search rv">
+    <div class="ftabs">
+      <button class="ftab active">One Way</button>
+      <button class="ftab">Round Trip</button>
+      <button class="ftab">Multi-City</button>
+    </div>
+    <div class="ffields">
+      <div class="ff"><div class="ff-lbl">From</div><div class="ff-val">Delhi · DEL</div></div>
+      <div class="ff"><div class="ff-lbl">To</div><div class="ff-val dim">Destination</div></div>
+      <div class="ff"><div class="ff-lbl">Departure</div><div class="ff-val dim">Select Date</div></div>
+      <div class="ff"><div class="ff-lbl">Travellers & Class</div><div class="ff-val">1 Adult · Economy</div></div>
+      <button class="fgo">Search Flights</button>
+    </div>
+  </div>
+
+  <div class="flights-grid">
+
+    <div class="flight-card rv d1">
+      <div class="fc-airline">
+        <div class="fc-logo ai">AI</div>
+        <div><div class="fc-airline-name">Air India</div><div class="fc-flight-no">AI-201</div></div>
+        <div style="margin-left:auto;font-size:.58rem;color:var(--gold);background:rgba(180,148,80,.1);padding:3px 9px;letter-spacing:.08em;">Non-Stop</div>
+      </div>
+      <div class="fc-route">
+        <div class="fc-airport">
+          <div class="fc-code">DEL</div>
+          <div class="fc-city">New Delhi</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:4px;">06:30</div>
+        </div>
+        <div class="fc-middle">
+          <div class="fc-duration">2h 30m</div>
+          <div class="fc-line"><div class="fc-dot"></div><div class="fc-dash"></div><svg class="fc-plane" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
+          <div class="fc-stops">Direct</div>
+        </div>
+        <div class="fc-airport right">
+          <div class="fc-code">BOM</div>
+          <div class="fc-city">Mumbai</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:4px;">09:00</div>
+        </div>
+      </div>
+      <div class="fc-footer">
+        <div><div class="fc-time-lbl">From</div><div class="fc-price">₹4,820</div></div>
+        <button class="fc-book">Book</button>
+      </div>
+    </div>
+
+    <div class="flight-card rv d2">
+      <div class="fc-airline">
+        <div class="fc-logo ig">6E</div>
+        <div><div class="fc-airline-name">IndiGo</div><div class="fc-flight-no">6E-545</div></div>
+        <div style="margin-left:auto;font-size:.58rem;color:var(--gold);background:rgba(180,148,80,.1);padding:3px 9px;letter-spacing:.08em;">Non-Stop</div>
+      </div>
+      <div class="fc-route">
+        <div class="fc-airport">
+          <div class="fc-code">BLR</div>
+          <div class="fc-city">Bengaluru</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:4px;">07:15</div>
+        </div>
+        <div class="fc-middle">
+          <div class="fc-duration">3h 45m</div>
+          <div class="fc-line"><div class="fc-dot"></div><div class="fc-dash"></div><svg class="fc-plane" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
+          <div class="fc-stops">Direct</div>
+        </div>
+        <div class="fc-airport right">
+          <div class="fc-code">CCU</div>
+          <div class="fc-city">Kolkata</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:4px;">11:00</div>
+        </div>
+      </div>
+      <div class="fc-footer">
+        <div><div class="fc-time-lbl">From</div><div class="fc-price">₹3,590</div></div>
+        <button class="fc-book">Book</button>
+      </div>
+    </div>
+
+    <div class="flight-card rv d3">
+      <div class="fc-airline">
+        <div class="fc-logo ek">EK</div>
+        <div><div class="fc-airline-name">Emirates</div><div class="fc-flight-no">EK-509</div></div>
+        <div style="margin-left:auto;font-size:.58rem;color:var(--gold);background:rgba(180,148,80,.1);padding:3px 9px;letter-spacing:.08em;">Non-Stop</div>
+      </div>
+      <div class="fc-route">
+        <div class="fc-airport">
+          <div class="fc-code">BOM</div>
+          <div class="fc-city">Mumbai</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:4px;">02:00</div>
+        </div>
+        <div class="fc-middle">
+          <div class="fc-duration">3h 10m</div>
+          <div class="fc-line"><div class="fc-dot"></div><div class="fc-dash"></div><svg class="fc-plane" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
+          <div class="fc-stops">Direct</div>
+        </div>
+        <div class="fc-airport right">
+          <div class="fc-code">DXB</div>
+          <div class="fc-city">Dubai</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:4px;">05:10</div>
+        </div>
+      </div>
+      <div class="fc-footer">
+        <div><div class="fc-time-lbl">From</div><div class="fc-price">₹18,200</div></div>
+        <button class="fc-book">Book</button>
+      </div>
+    </div>
+
+    <div class="flight-card rv d1">
+      <div class="fc-airline">
+        <div class="fc-logo vj">SG</div>
+        <div><div class="fc-airline-name">SpiceJet</div><div class="fc-flight-no">SG-118</div></div>
+        <div style="margin-left:auto;font-size:.58rem;color:rgba(248,242,230,.25);background:rgba(255,255,255,.04);padding:3px 9px;letter-spacing:.08em;">1 Stop</div>
+      </div>
+      <div class="fc-route">
+        <div class="fc-airport">
+          <div class="fc-code">JAI</div>
+          <div class="fc-city">Jaipur</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:4px;">09:40</div>
+        </div>
+        <div class="fc-middle">
+          <div class="fc-duration">5h 20m</div>
+          <div class="fc-line"><div class="fc-dot"></div><div class="fc-dash"></div><svg class="fc-plane" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
+          <div class="fc-stops">1 Stop · Delhi</div>
+        </div>
+        <div class="fc-airport right">
+          <div class="fc-code">GOI</div>
+          <div class="fc-city">Goa</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:4px;">15:00</div>
+        </div>
+      </div>
+      <div class="fc-footer">
+        <div><div class="fc-time-lbl">From</div><div class="fc-price">₹5,340</div></div>
+        <button class="fc-book">Book</button>
+      </div>
+    </div>
+
+    <div class="flight-card rv d2">
+      <div class="fc-airline">
+        <div class="fc-logo s6">SQ</div>
+        <div><div class="fc-airline-name">Singapore Air</div><div class="fc-flight-no">SQ-422</div></div>
+        <div style="margin-left:auto;font-size:.58rem;color:var(--gold);background:rgba(180,148,80,.1);padding:3px 9px;letter-spacing:.08em;">Non-Stop</div>
+      </div>
+      <div class="fc-route">
+        <div class="fc-airport">
+          <div class="fc-code">DEL</div>
+          <div class="fc-city">New Delhi</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:4px;">23:45</div>
+        </div>
+        <div class="fc-middle">
+          <div class="fc-duration">5h 55m</div>
+          <div class="fc-line"><div class="fc-dot"></div><div class="fc-dash"></div><svg class="fc-plane" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
+          <div class="fc-stops">Direct</div>
+        </div>
+        <div class="fc-airport right">
+          <div class="fc-code">SIN</div>
+          <div class="fc-city">Singapore</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:4px;">05:40+1</div>
+        </div>
+      </div>
+      <div class="fc-footer">
+        <div><div class="fc-time-lbl">From</div><div class="fc-price">₹22,800</div></div>
+        <button class="fc-book">Book</button>
+      </div>
+    </div>
+
+    <div class="flight-card rv d3">
+      <div class="fc-airline">
+        <div class="fc-logo ig">6E</div>
+        <div><div class="fc-airline-name">IndiGo</div><div class="fc-flight-no">6E-212</div></div>
+        <div style="margin-left:auto;font-size:.58rem;color:var(--gold);background:rgba(180,148,80,.1);padding:3px 9px;letter-spacing:.08em;">Non-Stop</div>
+      </div>
+      <div class="fc-route">
+        <div class="fc-airport">
+          <div class="fc-code">HYD</div>
+          <div class="fc-city">Hyderabad</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:4px;">14:25</div>
+        </div>
+        <div class="fc-middle">
+          <div class="fc-duration">2h 05m</div>
+          <div class="fc-line"><div class="fc-dot"></div><div class="fc-dash"></div><svg class="fc-plane" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
+          <div class="fc-stops">Direct</div>
+        </div>
+        <div class="fc-airport right">
+          <div class="fc-code">BLR</div>
+          <div class="fc-city">Bengaluru</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:4px;">16:30</div>
+        </div>
+      </div>
+      <div class="fc-footer">
+        <div><div class="fc-time-lbl">From</div><div class="fc-price">₹2,990</div></div>
+        <button class="fc-book">Book</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WHY US -->
+<div class="why-strip rv">
+  <div class="why-grid">
+    <div class="why-item">
+      <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="why-title">100% Secure Booking</div>
+      <div class="why-desc">PCI-compliant payments with full data encryption and fraud protection</div>
+    </div>
+    <div class="why-item">
+      <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+      <div class="why-title">Best Price Guarantee</div>
+      <div class="why-desc">We match or beat any comparable quote — guaranteed lowest prices</div>
+    </div>
+    <div class="why-item">
+      <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg></div>
+      <div class="why-title">24/7 Expert Support</div>
+      <div class="why-desc">Dedicated travel experts reachable round-the-clock for any assistance</div>
+    </div>
+    <div class="why-item">
+      <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+      <div class="why-title">Personalised Itineraries</div>
+      <div class="why-desc">Every trip is custom-crafted to match your style, pace, and preferences</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-sec">
+  <div class="cta-bg"></div>
+  <div class="cta-content rv">
+    <h2 class="cta-title">Your Next Adventure<br><em>Starts Here</em></h2>
+    <p class="cta-sub">Let our experts build your perfect itinerary — flights, hotels, visa, activities and more.</p>
+    <div class="cta-actions">
+      <button class="btn-gold">Plan My Trip</button>
+      <button class="btn-outline">Talk to an Expert</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-grid">
+    <div>
+      <a href="#" class="ft-logo">Ease<span>My</span>Booking</a>
+      <p class="ft-tagline">India's most trusted premium travel portal for packages, hotels, flights, visa and curated experiences.</p>
+      <div class="ft-social">
+        <a href="#" class="ft-s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+        <a href="#" class="ft-s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+        <a href="#" class="ft-s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg></a>
+      </div>
+    </div>
+    <div>
+      <div class="ft-col-h">Travel</div>
+      <ul class="ft-links">
+        <li><a href="#domestic">Domestic Packages</a></li>
+        <li><a href="#international">International Tours</a></li>
+        <li><a href="#hotels">Hotel Booking</a></li>
+        <li><a href="#flights">Flight Booking</a></li>
+        <li><a href="#visa">Visa Services</a></li>
+        <li><a href="#activities">Activities</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="ft-col-h">Support</div>
+      <ul class="ft-links">
+        <li><a href="#">Help Centre</a></li>
+        <li><a href="#">Cancellations</a></li>
+        <li><a href="#">Travel Insurance</a></li>
+        <li><a href="#">Group Bookings</a></li>
+        <li><a href="#">Corporate Travel</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="ft-col-h">Company</div>
+      <ul class="ft-links">
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <div class="ft-copy">© 2025 EaseMyBooking. All rights reserved.</div>
+    <div class="ft-legal"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a></div>
+  </div>
+</footer>
+
+<script>
+// Cursor
+const cur = document.getElementById('cur'), ring = document.getElementById('cur-r');
+let rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
+  setTimeout(() => { ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px'; }, 85);
+});
+
+// Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 60));
+
+// Reveal
+const rvEls = document.querySelectorAll('.rv');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('on'); });
+}, { threshold: 0.1 });
+rvEls.forEach(el => io.observe(el));
+
+// Search / Filter tabs
+document.querySelectorAll('.stab').forEach(t => {
+  t.addEventListener('click', function() {
+    document.querySelectorAll('.stab').forEach(s => s.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+document.querySelectorAll('.ftab').forEach(t => {
+  t.addEventListener('click', function() {
+    document.querySelectorAll('.ftab').forEach(s => s.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+document.querySelectorAll('.hf-btn').forEach(t => {
+  t.addEventListener('click', function() {
+    document.querySelectorAll('.hf-btn').forEach(s => s.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// Active nav on scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if(scrollY >= s.offsetTop - 200) current = s.id; });
+  navLinks.forEach(a => {
+    a.classList.remove('active');
+    if(a.getAttribute('href') === '#' + current) a.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
