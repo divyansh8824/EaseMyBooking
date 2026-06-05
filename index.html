@@ -7,6 +7,180 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+
+  /* ===========================
+LUXURY HERO IMAGE CAROUSEL
+=========================== */
+
+.hero-slider{
+position:relative;
+height:100vh;
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:0 7%;
+}
+
+/* OVERLAY */
+
+.overlay{
+position:absolute;
+inset:0;
+background:
+linear-gradient(
+rgba(18,18,18,0.48),
+rgba(18,18,18,0.38)
+);
+z-index:2;
+}
+
+/* SLIDES */
+
+.hero-slide{
+position:absolute;
+inset:0;
+background-size:cover;
+background-position:center;
+opacity:0;
+transform:scale(1.08);
+transition:
+opacity 1.8s ease,
+transform 8s ease;
+}
+
+/* HIGH QUALITY PREMIUM IMAGES */
+
+.hero-slide:nth-child(2){
+background-image:
+url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1800&q=80');
+}
+
+.hero-slide:nth-child(3){
+background-image:
+url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1800&q=80');
+}
+
+.hero-slide:nth-child(4){
+background-image:
+url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=80');
+}
+
+.hero-slide:nth-child(5){
+background-image:
+url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1800&q=80');
+}
+
+.hero-slide.active{
+opacity:1;
+transform:scale(1);
+}
+
+/* CONTENT */
+
+.hero-content{
+position:relative;
+z-index:3;
+max-width:900px;
+text-align:center;
+color:white;
+}
+
+.hero-badge{
+display:inline-block;
+padding:12px 24px;
+border-radius:50px;
+background:
+rgba(255,255,255,0.15);
+
+backdrop-filter:blur(12px);
+
+border:
+1px solid rgba(255,255,255,0.18);
+
+margin-bottom:28px;
+font-size:14px;
+font-weight:500;
+}
+
+.hero-content h1{
+font-size:84px;
+font-family:
+'Cormorant Garamond',
+serif;
+
+line-height:1;
+margin-bottom:22px;
+}
+
+.hero-content p{
+font-size:22px;
+line-height:1.8;
+color:#f1f1f1;
+max-width:750px;
+margin:auto;
+margin-bottom:40px;
+}
+
+/* BUTTONS */
+
+.hero-buttons{
+display:flex;
+justify-content:center;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.btn-primary{
+background:
+linear-gradient(
+135deg,
+#D4B06A,
+#B88A39
+);
+
+padding:18px 34px;
+border-radius:18px;
+text-decoration:none;
+color:white;
+font-weight:600;
+transition:.3s;
+}
+
+.btn-secondary{
+background:
+rgba(255,255,255,0.15);
+
+backdrop-filter:blur(14px);
+
+padding:18px 34px;
+border-radius:18px;
+text-decoration:none;
+color:white;
+font-weight:600;
+border:
+1px solid rgba(255,255,255,.15);
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.hero-content h1{
+font-size:46px;
+}
+
+.hero-content p{
+font-size:17px;
+}
+
+.hero-slider{
+padding:0 20px;
+height:90vh;
+}
+
+}
+
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
@@ -808,7 +982,7 @@
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>
     <li><a href="#destinations">Destinations</a></li>
-    <li><a href="#events.html">Events</a></li>
+    <li><a href="events.html">Events</a></li>
     <li><a href="#venues">Venues</a></li>
     <li><a href="#about">About</a></li>
   </ul>
@@ -816,28 +990,50 @@
 </nav>
 
 <!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-bg"></div>
-  <div class="hero-lines"></div>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
+<section class="hero-slider">
 
-  <div class="hero-content">
-    <div class="hero-eyebrow">Premium Travel & Event Experiences</div>
-    <h1 class="hero-title">The World <em>Awaits</em></h1>
-    <div class="hero-title-line2">Your Perfect Journey</div>
-    <p class="hero-sub">Curated travel packages, luxury event planning & exclusive venue bookings — all seamlessly in one place.</p>
-    <div class="hero-actions">
-      <button class="btn-primary">Explore Packages</button>
-      <button class="btn-ghost">Plan an Event</button>
-    </div>
-  </div>
+<div class="overlay"></div>
 
-  <div class="scroll-hint">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
-  </div>
+<!-- Background Slides -->
+<div class="hero-slide active"></div>
+<div class="hero-slide"></div>
+<div class="hero-slide"></div>
+<div class="hero-slide"></div>
+
+<!-- Content -->
+<div class="hero-content">
+
+<div class="hero-badge">
+✨ Luxury Travel • Events • Experiences
+</div>
+
+<h1>
+Luxury Experiences,<br>
+Designed Around You
+</h1>
+
+<p>
+Private Villas, Romantic Escapes,
+Premium Travel & Curated Celebrations
+— all in one place.
+</p>
+
+<div class="hero-buttons">
+
+<a href="farmhouse-villa.html"
+class="btn-primary">
+Explore Experiences
+</a>
+
+<a href="https://wa.me/91YOURNUMBER"
+class="btn-secondary">
+WhatsApp Concierge
+</a>
+
+</div>
+
+</div>
+
 </section>
 
 <!-- SEARCH BAR -->
@@ -1479,5 +1675,31 @@
   }, { threshold: 0.3 });
   if (statsStrip) statsObserver.observe(statsStrip);
 </script>
+
+<script>
+
+const slides =
+document.querySelectorAll('.hero-slide');
+
+let current = 0;
+
+function changeSlide(){
+
+slides[current]
+.classList.remove('active');
+
+current =
+(current + 1)
+% slides.length;
+
+slides[current]
+.classList.add('active');
+
+}
+
+setInterval(changeSlide, 4500);
+
+</script>
+
 </body>
 </html>
