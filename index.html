@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>EaseMyBooking — Travel & Events</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black:       #080808;
+    --deep:        #0e0e0e;
+    --card:        #141414;
+    --border:      rgba(201,165,90,0.18);
+    --gold:        #C9A55A;
+    --gold-light:  #e2c47a;
+    --champagne:   #f5e6c8;
+    --white:       #f9f5ee;
+    --muted:       rgba(249,245,238,0.45);
+    --ff-display:  'Cormorant Garamond', serif;
+    --ff-body:     'Montserrat', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--ff-body);
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── CURSOR ── */
+  #cursor {
+    position: fixed; top: 0; left: 0; z-index: 9999;
+    width: 10px; height: 10px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%,-50%);
+    transition: transform .15s ease, width .3s ease, height .3s ease, background .3s;
+  }
+  #cursor-ring {
+    position: fixed; top: 0; left: 0; z-index: 9998;
+    width: 36px; height: 36px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%,-50%);
+    transition: transform .4s cubic-bezier(.23,1,.32,1), width .4s, height .4s, opacity .3s;
+    opacity: .6;
+  }
+  body:has(a:hover) #cursor, body:has(button:hover) #cursor { width: 18px; height: 18px; background: var(--gold-light); }
+  body:has(a:hover) #cursor-ring, body:has(button:hover) #cursor-ring { width: 54px; height: 54px; opacity: .3; }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 9997;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: .025;
+    pointer-events: none;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    padding: 28px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: background .5s, padding .4s, backdrop-filter .5s;
+  }
+  nav.scrolled {
+    background: rgba(8,8,8,.88);
+    backdrop-filter: blur(18px);
+    padding: 18px 60px;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--ff-display);
+    font-size: 1.55rem;
+    font-weight: 400;
+    letter-spacing: .04em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 38px; list-style: none; }
+  .nav-links a {
+    font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none;
+    position: relative; padding-bottom: 4px;
+    transition: color .3s;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    width: 0; height: 1px; background: var(--gold);
+    transition: width .35s ease;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    font-size: .7rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--black); background: var(--gold);
+    padding: 11px 28px; border: none; cursor: none;
+    transition: background .3s, transform .2s;
+  }
+  .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; height: 100vh; min-height: 700px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  /* animated gradient mesh background */
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, #1a1108 0%, var(--black) 70%);
+    z-index: 0;
+  }
+  .hero-bg::before {
+    content: '';
+    position: absolute; inset: -50%;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(201,165,90,.12) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(201,165,90,.08) 0%, transparent 50%),
+      radial-gradient(circle at 60% 20%, rgba(255,200,80,.06) 0%, transparent 40%);
+    animation: meshShift 12s ease-in-out infinite alternate;
+  }
+  @keyframes meshShift {
+    0%   { transform: translate(0,0) scale(1); }
+    100% { transform: translate(3%, 2%) scale(1.04); }
+  }
+
+  /* floating orbs */
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px);
+    animation: orbFloat 18s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .orb-1 { width: 500px; height: 500px; background: rgba(201,165,90,.07); top: -100px; left: -80px; animation-delay: 0s; }
+  .orb-2 { width: 380px; height: 380px; background: rgba(201,165,90,.05); bottom: -60px; right: -60px; animation-delay: -6s; }
+  .orb-3 { width: 250px; height: 250px; background: rgba(255,210,100,.06); top: 40%; right: 15%; animation-delay: -12s; }
+  @keyframes orbFloat {
+    0%,100% { transform: translateY(0) scale(1); }
+    50%      { transform: translateY(-30px) scale(1.05); }
+  }
+
+  /* horizontal lines */
+  .hero-lines {
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 79px,
+      rgba(201,165,90,.04) 80px
+    );
+    z-index: 1;
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 860px; padding: 0 24px; }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 14px;
+    font-size: .65rem; letter-spacing: .32em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 28px;
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp .9s .3s forwards;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: ''; width: 32px; height: 1px; background: var(--gold); opacity: .6;
+  }
+
+  .hero-title {
+    font-family: var(--ff-display);
+    font-size: clamp(3.6rem, 8vw, 7rem);
+    font-weight: 300;
+    line-height: 1.0;
+    letter-spacing: -.01em;
+    color: var(--white);
+    margin-bottom: 10px;
+    opacity: 0; transform: translateY(30px);
+    animation: fadeUp .9s .5s forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero-title-line2 {
+    font-family: var(--ff-display);
+    font-size: clamp(3.6rem, 8vw, 7rem);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -.01em;
+    opacity: 0; transform: translateY(30px);
+    animation: fadeUp .9s .65s forwards;
+  }
+
+  .hero-sub {
+    font-size: .82rem; letter-spacing: .1em; line-height: 1.9;
+    color: var(--muted); max-width: 520px; margin: 28px auto 46px;
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp .9s .85s forwards;
+  }
+
+  .hero-actions {
+    display: flex; align-items: center; gap: 24px; justify-content: center;
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp .9s 1.05s forwards;
+  }
+  .btn-primary {
+    background: var(--gold); color: var(--black);
+    padding: 15px 42px; border: none;
+    font-family: var(--ff-body); font-size: .72rem;
+    letter-spacing: .18em; text-transform: uppercase;
+    cursor: none; transition: background .3s, transform .25s, box-shadow .3s;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::after {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(255,255,255,.15);
+    transform: translateX(-100%);
+    transition: transform .4s ease;
+  }
+  .btn-primary:hover::after { transform: translateX(0); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(201,165,90,.3); }
+
+  .btn-ghost {
+    background: transparent; color: var(--white);
+    padding: 14px 42px; border: 1px solid rgba(249,245,238,.25);
+    font-family: var(--ff-body); font-size: .72rem;
+    letter-spacing: .18em; text-transform: uppercase;
+    cursor: none; transition: border-color .3s, color .3s, transform .25s;
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* hero scroll indicator */
+  .scroll-hint {
+    position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+    z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 10px;
+    opacity: 0; animation: fadeUp .8s 1.6s forwards;
+  }
+  .scroll-hint span {
+    font-size: .6rem; letter-spacing: .22em; text-transform: uppercase; color: var(--muted);
+  }
+  .scroll-line {
+    width: 1px; height: 54px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollDrop 2s ease-in-out infinite;
+  }
+  @keyframes scrollDrop {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* ── SEARCH BAR ── */
+  .search-section {
+    position: relative; z-index: 10;
+    margin-top: -52px;
+    padding: 0 60px;
+  }
+  .search-bar {
+    max-width: 1100px; margin: 0 auto;
+    background: rgba(20,20,20,.95);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    display: grid; grid-template-columns: 1fr 1fr 1fr 1fr auto;
+    overflow: hidden;
+  }
+  .search-field {
+    padding: 26px 28px;
+    border-right: 1px solid var(--border);
+    cursor: none;
+    transition: background .3s;
+  }
+  .search-field:hover { background: rgba(201,165,90,.04); }
+  .search-field:last-of-type { border-right: none; }
+  .sf-label {
+    font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 6px;
+  }
+  .sf-value {
+    font-family: var(--ff-display); font-size: 1.05rem; font-weight: 300;
+    color: var(--white);
+  }
+  .sf-value.muted { color: var(--muted); }
+  .search-btn {
+    background: var(--gold); color: var(--black);
+    padding: 0 40px; border: none;
+    font-family: var(--ff-body); font-size: .7rem;
+    letter-spacing: .18em; text-transform: uppercase;
+    cursor: none; transition: background .3s;
+    white-space: nowrap;
+  }
+  .search-btn:hover { background: var(--gold-light); }
+
+  /* ── SECTION BASE ── */
+  section { padding: 120px 60px; }
+
+  .section-eyebrow {
+    display: inline-flex; align-items: center; gap: 14px;
+    font-size: .6rem; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px;
+  }
+  .section-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+
+  .section-title {
+    font-family: var(--ff-display);
+    font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+    font-weight: 300; line-height: 1.1; letter-spacing: -.01em;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+
+  /* ── SERVICES ── */
+  .services-section { background: var(--deep); }
+  .services-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 70px; gap: 40px;
+  }
+  .services-desc {
+    max-width: 360px; font-size: .82rem; line-height: 1.9;
+    color: var(--muted); letter-spacing: .04em;
+  }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .service-card {
+    background: var(--card);
+    padding: 52px 44px;
+    position: relative; overflow: hidden;
+    cursor: none;
+    transition: transform .4s cubic-bezier(.23,1,.32,1);
+  }
+  .service-card::before {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    transform: scaleX(0); transition: transform .5s ease;
+  }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-card::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 110%, rgba(201,165,90,.06) 0%, transparent 70%);
+    opacity: 0; transition: opacity .4s;
+  }
+  .service-card:hover::after { opacity: 1; }
+  .service-card:hover { transform: translateY(-4px); }
+
+  .service-icon {
+    width: 52px; height: 52px; margin-bottom: 32px;
+    position: relative; z-index: 1;
+  }
+  .service-icon svg { width: 100%; height: 100%; }
+
+  .service-num {
+    position: absolute; top: 36px; right: 40px;
+    font-family: var(--ff-display); font-size: 4rem; font-weight: 300;
+    color: rgba(201,165,90,.07); line-height: 1;
+    transition: color .4s;
+  }
+  .service-card:hover .service-num { color: rgba(201,165,90,.12); }
+
+  .service-name {
+    font-family: var(--ff-display); font-size: 1.5rem; font-weight: 400;
+    margin-bottom: 14px; position: relative; z-index: 1;
+  }
+  .service-desc {
+    font-size: .78rem; line-height: 1.9; color: var(--muted);
+    letter-spacing: .04em; position: relative; z-index: 1;
+  }
+  .service-link {
+    display: inline-flex; align-items: center; gap: 10px; margin-top: 28px;
+    font-size: .65rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none; position: relative; z-index: 1;
+    transition: gap .3s;
+  }
+  .service-link:hover { gap: 16px; }
+  .service-link svg { width: 14px; height: 14px; }
+
+  /* ── DESTINATIONS ── */
+  .destinations-section { background: var(--black); }
+  .dest-header { margin-bottom: 60px; }
+  .dest-tabs {
+    display: flex; gap: 0; margin-bottom: 50px;
+    border-bottom: 1px solid var(--border);
+  }
+  .dest-tab {
+    padding: 14px 32px; background: none; border: none;
+    font-family: var(--ff-body); font-size: .68rem;
+    letter-spacing: .18em; text-transform: uppercase;
+    color: var(--muted); cursor: none;
+    position: relative; transition: color .3s;
+  }
+  .dest-tab::after {
+    content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+    height: 2px; background: var(--gold);
+    transform: scaleX(0); transition: transform .3s;
+  }
+  .dest-tab.active { color: var(--white); }
+  .dest-tab.active::after { transform: scaleX(1); }
+
+  .dest-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 320px 220px;
+    gap: 3px;
+  }
+  .dest-card {
+    position: relative; overflow: hidden; cursor: none;
+    background: var(--card);
+  }
+  .dest-card:first-child { grid-row: 1 / 3; }
+  .dest-card-img {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    transition: transform .8s cubic-bezier(.23,1,.32,1), filter .6s;
+    filter: brightness(.6) saturate(.8);
+  }
+  .dest-card:hover .dest-card-img {
+    transform: scale(1.08);
+    filter: brightness(.45) saturate(.7);
+  }
+  .dest-card-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(8,8,8,.9) 0%, transparent 60%);
+  }
+  .dest-card-content {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 28px 30px;
+    transform: translateY(4px);
+    transition: transform .4s ease;
+  }
+  .dest-card:hover .dest-card-content { transform: translateY(0); }
+  .dest-tag {
+    font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 6px;
+  }
+  .dest-name {
+    font-family: var(--ff-display);
+    font-size: 1.5rem; font-weight: 300;
+  }
+  .dest-card:first-child .dest-name { font-size: 2.2rem; }
+  .dest-detail {
+    font-size: .72rem; color: var(--muted); margin-top: 6px;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity .4s .1s, transform .4s .1s;
+    letter-spacing: .06em;
+  }
+  .dest-card:hover .dest-detail { opacity: 1; transform: translateY(0); }
+
+  /* destination image placeholders using CSS gradients */
+  .dest-img-1 { background: linear-gradient(135deg, #0d1b2a 0%, #1a3a5c 40%, #2d5a8e 100%); }
+  .dest-img-2 { background: linear-gradient(135deg, #2d1b0e 0%, #5c3a1a 40%, #8e6030 100%); }
+  .dest-img-3 { background: linear-gradient(135deg, #0d2a1b 0%, #1a5c3a 40%, #2d8e60 100%); }
+  .dest-img-4 { background: linear-gradient(135deg, #2a0d2a 0%, #5c1a5c 40%, #8e308e 100%); }
+  .dest-img-5 { background: linear-gradient(135deg, #2a1a0d 0%, #5c4a1a 40%, #8e7030 100%); }
+
+  /* animated pattern on gradient bg */
+  .dest-card-img::before {
+    content: '';
+    position: absolute; inset: 0;
+    opacity: .18;
+    background-image: radial-gradient(circle, rgba(255,255,255,.1) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  /* ── EVENTS SECTION ── */
+  .events-section {
+    background: var(--deep);
+    position: relative; overflow: hidden;
+  }
+  .events-section::before {
+    content: '';
+    position: absolute; right: -200px; top: -200px;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,165,90,.06);
+    pointer-events: none;
+  }
+  .events-section::after {
+    content: '';
+    position: absolute; right: -300px; top: -300px;
+    width: 900px; height: 900px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,165,90,.04);
+    pointer-events: none;
+  }
+  .events-inner {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    align-items: center;
+  }
+  .events-visual {
+    position: relative; height: 560px;
+  }
+  .ev-card-main {
+    position: absolute; top: 0; left: 0; right: 60px; bottom: 60px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .ev-card-accent {
+    position: absolute; bottom: 0; right: 0; width: 220px; height: 180px;
+    background: var(--gold);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 24px;
+    z-index: 2;
+  }
+  .ev-accent-num {
+    font-family: var(--ff-display); font-size: 3rem; font-weight: 300;
+    color: var(--black); line-height: 1;
+  }
+  .ev-accent-label {
+    font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
+    color: rgba(8,8,8,.7); margin-top: 4px;
+  }
+  .ev-main-visual {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #1a0d0d 0%, #2d1a1a 50%, #1a0d0d 100%);
+    position: relative;
+  }
+  .ev-main-visual::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at 60% 40%, rgba(201,165,90,.15) 0%, transparent 55%),
+      repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(201,165,90,.02) 31px);
+  }
+  /* event icons decoration */
+  .ev-icons {
+    position: absolute; inset: 0;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 30px;
+    padding: 40px;
+  }
+  .ev-icon-badge {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: .35;
+  }
+  .ev-icon-badge svg { width: 32px; height: 32px; color: var(--gold); }
+  .ev-icon-badge span { font-size: .55rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); }
+
+  .events-content { position: relative; z-index: 1; }
+  .events-list { margin-top: 44px; display: flex; flex-direction: column; gap: 2px; }
+  .event-item {
+    display: flex; align-items: center; gap: 24px;
+    padding: 24px 28px;
+    background: var(--card); border-left: 2px solid transparent;
+    cursor: none; transition: border-color .3s, background .3s, transform .3s;
+  }
+  .event-item:hover {
+    border-left-color: var(--gold);
+    background: rgba(201,165,90,.04);
+    transform: translateX(4px);
+  }
+  .event-item-icon {
+    width: 44px; height: 44px; flex-shrink: 0;
+    background: rgba(201,165,90,.08); border-radius: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .3s;
+  }
+  .event-item:hover .event-item-icon { background: rgba(201,165,90,.16); }
+  .event-item-icon svg { width: 20px; height: 20px; color: var(--gold); }
+  .event-item-name {
+    font-family: var(--ff-display); font-size: 1.1rem; font-weight: 400;
+  }
+  .event-item-desc { font-size: .72rem; color: var(--muted); letter-spacing: .04em; margin-top: 2px; }
+  .event-arrow {
+    margin-left: auto; color: var(--muted);
+    transition: color .3s, transform .3s;
+  }
+  .event-item:hover .event-arrow { color: var(--gold); transform: translateX(4px); }
+
+  /* ── VENUES ── */
+  .venues-section { background: var(--black); }
+  .venues-header { margin-bottom: 60px; }
+  .venues-marquee-wrap { overflow: hidden; margin-bottom: 0; }
+  .venues-marquee {
+    display: flex; gap: 20px;
+    animation: marquee 30s linear infinite;
+    width: max-content;
+  }
+  .venues-marquee:hover { animation-play-state: paused; }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .venue-card {
+    width: 340px; flex-shrink: 0;
+    background: var(--card); border: 1px solid var(--border);
+    overflow: hidden; cursor: none;
+    transition: border-color .4s;
+  }
+  .venue-card:hover { border-color: rgba(201,165,90,.4); }
+  .venue-img {
+    height: 220px;
+    position: relative; overflow: hidden;
+  }
+  .venue-img-inner {
+    width: 100%; height: 100%;
+    transition: transform .7s cubic-bezier(.23,1,.32,1);
+  }
+  .venue-card:hover .venue-img-inner { transform: scale(1.07); }
+  .venue-img-bg-1 { background: linear-gradient(135deg, #1a1508 0%, #3d320e 50%, #6b5a18 100%); }
+  .venue-img-bg-2 { background: linear-gradient(135deg, #081a18 0%, #0e3d38 50%, #186b60 100%); }
+  .venue-img-bg-3 { background: linear-gradient(135deg, #1a0808 0%, #3d0e18 50%, #6b1830 100%); }
+  .venue-img-bg-4 { background: linear-gradient(135deg, #08081a 0%, #0e1a3d 50%, #1830a0 80%, #2040c0 100%); }
+  .venue-img-bg-5 { background: linear-gradient(135deg, #1a1208 0%, #3d2e0e 50%, #6b5420 100%); }
+  .venue-img-bg-6 { background: linear-gradient(135deg, #0a1a0a 0%, #183d18 50%, #2e6b2e 100%); }
+  .venue-img-inner::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(201,165,90,.12) 0%, transparent 65%),
+      repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(201,165,90,.03) 21px);
+  }
+  .venue-badge {
+    position: absolute; top: 16px; left: 16px;
+    background: var(--gold); color: var(--black);
+    font-size: .55rem; letter-spacing: .16em; text-transform: uppercase;
+    padding: 5px 12px;
+  }
+  .venue-info { padding: 24px 24px 28px; }
+  .venue-name { font-family: var(--ff-display); font-size: 1.2rem; font-weight: 400; margin-bottom: 6px; }
+  .venue-loc {
+    font-size: .7rem; color: var(--muted); letter-spacing: .08em;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .venue-loc svg { width: 10px; height: 10px; color: var(--gold); }
+  .venue-meta {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 18px; padding-top: 18px;
+    border-top: 1px solid var(--border);
+    font-size: .68rem; color: var(--muted); letter-spacing: .06em;
+  }
+  .venue-price { color: var(--gold); font-family: var(--ff-display); font-size: 1rem; }
+
+  /* ── STATS STRIP ── */
+  .stats-strip {
+    background: var(--gold);
+    padding: 60px;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: var(--ff-display); font-size: 3.5rem; font-weight: 300;
+    color: var(--black); line-height: 1;
+  }
+  .stat-label {
+    font-size: .62rem; letter-spacing: .22em; text-transform: uppercase;
+    color: rgba(8,8,8,.6); margin-top: 8px;
+  }
+
+  /* ── TESTIMONIALS ── */
+  .testi-section { background: var(--deep); }
+  .testi-header { margin-bottom: 60px; }
+  .testi-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+  }
+  .testi-card {
+    background: var(--card); padding: 44px 40px;
+    position: relative; overflow: hidden;
+    border-top: 2px solid transparent;
+    transition: border-color .4s, transform .4s;
+    cursor: none;
+  }
+  .testi-card:hover { border-top-color: var(--gold); transform: translateY(-3px); }
+  .testi-quote {
+    font-family: var(--ff-display); font-size: 5rem;
+    color: rgba(201,165,90,.12); line-height: .8;
+    margin-bottom: 20px;
+    transition: color .4s;
+  }
+  .testi-card:hover .testi-quote { color: rgba(201,165,90,.2); }
+  .testi-text {
+    font-family: var(--ff-display); font-size: 1.05rem; font-weight: 300;
+    font-style: italic; line-height: 1.7; color: var(--white);
+    margin-bottom: 28px;
+  }
+  .testi-author { display: flex; align-items: center; gap: 14px; }
+  .testi-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold) 0%, #8a6a20 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--ff-display); font-size: 1rem; font-weight: 400;
+    color: var(--black); flex-shrink: 0;
+  }
+  .testi-name { font-size: .8rem; letter-spacing: .06em; }
+  .testi-role { font-size: .65rem; color: var(--muted); letter-spacing: .08em; margin-top: 2px; }
+  .testi-stars { color: var(--gold); font-size: .7rem; letter-spacing: 2px; margin-bottom: 16px; }
+
+  /* ── CTA BANNER ── */
+  .cta-section {
+    background: var(--black);
+    padding: 140px 60px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 50% 50%, rgba(201,165,90,.08) 0%, transparent 70%);
+  }
+  .cta-title {
+    font-family: var(--ff-display);
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 300; line-height: 1.05;
+    position: relative; z-index: 1;
+  }
+  .cta-title em { font-style: italic; color: var(--gold); }
+  .cta-sub {
+    font-size: .82rem; color: var(--muted); line-height: 1.9;
+    letter-spacing: .06em; margin: 24px auto 48px;
+    max-width: 480px; position: relative; z-index: 1;
+  }
+  .cta-actions { position: relative; z-index: 1; display: flex; gap: 20px; justify-content: center; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #050505; padding: 80px 60px 40px;
+    border-top: 1px solid var(--border);
+  }
+  .footer-top {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px;
+    padding-bottom: 60px; border-bottom: 1px solid var(--border);
+  }
+  .footer-brand {}
+  .footer-logo {
+    font-family: var(--ff-display); font-size: 1.6rem; font-weight: 400;
+    color: var(--white); margin-bottom: 18px; display: block;
+    text-decoration: none;
+  }
+  .footer-logo span { color: var(--gold); }
+  .footer-tagline {
+    font-size: .78rem; color: var(--muted); line-height: 1.9;
+    letter-spacing: .04em; margin-bottom: 28px; max-width: 280px;
+  }
+  .footer-social { display: flex; gap: 12px; }
+  .social-btn {
+    width: 38px; height: 38px; border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); cursor: none; text-decoration: none;
+    transition: border-color .3s, color .3s, background .3s;
+  }
+  .social-btn:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,165,90,.05); }
+  .social-btn svg { width: 15px; height: 15px; }
+  .footer-col-title {
+    font-size: .62rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 22px;
+  }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+  .footer-links a {
+    font-size: .78rem; color: var(--muted); text-decoration: none; letter-spacing: .04em;
+    transition: color .3s;
+  }
+  .footer-links a:hover { color: var(--white); }
+  .footer-bottom {
+    padding-top: 30px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-copy { font-size: .68rem; color: rgba(249,245,238,.25); letter-spacing: .08em; }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: .65rem; color: rgba(249,245,238,.25); text-decoration: none; letter-spacing: .08em; transition: color .3s; }
+  .footer-legal a:hover { color: var(--muted); }
+
+  /* ── REVEAL ANIMATIONS ── */
+  .reveal { opacity: 0; transform: translateY(36px); transition: opacity .9s cubic-bezier(.23,1,.32,1), transform .9s cubic-bezier(.23,1,.32,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: .1s; }
+  .reveal-delay-2 { transition-delay: .2s; }
+  .reveal-delay-3 { transition-delay: .3s; }
+  .reveal-delay-4 { transition-delay: .4s; }
+  .reveal-delay-5 { transition-delay: .5s; }
+
+  /* ── GOLD LINE DIVIDER ── */
+  .gold-divider {
+    width: 60px; height: 1px; background: var(--gold);
+    margin: 22px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Ease<span>My</span>Booking</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#destinations">Destinations</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#venues">Venues</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <button class="nav-cta">Get a Quote</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Premium Travel & Event Experiences</div>
+    <h1 class="hero-title">The World <em>Awaits</em></h1>
+    <div class="hero-title-line2">Your Perfect Journey</div>
+    <p class="hero-sub">Curated travel packages, luxury event planning & exclusive venue bookings — all seamlessly in one place.</p>
+    <div class="hero-actions">
+      <button class="btn-primary">Explore Packages</button>
+      <button class="btn-ghost">Plan an Event</button>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- SEARCH BAR -->
+<div class="search-section">
+  <div class="search-bar">
+    <div class="search-field">
+      <div class="sf-label">Service Type</div>
+      <div class="sf-value">Travel Packages</div>
+    </div>
+    <div class="search-field">
+      <div class="sf-label">Destination</div>
+      <div class="sf-value muted">Where to?</div>
+    </div>
+    <div class="search-field">
+      <div class="sf-label">Travel Dates</div>
+      <div class="sf-value muted">Select Dates</div>
+    </div>
+    <div class="search-field">
+      <div class="sf-label">Guests</div>
+      <div class="sf-value muted">2 Adults</div>
+    </div>
+    <button class="search-btn">Search</button>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services-section" id="services">
+  <div class="services-header reveal">
+    <div>
+      <div class="section-eyebrow">What We Offer</div>
+      <h2 class="section-title">Crafted for the<br><em>Extraordinary</em></h2>
+    </div>
+    <p class="services-desc">From seamless flight & hotel bookings to full-scale event production — we handle every detail so you experience only the extraordinary.</p>
+  </div>
+
+  <div class="services-grid">
+    <!-- Card 1 -->
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-num">01</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 28L26 6L44 28" stroke="#C9A55A" stroke-width="1.5"/>
+          <path d="M14 22V44H38V22" stroke="#C9A55A" stroke-width="1.5"/>
+          <path d="M20 44V32H32V44" stroke="#C9A55A" stroke-width="1.5"/>
+          <circle cx="26" cy="18" r="3" stroke="#C9A55A" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <h3 class="service-name">Domestic Travel</h3>
+      <p class="service-desc">Hand-curated packages across India's most breathtaking destinations. Flights, hotels, transfers — all bundled.</p>
+      <a href="#" class="service-link">
+        Explore Packages
+        <svg viewBox="0 0 14 14" fill="none"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
+      </a>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-num">02</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 52 52" fill="none">
+          <circle cx="26" cy="26" r="18" stroke="#C9A55A" stroke-width="1.5"/>
+          <path d="M8 26h36M26 8c-6 4-10 10-10 18s4 14 10 18M26 8c6 4 10 10 10 18s-4 14-10 18" stroke="#C9A55A" stroke-width="1.5"/>
+          <path d="M10 18h32M10 34h32" stroke="#C9A55A" stroke-width="1"/>
+        </svg>
+      </div>
+      <h3 class="service-name">International Tours</h3>
+      <p class="service-desc">Luxury international packages with visa assistance, business-class options, and 5-star accommodations worldwide.</p>
+      <a href="#" class="service-link">
+        View Tours
+        <svg viewBox="0 0 14 14" fill="none"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
+      </a>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="service-card reveal reveal-delay-3">
+      <div class="service-num">03</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 52 52" fill="none">
+          <path d="M6 40l10-20 8 10 8-14 14 24H6z" stroke="#C9A55A" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M4 12l6-4 4 6-6 4-4-6z" stroke="#C9A55A" stroke-width="1.5"/>
+          <path d="M40 8l4 2-2 8-6-2 4-8z" stroke="#C9A55A" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <h3 class="service-name">Flight & Hotel</h3>
+      <p class="service-desc">Best-fare flight searches paired with curated hotel selections across all budgets. Book in minutes.</p>
+      <a href="#" class="service-link">
+        Book Now
+        <svg viewBox="0 0 14 14" fill="none"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
+      </a>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-num">04</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 52 52" fill="none">
+          <rect x="10" y="16" width="32" height="26" rx="1" stroke="#C9A55A" stroke-width="1.5"/>
+          <path d="M18 16V12a8 8 0 0116 0v4" stroke="#C9A55A" stroke-width="1.5"/>
+          <path d="M22 29l3 3 6-6" stroke="#C9A55A" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <h3 class="service-name">Event Planning</h3>
+      <p class="service-desc">Weddings, corporate galas, birthdays & conferences. We design, plan, and execute flawlessly from concept to close.</p>
+      <a href="#" class="service-link">
+        Plan Event
+        <svg viewBox="0 0 14 14" fill="none"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
+      </a>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="service-card reveal reveal-delay-3">
+      <div class="service-num">05</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 52 52" fill="none">
+          <path d="M10 38V22l16-12 16 12v16" stroke="#C9A55A" stroke-width="1.5"/>
+          <rect x="20" y="28" width="12" height="10" stroke="#C9A55A" stroke-width="1.5"/>
+          <path d="M26 10v4M14 26h4M34 26h4" stroke="#C9A55A" stroke-width="1.5"/>
+          <circle cx="26" cy="22" r="3" stroke="#C9A55A" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <h3 class="service-name">Vendor Bookings</h3>
+      <p class="service-desc">Catering, AV production, sound systems, decor, photography. Premium vendors vetted and booked by us.</p>
+      <a href="#" class="service-link">
+        Find Vendors
+        <svg viewBox="0 0 14 14" fill="none"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
+      </a>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="service-card reveal reveal-delay-4">
+      <div class="service-num">06</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 52 52" fill="none">
+          <rect x="8" y="20" width="36" height="22" rx="1" stroke="#C9A55A" stroke-width="1.5"/>
+          <path d="M16 20V14a10 10 0 0120 0v6" stroke="#C9A55A" stroke-width="1.5"/>
+          <path d="M20 32c0 2.2 1.8 4 6 4s6-1.8 6-4-2.4-4-6-4-6 1.8-6 4z" stroke="#C9A55A" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <h3 class="service-name">Farmhouse & Villas</h3>
+      <p class="service-desc">Exclusive farmhouses and villas for private parties, destination weddings, and getaways. Luxury on your terms.</p>
+      <a href="#" class="service-link">
+        Browse Venues
+        <svg viewBox="0 0 14 14" fill="none"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- DESTINATIONS -->
+<section class="destinations-section" id="destinations">
+  <div class="dest-header reveal">
+    <div class="section-eyebrow">Explore the Globe</div>
+    <h2 class="section-title">Trending <em>Destinations</em></h2>
+  </div>
+
+  <div class="dest-tabs reveal">
+    <button class="dest-tab active">All</button>
+    <button class="dest-tab">Domestic</button>
+    <button class="dest-tab">International</button>
+    <button class="dest-tab">Honeymoon</button>
+    <button class="dest-tab">Adventure</button>
+  </div>
+
+  <div class="dest-grid reveal">
+    <div class="dest-card">
+      <div class="dest-card-img dest-img-1"></div>
+      <div class="dest-card-overlay"></div>
+      <div class="dest-card-content">
+        <div class="dest-tag">International · Premium</div>
+        <div class="dest-name">Santorini, Greece</div>
+        <div class="dest-detail">7 nights · From ₹1,85,000 per person</div>
+      </div>
+    </div>
+    <div class="dest-card">
+      <div class="dest-card-img dest-img-2"></div>
+      <div class="dest-card-overlay"></div>
+      <div class="dest-card-content">
+        <div class="dest-tag">Domestic · Trending</div>
+        <div class="dest-name">Rajasthan</div>
+        <div class="dest-detail">5 nights · From ₹42,000</div>
+      </div>
+    </div>
+    <div class="dest-card">
+      <div class="dest-card-img dest-img-3"></div>
+      <div class="dest-card-overlay"></div>
+      <div class="dest-card-content">
+        <div class="dest-tag">International · Exotic</div>
+        <div class="dest-name">Maldives</div>
+        <div class="dest-detail">4 nights · From ₹95,000</div>
+      </div>
+    </div>
+    <div class="dest-card">
+      <div class="dest-card-img dest-img-4"></div>
+      <div class="dest-card-overlay"></div>
+      <div class="dest-card-content">
+        <div class="dest-tag">Domestic · Spiritual</div>
+        <div class="dest-name">Varanasi</div>
+        <div class="dest-detail">3 nights · From ₹18,000</div>
+      </div>
+    </div>
+    <div class="dest-card">
+      <div class="dest-card-img dest-img-5"></div>
+      <div class="dest-card-overlay"></div>
+      <div class="dest-card-content">
+        <div class="dest-tag">International · Luxury</div>
+        <div class="dest-name">Dubai</div>
+        <div class="dest-detail">5 nights · From ₹78,000</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section class="events-section" id="events">
+  <div class="events-inner">
+    <!-- Visual -->
+    <div class="events-visual reveal">
+      <div class="ev-card-main">
+        <div class="ev-main-visual">
+          <div class="ev-icons">
+            <div class="ev-icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M9 19V6l12-3v13M9 19c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm12 0c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2z"/></svg>
+              <span>Sound</span>
+            </div>
+            <div class="ev-icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+              <span>AV Production</span>
+            </div>
+            <div class="ev-icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              <span>Catering</span>
+            </div>
+            <div class="ev-icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+              <span>Planning</span>
+            </div>
+            <div class="ev-icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+              <span>Decor</span>
+            </div>
+            <div class="ev-icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+              <span>Photography</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ev-card-accent">
+        <div class="ev-accent-num">500+</div>
+        <div class="ev-accent-label">Events Executed</div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="events-content reveal reveal-delay-2">
+      <div class="section-eyebrow">Events & Celebrations</div>
+      <h2 class="section-title">Every Celebration,<br><em>Perfected</em></h2>
+      <div class="gold-divider"></div>
+      <p style="font-size:.82rem;color:var(--muted);line-height:1.9;letter-spacing:.04em;">
+        From intimate gatherings to grand weddings and corporate summits — our team orchestrates unforgettable experiences with precision and passion.
+      </p>
+
+      <div class="events-list">
+        <div class="event-item">
+          <div class="event-item-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" width="20" height="20"><path d="M10 3c-3.87 0-7 3.13-7 7s3.13 7 7 7 7-3.13 7-7-3.13-7-7-7zm0 12c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/><path d="M10 6v4l3 1.5"/></svg>
+          </div>
+          <div>
+            <div class="event-item-name">Weddings & Receptions</div>
+            <div class="event-item-desc">Full-service planning with vendor coordination</div>
+          </div>
+          <div class="event-arrow">
+            <svg viewBox="0 0 14 14" fill="none" width="14"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
+          </div>
+        </div>
+        <div class="event-item">
+          <div class="event-item-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" width="20" height="20"><rect x="3" y="4" width="14" height="13" rx="1"/><path d="M7 2v4M13 2v4M3 9h14"/></svg>
+          </div>
+          <div>
+            <div class="event-item-name">Corporate Events & Galas</div>
+            <div class="event-item-desc">Conferences, product launches, award nights</div>
+          </div>
+          <div class="event-arrow">
+            <svg viewBox="0 0 14 14" fill="none" width="14"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
+          </div>
+        </div>
+        <div class="event-item">
+          <div class="event-item-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" width="20" height="20"><path d="M10 2l1.8 5.4H17l-4.4 3.2 1.7 5.4L10 13l-4.3 3 1.7-5.4L3 7.4h5.2z"/></svg>
+          </div>
+          <div>
+            <div class="event-item-name">Private Parties & Birthdays</div>
+            <div class="event-item-desc">Farmhouses, villas, themed decor & catering</div>
+          </div>
+          <div class="event-arrow">
+            <svg viewBox="0 0 14 14" fill="none" width="14"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
+          </div>
+        </div>
+        <div class="event-item">
+          <div class="event-item-icon">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" width="20" height="20"><path d="M9 2L2 7l7 5 7-5-7-5zM2 13l7 5 7-5"/></svg>
+          </div>
+          <div>
+            <div class="event-item-name">Sound & AV Production</div>
+            <div class="event-item-desc">Stage, lighting, visuals, live streaming</div>
+          </div>
+          <div class="event-arrow">
+            <svg viewBox="0 0 14 14" fill="none" width="14"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VENUES MARQUEE -->
+<section class="venues-section" id="venues">
+  <div class="venues-header reveal">
+    <div class="section-eyebrow">Exclusive Venues</div>
+    <h2 class="section-title">Farmhouses & <em>Villas</em></h2>
+  </div>
+  <div class="venues-marquee-wrap reveal">
+    <div class="venues-marquee">
+      <!-- Card set 1 -->
+      <div class="venue-card">
+        <div class="venue-img">
+          <div class="venue-img-inner venue-img-bg-1"></div>
+          <div class="venue-badge">Farmhouse</div>
+        </div>
+        <div class="venue-info">
+          <div class="venue-name">The Golden Acres</div>
+          <div class="venue-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7c0-2.76-2.24-5-5-5zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Jaipur, Rajasthan</div>
+          <div class="venue-meta">
+            <span>Up to 400 guests</span>
+            <span class="venue-price">₹1,20,000/day</span>
+          </div>
+        </div>
+      </div>
+      <div class="venue-card">
+        <div class="venue-img">
+          <div class="venue-img-inner venue-img-bg-2"></div>
+          <div class="venue-badge">Villa</div>
+        </div>
+        <div class="venue-info">
+          <div class="venue-name">Azure Retreat Villa</div>
+          <div class="venue-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7c0-2.76-2.24-5-5-5zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Goa</div>
+          <div class="venue-meta">
+            <span>Up to 150 guests</span>
+            <span class="venue-price">₹85,000/day</span>
+          </div>
+        </div>
+      </div>
+      <div class="venue-card">
+        <div class="venue-img">
+          <div class="venue-img-inner venue-img-bg-3"></div>
+          <div class="venue-badge">Farmhouse</div>
+        </div>
+        <div class="venue-info">
+          <div class="venue-name">Crimson Fields Estate</div>
+          <div class="venue-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7c0-2.76-2.24-5-5-5zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Delhi NCR</div>
+          <div class="venue-meta">
+            <span>Up to 600 guests</span>
+            <span class="venue-price">₹2,00,000/day</span>
+          </div>
+        </div>
+      </div>
+      <div class="venue-card">
+        <div class="venue-img">
+          <div class="venue-img-inner venue-img-bg-4"></div>
+          <div class="venue-badge">Villa</div>
+        </div>
+        <div class="venue-info">
+          <div class="venue-name">Sapphire Crest Villa</div>
+          <div class="venue-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7c0-2.76-2.24-5-5-5zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Udaipur</div>
+          <div class="venue-meta">
+            <span>Up to 200 guests</span>
+            <span class="venue-price">₹1,50,000/day</span>
+          </div>
+        </div>
+      </div>
+      <div class="venue-card">
+        <div class="venue-img">
+          <div class="venue-img-inner venue-img-bg-5"></div>
+          <div class="venue-badge">Farmhouse</div>
+        </div>
+        <div class="venue-info">
+          <div class="venue-name">Heritage Haveli Farm</div>
+          <div class="venue-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7c0-2.76-2.24-5-5-5zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Jodhpur</div>
+          <div class="venue-meta">
+            <span>Up to 350 guests</span>
+            <span class="venue-price">₹95,000/day</span>
+          </div>
+        </div>
+      </div>
+      <div class="venue-card">
+        <div class="venue-img">
+          <div class="venue-img-inner venue-img-bg-6"></div>
+          <div class="venue-badge">Villa</div>
+        </div>
+        <div class="venue-info">
+          <div class="venue-name">Emerald Garden Villa</div>
+          <div class="venue-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7c0-2.76-2.24-5-5-5zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Lonavala</div>
+          <div class="venue-meta">
+            <span>Up to 120 guests</span>
+            <span class="venue-price">₹70,000/day</span>
+          </div>
+        </div>
+      </div>
+      <!-- Duplicate for seamless loop -->
+      <div class="venue-card">
+        <div class="venue-img"><div class="venue-img-inner venue-img-bg-1"></div><div class="venue-badge">Farmhouse</div></div>
+        <div class="venue-info"><div class="venue-name">The Golden Acres</div><div class="venue-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7c0-2.76-2.24-5-5-5zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Jaipur, Rajasthan</div><div class="venue-meta"><span>Up to 400 guests</span><span class="venue-price">₹1,20,000/day</span></div></div>
+      </div>
+      <div class="venue-card">
+        <div class="venue-img"><div class="venue-img-inner venue-img-bg-2"></div><div class="venue-badge">Villa</div></div>
+        <div class="venue-info"><div class="venue-name">Azure Retreat Villa</div><div class="venue-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7c0-2.76-2.24-5-5-5zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Goa</div><div class="venue-meta"><span>Up to 150 guests</span><span class="venue-price">₹85,000/day</span></div></div>
+      </div>
+      <div class="venue-card">
+        <div class="venue-img"><div class="venue-img-inner venue-img-bg-3"></div><div class="venue-badge">Farmhouse</div></div>
+        <div class="venue-info"><div class="venue-name">Crimson Fields Estate</div><div class="venue-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7c0-2.76-2.24-5-5-5zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Delhi NCR</div><div class="venue-meta"><span>Up to 600 guests</span><span class="venue-price">₹2,00,000/day</span></div></div>
+      </div>
+      <div class="venue-card">
+        <div class="venue-img"><div class="venue-img-inner venue-img-bg-4"></div><div class="venue-badge">Villa</div></div>
+        <div class="venue-info"><div class="venue-name">Sapphire Crest Villa</div><div class="venue-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7c0-2.76-2.24-5-5-5zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Udaipur</div><div class="venue-meta"><span>Up to 200 guests</span><span class="venue-price">₹1,50,000/day</span></div></div>
+      </div>
+      <div class="venue-card">
+        <div class="venue-img"><div class="venue-img-inner venue-img-bg-5"></div><div class="venue-badge">Farmhouse</div></div>
+        <div class="venue-info"><div class="venue-name">Heritage Haveli Farm</div><div class="venue-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7c0-2.76-2.24-5-5-5zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Jodhpur</div><div class="venue-meta"><span>Up to 350 guests</span><span class="venue-price">₹95,000/day</span></div></div>
+      </div>
+      <div class="venue-card">
+        <div class="venue-img"><div class="venue-img-inner venue-img-bg-6"></div><div class="venue-badge">Villa</div></div>
+        <div class="venue-info"><div class="venue-name">Emerald Garden Villa</div><div class="venue-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7c0-2.76-2.24-5-5-5zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Lonavala</div><div class="venue-meta"><span>Up to 120 guests</span><span class="venue-price">₹70,000/day</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip reveal">
+  <div class="stat-item">
+    <div class="stat-num" data-target="12000">0</div>
+    <div class="stat-label">Happy Travellers</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num" data-target="500">0</div>
+    <div class="stat-label">Events Executed</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num" data-target="80">0</div>
+    <div class="stat-label">Destinations Covered</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num" data-target="200">0</div>
+    <div class="stat-label">Vendor Partners</div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testi-section">
+  <div class="testi-header reveal">
+    <div class="section-eyebrow">Client Stories</div>
+    <h2 class="section-title">What Our Guests <em>Say</em></h2>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card reveal reveal-delay-1">
+      <div class="testi-quote">"</div>
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">Our Maldives honeymoon was beyond anything we imagined. Every detail was flawlessly curated — from the seaplane transfer to the overwater villa.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">P</div>
+        <div>
+          <div class="testi-name">Priya Sharma</div>
+          <div class="testi-role">Honeymooner · Delhi</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal reveal-delay-2">
+      <div class="testi-quote">"</div>
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">EaseMyBooking handled our 400-guest wedding at The Golden Acres. The vendor coordination, sound setup and catering were absolutely world-class.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">R</div>
+        <div>
+          <div class="testi-name">Rahul & Anjali</div>
+          <div class="testi-role">Wedding Clients · Jaipur</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal reveal-delay-3">
+      <div class="testi-quote">"</div>
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">Our corporate annual gala of 200 people was managed end-to-end. The AV production team was phenomenal and the venue they sourced was stunning.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">A</div>
+        <div>
+          <div class="testi-name">Aditya Mehta</div>
+          <div class="testi-role">CEO · TechVentures India</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2 class="cta-title reveal">Ready to Create<br><em>Something Legendary?</em></h2>
+  <p class="cta-sub reveal reveal-delay-1">Tell us your dream — we'll make it real. From a Rajasthan road trip to a 500-person wedding gala.</p>
+  <div class="cta-actions reveal reveal-delay-2">
+    <button class="btn-primary">Start Planning</button>
+    <button class="btn-ghost">Talk to an Expert</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="footer-logo">Ease<span>My</span>Booking</a>
+      <p class="footer-tagline">Your one-stop destination for premium travel packages, luxury event planning, and exclusive venue bookings across India and beyond.</p>
+      <div class="footer-social">
+        <a href="#" class="social-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="#" class="social-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </a>
+        <a href="#" class="social-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Travel</div>
+      <ul class="footer-links">
+        <li><a href="#">Domestic Packages</a></li>
+        <li><a href="#">International Tours</a></li>
+        <li><a href="#">Flight Booking</a></li>
+        <li><a href="#">Hotel Booking</a></li>
+        <li><a href="#">Honeymoon Packages</a></li>
+        <li><a href="#">Group Tours</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Events</div>
+      <ul class="footer-links">
+        <li><a href="#">Wedding Planning</a></li>
+        <li><a href="#">Corporate Events</a></li>
+        <li><a href="#">Private Parties</a></li>
+        <li><a href="#">Vendor Bookings</a></li>
+        <li><a href="#">Catering Services</a></li>
+        <li><a href="#">AV & Sound</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Our Team</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 EaseMyBooking. All rights reserved.</div>
+    <div class="footer-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Cookie Policy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    setTimeout(() => {
+      ring.style.left = e.clientX + 'px';
+      ring.style.top = e.clientY + 'px';
+    }, 80);
+  });
+
+  // Nav scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Destination tabs
+  document.querySelectorAll('.dest-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.dest-tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Counter animation
+  function animateCounter(el, target) {
+    let start = 0;
+    const duration = 1800;
+    const step = timestamp => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * target).toLocaleString('en-IN') + '+';
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  const statsStrip = document.querySelector('.stats-strip');
+  const statsObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        document.querySelectorAll('[data-target]').forEach(el => {
+          animateCounter(el, parseInt(el.dataset.target));
+        });
+        statsObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  if (statsStrip) statsObserver.observe(statsStrip);
+</script>
+</body>
+</html>
