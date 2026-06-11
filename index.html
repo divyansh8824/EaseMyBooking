@@ -1,191 +1,727 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>Coming Soon | EaseMyBooking</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+<title>EaseMyBooking — Travel & Events</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --black:#080808;--deep:#0e0e0e;--card:#141414;
+  --border:rgba(201,165,90,.18);--gold:#C9A55A;--gold2:#e2c47a;
+  --white:#f9f5ee;--muted:rgba(249,245,238,.45);
+  --ff-d:"Cormorant Garamond",serif;--ff-b:"Montserrat",sans-serif;
 }
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--white);font-family:var(--ff-b);font-weight:300;overflow-x:hidden;}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-track{background:var(--black);}::-webkit-scrollbar-thumb{background:var(--gold);}
+body::before{content:"";position:fixed;inset:0;z-index:9997;pointer-events:none;opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");}
 
-body{
-font-family:'Inter',sans-serif;
-background:#f6f3ee;
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:20px;
-overflow:hidden;
-position:relative;
+/* CURSOR — desktop only */
+#cur,#cur-r{pointer-events:none;position:fixed;top:0;left:0;z-index:9999;transform:translate(-50%,-50%);}
+#cur{width:10px;height:10px;background:var(--gold);border-radius:50%;transition:width .3s,height .3s,background .3s;}
+#cur-r{width:36px;height:36px;border:1px solid var(--gold);border-radius:50%;opacity:.6;transition:left .4s cubic-bezier(.23,1,.32,1),top .4s cubic-bezier(.23,1,.32,1),width .4s,height .4s;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:26px 60px;display:flex;align-items:center;justify-content:space-between;transition:all .5s;}
+nav.sc{background:rgba(8,8,8,.92);backdrop-filter:blur(18px);padding:16px 60px;border-bottom:1px solid var(--border);}
+.logo{font-family:var(--ff-d);font-size:1.5rem;font-weight:400;letter-spacing:.04em;color:var(--white);text-decoration:none;}
+.logo span{color:var(--gold);}
+.nav-links{display:flex;gap:36px;list-style:none;}
+.nav-links a{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;position:relative;padding-bottom:4px;transition:color .3s;}
+.nav-links a::after{content:"";position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--gold);transition:width .3s;}
+.nav-links a:hover{color:var(--white);}
+.nav-links a:hover::after{width:100%;}
+.nav-cta{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--black);background:var(--gold);padding:11px 28px;border:none;cursor:pointer;transition:background .3s,transform .2s;}
+.nav-cta:hover{background:var(--gold2);transform:translateY(-1px);}
+/* Hamburger */
+.ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;z-index:1100;}
+.ham span{display:block;width:26px;height:1.5px;background:var(--white);transition:all .4s;}
+.ham.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.ham.open span:nth-child(2){opacity:0;}
+.ham.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+.mob-nav{display:none;position:fixed;inset:0;z-index:1050;background:rgba(8,8,8,.98);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:0;padding:80px 30px 40px;}
+.mob-nav.open{display:flex;}
+.mob-nav a{font-family:var(--ff-d);font-size:2rem;font-weight:300;font-style:italic;color:var(--muted);text-decoration:none;padding:14px 0;border-bottom:1px solid var(--border);width:100%;text-align:center;transition:color .3s;}
+.mob-nav a:hover{color:var(--gold);}
+.mob-cta{margin-top:28px;background:var(--gold);color:var(--black);border:none;padding:15px 48px;font-family:var(--ff-b);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;width:100%;max-width:280px;}
+
+/* HERO */
+.hero{position:relative;height:100vh;min-height:680px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;text-align:center;}
+.hero-bg{position:absolute;inset:0;background:url("https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1800&q=80") center/cover no-repeat;filter:brightness(.32) saturate(.8);transform:scale(1.04);animation:hZoom 18s ease-in-out infinite alternate;}
+@keyframes hZoom{0%{transform:scale(1.04);}100%{transform:scale(1.0);}}
+.hero-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(8,8,8,.3) 0%,rgba(8,8,8,.15) 40%,rgba(8,8,8,.7) 100%);}
+.hero-lines{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(201,165,90,.04) 80px);z-index:1;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);animation:orbF 18s ease-in-out infinite;pointer-events:none;}
+.orb1{width:500px;height:500px;background:rgba(201,165,90,.07);top:-100px;left:-80px;}
+.orb2{width:380px;height:380px;background:rgba(201,165,90,.05);bottom:-60px;right:-60px;animation-delay:-6s;}
+.hero-content{position:relative;z-index:2;max-width:860px;padding:0 24px;}
+.hero-eye{display:inline-flex;align-items:center;gap:14px;font-size:.62rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);margin-bottom:26px;opacity:0;animation:fUp .9s .3s forwards;}
+.hero-eye::before,.hero-eye::after{content:"";width:30px;height:1px;background:var(--gold);opacity:.6;}
+h1.hero-t{font-family:var(--ff-d);font-size:clamp(3.5rem,8vw,7rem);font-weight:300;line-height:1;letter-spacing:-.01em;margin-bottom:8px;opacity:0;animation:fUp .9s .5s forwards;}
+h1.hero-t em{font-style:italic;color:var(--gold);}
+.hero-t2{font-family:var(--ff-d);font-size:clamp(3.5rem,8vw,7rem);font-weight:300;line-height:1.1;letter-spacing:-.01em;opacity:0;animation:fUp .9s .65s forwards;}
+.hero-sub{font-size:.82rem;letter-spacing:.08em;line-height:1.9;color:var(--muted);max-width:520px;margin:24px auto 42px;opacity:0;animation:fUp .9s .85s forwards;}
+.hero-btns{display:flex;align-items:center;gap:20px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fUp .9s 1.05s forwards;}
+.btn-g{background:var(--gold);color:var(--black);padding:14px 40px;border:none;font-family:var(--ff-b);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;position:relative;overflow:hidden;transition:background .3s,transform .25s,box-shadow .3s;}
+.btn-g::after{content:"";position:absolute;inset:0;background:rgba(255,255,255,.16);transform:translateX(-100%);transition:transform .4s;}
+.btn-g:hover::after{transform:translateX(0);}
+.btn-g:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(201,165,90,.3);}
+.btn-o{background:transparent;color:var(--white);padding:13px 36px;border:1px solid rgba(249,245,238,.28);font-family:var(--ff-b);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:border-color .3s,color .3s,transform .25s;}
+.btn-o:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px);}
+.scroll-h{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fUp .7s 1.6s forwards;}
+.scroll-h span{font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
+.s-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--gold),transparent);animation:sDrop 2.2s ease-in-out infinite;}
+@keyframes fUp{to{opacity:1;transform:translateY(0);}from{opacity:0;transform:translateY(22px);}}
+@keyframes orbF{0%,100%{transform:translateY(0);}50%{transform:translateY(-28px);}}
+@keyframes sDrop{0%{transform:scaleY(0);transform-origin:top;}50%{transform:scaleY(1);transform-origin:top;}51%{transform:scaleY(1);transform-origin:bottom;}100%{transform:scaleY(0);transform-origin:bottom;}}
+
+/* SEARCH */
+.search-wrap{position:relative;z-index:10;margin-top:-52px;padding:0 60px;}
+.search-box{max-width:1100px;margin:0 auto;background:rgba(14,14,14,.97);border:1px solid var(--border);backdrop-filter:blur(20px);display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;overflow:hidden;}
+.sf{padding:24px 26px;border-right:1px solid var(--border);cursor:pointer;transition:background .3s;}
+.sf:hover{background:rgba(201,165,90,.04);}
+.sf-l{font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
+.sf-v{font-family:var(--ff-d);font-size:1rem;font-weight:300;color:var(--white);}
+.sf-v.d{color:var(--muted);}
+.s-btn{background:var(--gold);color:var(--black);border:none;padding:0 36px;font-family:var(--ff-b);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:background .3s;white-space:nowrap;}
+.s-btn:hover{background:var(--gold2);}
+
+/* SECTIONS */
+section{padding:110px 60px;}
+.eye{display:inline-flex;align-items:center;gap:12px;font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+.eye::before{content:"";width:22px;height:1px;background:var(--gold);}
+.sec-t{font-family:var(--ff-d);font-size:clamp(2.3rem,4.5vw,3.8rem);font-weight:300;line-height:1.1;}
+.sec-t em{font-style:italic;color:var(--gold);}
+.rv{opacity:0;transform:translateY(32px);transition:opacity .85s cubic-bezier(.23,1,.32,1),transform .85s cubic-bezier(.23,1,.32,1);}
+.rv.on{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}
+.divider{width:52px;height:1px;background:var(--gold);margin:18px 0;}
+
+/* SERVICES */
+.svc-sec{background:var(--deep);}
+.svc-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:64px;gap:40px;}
+.svc-desc{max-width:360px;font-size:.8rem;line-height:1.9;color:var(--muted);}
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.svc-card{background:var(--card);padding:50px 42px;position:relative;overflow:hidden;cursor:pointer;transition:transform .4s cubic-bezier(.23,1,.32,1);}
+.svc-card::before{content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);transform:scaleX(0);transition:transform .5s;}
+.svc-card:hover::before{transform:scaleX(1);}
+.svc-card:hover{transform:translateY(-4px);}
+.svc-num{position:absolute;top:32px;right:36px;font-family:var(--ff-d);font-size:4rem;font-weight:300;color:rgba(201,165,90,.07);line-height:1;}
+.svc-icon{width:50px;height:50px;margin-bottom:28px;position:relative;z-index:1;}
+.svc-icon svg{width:100%;height:100%;}
+/* Service image backgrounds */
+.svc-img-wrap{width:100%;height:160px;overflow:hidden;margin-bottom:20px;position:relative;}
+.svc-img-wrap img{width:100%;height:100%;object-fit:cover;filter:brightness(.5) saturate(.8);transition:transform .7s cubic-bezier(.23,1,.32,1),filter .5s;}
+.svc-card:hover .svc-img-wrap img{transform:scale(1.08);filter:brightness(.4);}
+.svc-n{font-family:var(--ff-d);font-size:1.45rem;font-weight:400;margin-bottom:12px;position:relative;z-index:1;}
+.svc-d{font-size:.76rem;line-height:1.85;color:var(--muted);position:relative;z-index:1;}
+.svc-link{display:inline-flex;align-items:center;gap:9px;margin-top:24px;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;position:relative;z-index:1;transition:gap .3s;}
+.svc-link:hover{gap:14px;}
+.svc-link svg{width:12px;height:12px;}
+
+/* DESTINATIONS */
+.dest-sec{background:var(--black);}
+.dest-head{margin-bottom:50px;}
+.dest-tabs{display:flex;gap:0;margin-bottom:46px;border-bottom:1px solid var(--border);}
+.d-tab{padding:13px 30px;background:none;border:none;font-family:var(--ff-b);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);cursor:pointer;position:relative;transition:color .3s;}
+.d-tab::after{content:"";position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform .3s;}
+.d-tab.active{color:var(--white);}
+.d-tab.active::after{transform:scaleX(1);}
+.dest-grid{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:320px 220px;gap:3px;}
+.dest-card{position:relative;overflow:hidden;cursor:pointer;}
+.dest-card:first-child{grid-row:1/3;}
+.dest-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.23,1,.32,1),filter .6s;filter:brightness(.55) saturate(.85);}
+.dest-card:hover img{transform:scale(1.08);filter:brightness(.4);}
+.dest-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,8,.92) 0%,transparent 60%);}
+.dest-info{position:absolute;bottom:0;left:0;right:0;padding:26px 28px;transform:translateY(4px);transition:transform .4s;}
+.dest-card:hover .dest-info{transform:translateY(0);}
+.dest-tag{font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
+.dest-name{font-family:var(--ff-d);font-size:1.5rem;font-weight:300;}
+.dest-card:first-child .dest-name{font-size:2.3rem;}
+.dest-det{font-size:.7rem;color:var(--muted);margin-top:5px;opacity:0;transform:translateY(7px);transition:opacity .4s .1s,transform .4s .1s;}
+.dest-card:hover .dest-det{opacity:1;transform:translateY(0);}
+
+/* EVENTS */
+.ev-sec{background:var(--deep);position:relative;overflow:hidden;}
+.ev-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.ev-visual{position:relative;height:560px;}
+.ev-main{position:absolute;top:0;left:0;right:60px;bottom:60px;overflow:hidden;}
+.ev-main img{width:100%;height:100%;object-fit:cover;filter:brightness(.55) saturate(.8);}
+.ev-acc{position:absolute;bottom:0;right:0;width:210px;height:175px;background:var(--gold);display:flex;flex-direction:column;justify-content:flex-end;padding:22px;z-index:2;}
+.ev-num{font-family:var(--ff-d);font-size:2.9rem;font-weight:300;color:var(--black);line-height:1;}
+.ev-lbl{font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(8,8,8,.65);margin-top:4px;}
+.ev-content{}
+.ev-list{margin-top:40px;display:flex;flex-direction:column;gap:2px;}
+.ev-item{display:flex;align-items:center;gap:22px;padding:22px 26px;background:var(--card);border-left:2px solid transparent;cursor:pointer;transition:border-color .3s,background .3s,transform .3s;}
+.ev-item:hover{border-left-color:var(--gold);background:rgba(201,165,90,.04);transform:translateX(4px);}
+.ev-ico{width:42px;height:42px;flex-shrink:0;background:rgba(201,165,90,.08);display:flex;align-items:center;justify-content:center;transition:background .3s;}
+.ev-item:hover .ev-ico{background:rgba(201,165,90,.16);}
+.ev-ico svg{width:18px;height:18px;color:var(--gold);}
+.ev-iname{font-family:var(--ff-d);font-size:1.05rem;font-weight:400;}
+.ev-idesc{font-size:.7rem;color:var(--muted);margin-top:2px;}
+.ev-arr{margin-left:auto;color:var(--muted);transition:color .3s,transform .3s;}
+.ev-item:hover .ev-arr{color:var(--gold);transform:translateX(4px);}
+
+/* VENUES MARQUEE */
+.venue-sec{background:var(--black);}
+.v-head{margin-bottom:54px;}
+.v-scroll{overflow:hidden;}
+.v-track{display:flex;gap:18px;width:max-content;animation:marq 34s linear infinite;}
+.v-track:hover{animation-play-state:paused;}
+@keyframes marq{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+.v-card{width:320px;flex-shrink:0;background:var(--card);border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:border-color .4s,transform .4s;}
+.v-card:hover{border-color:rgba(201,165,90,.4);transform:translateY(-4px);}
+.v-img{height:210px;overflow:hidden;position:relative;}
+.v-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.23,1,.32,1);filter:brightness(.8);}
+.v-card:hover .v-img img{transform:scale(1.08);}
+.v-badge{position:absolute;top:14px;left:14px;background:var(--gold);color:var(--black);font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;}
+.v-body{padding:20px 22px 24px;}
+.v-name{font-family:var(--ff-d);font-size:1.15rem;font-weight:400;margin-bottom:5px;}
+.v-loc{font-size:.67rem;color:var(--muted);display:flex;align-items:center;gap:5px;}
+.v-loc svg{width:9px;height:9px;color:var(--gold);}
+.v-meta{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-size:.65rem;color:var(--muted);}
+.v-price{color:var(--gold);font-family:var(--ff-d);font-size:.95rem;}
+
+/* STATS */
+.stats{background:var(--gold);padding:60px;display:grid;grid-template-columns:repeat(4,1fr);gap:2px;}
+.st-item{text-align:center;}
+.st-n{font-family:var(--ff-d);font-size:3.4rem;font-weight:300;color:var(--black);line-height:1;}
+.st-l{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(8,8,8,.6);margin-top:7px;}
+
+/* TESTIMONIALS */
+.testi-sec{background:var(--deep);}
+.testi-head{margin-bottom:56px;}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.t-card{background:var(--card);padding:42px 38px;border-top:2px solid transparent;cursor:pointer;transition:border-color .4s,transform .4s;}
+.t-card:hover{border-top-color:var(--gold);transform:translateY(-3px);}
+.t-q{font-family:var(--ff-d);font-size:5rem;color:rgba(201,165,90,.12);line-height:.8;margin-bottom:18px;}
+.t-stars{color:var(--gold);font-size:.68rem;letter-spacing:2px;margin-bottom:14px;}
+.t-text{font-family:var(--ff-d);font-size:1.02rem;font-weight:300;font-style:italic;line-height:1.7;color:var(--white);margin-bottom:26px;}
+.t-auth{display:flex;align-items:center;gap:13px;}
+.t-av{width:38px;height:38px;border-radius:50%;overflow:hidden;flex-shrink:0;}
+.t-av img{width:100%;height:100%;object-fit:cover;}
+.t-name{font-size:.78rem;letter-spacing:.05em;}
+.t-role{font-size:.63rem;color:var(--muted);margin-top:2px;}
+
+/* CTA */
+.cta-sec{position:relative;padding:130px 60px;text-align:center;overflow:hidden;}
+.cta-bg{position:absolute;inset:0;background:url("https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1600&q=80") center/cover no-repeat;filter:brightness(.18) saturate(.6);}
+.cta-sec::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(8,8,8,.4),rgba(8,8,8,.7));}
+.cta-inner{position:relative;z-index:1;}
+.cta-t{font-family:var(--ff-d);font-size:clamp(2.8rem,6vw,5.2rem);font-weight:300;line-height:1.05;margin-bottom:18px;}
+.cta-t em{font-style:italic;color:var(--gold);}
+.cta-sub{font-size:.8rem;color:var(--muted);line-height:1.9;max-width:460px;margin:0 auto 44px;}
+.cta-btns{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;}
+
+/* FOOTER */
+footer{background:#050505;padding:76px 60px 38px;border-top:1px solid var(--border);}
+.ft-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:56px;padding-bottom:54px;border-bottom:1px solid var(--border);}
+.ft-logo{font-family:var(--ff-d);font-size:1.55rem;font-weight:400;color:var(--white);text-decoration:none;display:block;margin-bottom:14px;}
+.ft-logo span{color:var(--gold);}
+.ft-tag{font-size:.76rem;color:var(--muted);line-height:1.85;max-width:270px;margin-bottom:24px;}
+.ft-soc{display:flex;gap:10px;}
+.ft-s{width:36px;height:36px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;transition:all .3s;}
+.ft-s:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,165,90,.05);}
+.ft-s svg{width:13px;height:13px;}
+.ft-h{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;}
+.ft-ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.ft-ul a{font-size:.75rem;color:var(--muted);text-decoration:none;transition:color .3s;}
+.ft-ul a:hover{color:var(--white);}
+.ft-bot{padding-top:26px;display:flex;justify-content:space-between;align-items:center;}
+.ft-copy{font-size:.63rem;color:rgba(249,245,238,.22);}
+.ft-leg{display:flex;gap:20px;}
+.ft-leg a{font-size:.62rem;color:rgba(249,245,238,.22);text-decoration:none;transition:color .3s;}
+.ft-leg a:hover{color:var(--muted);}
+
+/* MOBILE */
+@media(max-width:1024px){
+  nav{padding:20px 32px;}nav.sc{padding:14px 32px;}
+  .nav-links,.nav-cta{display:none;}.ham{display:flex;}
+  section{padding:80px 32px;}
+  .search-wrap{padding:0 32px;margin-top:-36px;}
+  .search-box{grid-template-columns:1fr 1fr;}
+  .sf:nth-child(3),.sf:nth-child(4){display:none;}
+  .s-btn{grid-column:1/-1;padding:18px;}
+  .svc-grid{grid-template-columns:repeat(2,1fr);}
+  .svc-head{flex-direction:column;gap:16px;}
+  .dest-grid{grid-template-columns:1fr 1fr;grid-template-rows:260px 180px 180px;}
+  .dest-card:first-child{grid-row:1/2;grid-column:1/3;}
+  .ev-inner{grid-template-columns:1fr;gap:48px;}
+  .ev-visual{height:400px;}
+  .stats{padding:44px 32px;}
+  .testi-grid{grid-template-columns:1fr 1fr;}
+  .ft-top{grid-template-columns:1fr 1fr;gap:36px;}
+  .cta-sec{padding:90px 32px;}
 }
-
-/* Luxury Background */
-body::before{
-content:"";
-position:absolute;
-width:100%;
-height:100%;
-background:
-linear-gradient(rgba(246,243,238,.88),
-rgba(246,243,238,.88)),
-url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&q=80');
-background-size:cover;
-background-position:center;
-z-index:-1;
-}
-
-/* Card */
-.coming-card{
-background:rgba(255,255,255,0.72);
-backdrop-filter:blur(14px);
-padding:60px 40px;
-border-radius:30px;
-text-align:center;
-max-width:700px;
-width:100%;
-box-shadow:0 10px 40px rgba(0,0,0,0.08);
-border:1px solid rgba(255,255,255,0.4);
-}
-
-.badge{
-display:inline-block;
-background:#d4af37;
-color:white;
-padding:10px 22px;
-border-radius:50px;
-font-size:14px;
-font-weight:600;
-margin-bottom:25px;
-}
-
-h1{
-font-family:'Cormorant Garamond',serif;
-font-size:64px;
-line-height:1;
-color:#111;
-margin-bottom:20px;
-}
-
-.subtitle{
-font-size:20px;
-color:#555;
-line-height:1.7;
-margin-bottom:18px;
-}
-
-.small-text{
-font-size:16px;
-color:#777;
-margin-bottom:35px;
-}
-
-.btns{
-display:flex;
-justify-content:center;
-gap:15px;
-flex-wrap:wrap;
-}
-
-.primary-btn{
-background:#caa343;
-color:white;
-padding:16px 34px;
-border-radius:14px;
-text-decoration:none;
-font-weight:600;
-transition:.3s;
-}
-
-.primary-btn:hover{
-transform:translateY(-3px);
-}
-
-.secondary-btn{
-background:#25D366;
-color:white;
-padding:16px 34px;
-border-radius:14px;
-text-decoration:none;
-font-weight:600;
-transition:.3s;
-}
-
-.secondary-btn:hover{
-transform:translateY(-3px);
-}
-
-.footer-note{
-margin-top:35px;
-font-size:14px;
-color:#888;
-}
-
 @media(max-width:768px){
-
-h1{
-font-size:46px;
+  nav{padding:16px 20px;}nav.sc{padding:12px 20px;}
+  #cur,#cur-r{display:none;}
+  .hero{min-height:100svh;}
+  .hero-content{padding:0 20px;}
+  .hero-eye{font-size:.55rem;margin-bottom:18px;}
+  h1.hero-t,.hero-t2{font-size:clamp(2.8rem,11vw,4.2rem);}
+  .hero-sub{font-size:.78rem;margin:16px auto 30px;}
+  .hero-btns{flex-direction:column;align-items:center;gap:12px;}
+  .btn-g,.btn-o{width:100%;max-width:290px;text-align:center;padding:14px 20px;}
+  .scroll-h{display:none;}
+  .search-wrap{padding:0;margin-top:0;}
+  .search-box{grid-template-columns:1fr;border-left:none;border-right:none;}
+  .sf{border-right:none;border-bottom:1px solid var(--border);padding:16px 20px;}
+  .sf:nth-child(3),.sf:nth-child(4){display:block;}
+  .s-btn{padding:18px;}
+  section{padding:56px 20px;}
+  .svc-head{flex-direction:column;gap:12px;margin-bottom:36px;}
+  .svc-grid{grid-template-columns:1fr;gap:2px;}
+  .svc-card{padding:32px 24px;}
+  .svc-img-wrap{height:180px;}
+  .dest-head{margin-bottom:28px;}
+  .dest-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;}
+  .d-tab{white-space:nowrap;padding:12px 18px;font-size:.6rem;}
+  .dest-grid{grid-template-columns:1fr;grid-template-rows:repeat(5,200px);}
+  .dest-card:first-child{grid-row:1/2;grid-column:1/2;}
+  .dest-card:first-child .dest-name{font-size:1.7rem;}
+  .dest-det{opacity:1;transform:none;}
+  .ev-inner{grid-template-columns:1fr;gap:32px;}
+  .ev-visual{height:300px;}
+  .ev-main{right:36px;bottom:36px;}
+  .ev-acc{width:150px;height:130px;padding:16px;}
+  .ev-num{font-size:2.2rem;}
+  .ev-item{padding:16px 18px;gap:14px;}
+  .v-card{width:270px;}
+  .stats{grid-template-columns:repeat(2,1fr);padding:40px 20px;gap:20px;}
+  .st-n{font-size:2.4rem;}
+  .testi-grid{grid-template-columns:1fr;gap:2px;}
+  .t-card{padding:30px 22px;}
+  .cta-sec{padding:70px 20px;}
+  .cta-btns{flex-direction:column;align-items:center;gap:12px;}
+  .btn-g,.btn-o{width:100%;max-width:290px;}
+  .ft-top{grid-template-columns:1fr;gap:32px;}
+  footer{padding:48px 20px 26px;}
+  .ft-bot{flex-direction:column;gap:10px;text-align:center;}
+  .ft-leg{flex-wrap:wrap;justify-content:center;}
 }
-
-.subtitle{
-font-size:18px;
+@media(max-width:480px){
+  h1.hero-t,.hero-t2{font-size:clamp(2.4rem,12vw,3.2rem);}
+  .sec-t{font-size:clamp(1.9rem,8vw,2.5rem);}
+  .cta-t{font-size:clamp(2rem,9vw,2.8rem);}
+  .st-n{font-size:2rem;}
+  .logo{font-size:1.28rem;}
 }
-
-.coming-card{
-padding:45px 25px;
-}
-
-}
-
 </style>
 </head>
-
 <body>
+<div id="cur"></div><div id="cur-r"></div>
 
-<div class="coming-card">
+<nav id="nav">
+  <a href="#" class="logo">Ease<span>My</span>Booking</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="EMB-Travel.html">Travel</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="farmhouse-villas.html">Farm Houses</a></li>
+    <li><a href="coming-soon.html">Experiential Stay</a></li>
+  </ul>
+  <button class="nav-cta">Get a Quote</button>
+  <button class="ham" id="ham"><span></span><span></span><span></span></button>
+  <div class="mob-nav" id="mobNav">
+    <a href="#services" onclick="closeMob()">Services</a>
+    <a href="#destinations" onclick="closeMob()">Destinations</a>
+    <a href="#events" onclick="closeMob()">Events</a>
+    <a href="#venues" onclick="closeMob()">Venues</a>
+    <a href="#contact" onclick="closeMob()">Contact</a>
+    <button class="mob-cta" onclick="closeMob()">Get a Quote</button>
+  </div>
+</nav>
 
-<div class="badge">
-✨ Premium Experience Coming Soon
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grad"></div>
+  <div class="hero-lines"></div>
+  <div class="orb orb1"></div><div class="orb orb2"></div>
+  <div class="hero-content">
+    <div class="hero-eye">Premium Travel &amp; Event Experiences</div>
+    <h1 class="hero-t">The World <em>Awaits</em></h1>
+    <div class="hero-t2">Your Perfect Journey</div>
+    <p class="hero-sub">Curated travel packages, luxury event planning &amp; exclusive venue bookings — all seamlessly in one place.</p>
+    <div class="hero-btns">
+      <button class="btn-g">Explore Packages</button>
+      <button class="btn-o">Plan an Event</button>
+    </div>
+  </div>
+  <div class="scroll-h"><span>Scroll</span><div class="s-line"></div></div>
+</section>
+
+<!-- SEARCH -->
+<div class="search-wrap">
+  <div class="search-box">
+    <div class="sf"><div class="sf-l">Service Type</div><div class="sf-v">Travel Packages</div></div>
+    <div class="sf"><div class="sf-l">Destination</div><div class="sf-v d">Where to?</div></div>
+    <div class="sf"><div class="sf-l">Travel Dates</div><div class="sf-v d">Select Dates</div></div>
+    <div class="sf"><div class="sf-l">Guests</div><div class="sf-v d">2 Adults</div></div>
+    <button class="s-btn">Search</button>
+  </div>
 </div>
 
-<h1>
-Coming Soon
-</h1>
+<!-- SERVICES -->
+<section class="svc-sec" id="services">
+  <div class="svc-head rv">
+    <div><div class="eye">What We Offer</div><h2 class="sec-t">Crafted for the<br><em>Extraordinary</em></h2></div>
+    <p class="svc-desc">From seamless flight &amp; hotel bookings to full-scale event production — every detail handled with excellence.</p>
+  </div>
+  <div class="svc-grid">
+    <div class="svc-card rv d1">
+      <div class="svc-num">01</div>
+      <div class="svc-img-wrap"><img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80" alt="Domestic Travel" loading="lazy"/></div>
+      <div class="svc-icon"><svg viewBox="0 0 52 52" fill="none"><path d="M8 28L26 6L44 28" stroke="#C9A55A" stroke-width="1.5"/><path d="M14 22V44H38V22" stroke="#C9A55A" stroke-width="1.5"/><path d="M20 44V32H32V44" stroke="#C9A55A" stroke-width="1.5"/><circle cx="26" cy="18" r="3" stroke="#C9A55A" stroke-width="1.5"/></svg></div>
+      <h3 class="svc-n">Domestic Travel</h3>
+      <p class="svc-d">Hand-curated packages across India's most breathtaking destinations. Flights, hotels, transfers — all bundled.</p>
+      <a href="domestic-travel.html" class="svc-link">Explore <svg viewBox="0 0 14 14" fill="none"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></a>
+    </div>
+    <div class="svc-card rv d2">
+      <div class="svc-num">02</div>
+      <div class="svc-img-wrap"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80" alt="International Tours" loading="lazy"/></div>
+      <div class="svc-icon"><svg viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="18" stroke="#C9A55A" stroke-width="1.5"/><path d="M8 26h36M26 8c-6 4-10 10-10 18s4 14 10 18M26 8c6 4 10 10 10 18s-4 14-10 18" stroke="#C9A55A" stroke-width="1.5"/></svg></div>
+      <h3 class="svc-n">International Tours</h3>
+      <p class="svc-d">Luxury international packages with visa assistance, business-class options, and 5-star hotels worldwide.</p>
+      <a href="#" class="svc-link">View Tours <svg viewBox="0 0 14 14" fill="none"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></a>
+    </div>
+    <div class="svc-card rv d3">
+      <div class="svc-num">03</div>
+      <div class="svc-img-wrap"><img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80" alt="Flights" loading="lazy"/></div>
+      <div class="svc-icon"><svg viewBox="0 0 52 52" fill="none"><path d="M6 36l8-18 7 9 7-14 12 22H6z" stroke="#C9A55A" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+      <h3 class="svc-n">Flight Booking</h3>
+      <p class="svc-d">Seamless flight bookings with the best fares, flexible options, and effortless travel planning.</p>
+      <a href="coming-soon.html" class="svc-link">Book Now <svg viewBox="0 0 14 14" fill="none"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></a>
+    </div>
 
-<p class="subtitle">
-We’re currently building this experience for you.
-</p>
+    <div class="svc-card rv d3">
+  <div class="svc-num">03</div>
 
-<p class="small-text">
-Our team is curating something premium & unforgettable.
-We’ll get back to you shortly.
-</p>
+  <div class="svc-img-wrap">
+    <img src="https://images.unsplash.com/photo-1540339832862-474599807836?w=600&q=80" alt="Visa Assistance" loading="lazy"/>
+  </div>
 
-<div class="btns">
+  <div class="svc-icon">
+    <svg viewBox="0 0 52 52" fill="none">
+      <path d="M12 14h28v24H12z" stroke="#C9A55A" stroke-width="1.5"/>
+      <path d="M20 22h12M20 28h8" stroke="#C9A55A" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="33" cy="31" r="4" stroke="#C9A55A" stroke-width="1.5"/>
+    </svg>
+  </div>
 
-<a href="index.html" class="primary-btn">
-Back to Home
-</a>
+  <h3 class="svc-n">Visa Assistance</h3>
 
-<a href="https://wa.me/91YOURNUMBER" class="secondary-btn">
-WhatsApp Us
-</a>
+  <p class="svc-d">
+    Smooth and stress-free visa assistance with expert consultation, document support, appointment guidance, and end-to-end travel assistance.
+  </p>
 
+  <a href="coming-soon.html" class="svc-link">
+    Apply Now
+    <svg viewBox="0 0 14 14" fill="none">
+      <path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/>
+    </svg>
+  </a>
 </div>
 
-<p class="footer-note">
-EaseMyBooking • Luxury Experiences • Curated Just For You
-</p>
+<div class="svc-card rv d4">
+  <div class="svc-num">04</div>
 
+  <div class="svc-img-wrap">
+    <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&q=80" alt="Experiential Stays" loading="lazy"/>
+  </div>
+
+  <div class="svc-icon">
+    <svg viewBox="0 0 52 52" fill="none">
+      <path d="M10 30L26 14L42 30" stroke="#C9A55A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M16 28V40H36V28" stroke="#C9A55A" stroke-width="1.5" stroke-linejoin="round"/>
+      <path d="M22 34H30" stroke="#C9A55A" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <h3 class="svc-n">Experiential Stays</h3>
+
+  <p class="svc-d">
+    Escape the ordinary with curated farmhouses, luxury villas, nature retreats, and unique stay experiences crafted for relaxation, celebrations, and unforgettable moments.
+  </p>
+
+  <a href="coming-soon.html" class="svc-link">
+    Explore Stays
+    <svg viewBox="0 0 14 14" fill="none">
+      <path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/>
+    </svg>
+  </a>
 </div>
 
+<div class="svc-card rv d5">
+  <div class="svc-num">05</div>
+
+  <div class="svc-img-wrap">
+    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80" alt="Hotel Bookings" loading="lazy"/>
+  </div>
+
+  <div class="svc-icon">
+    <svg viewBox="0 0 52 52" fill="none">
+      <path d="M12 36V20C12 17.8 13.8 16 16 16H36C38.2 16 40 17.8 40 20V36" stroke="#C9A55A" stroke-width="1.5" stroke-linejoin="round"/>
+      <path d="M12 28H40" stroke="#C9A55A" stroke-width="1.5"/>
+      <path d="M18 24H22" stroke="#C9A55A" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M30 24H34" stroke="#C9A55A" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M10 36H42" stroke="#C9A55A" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <h3 class="svc-n">Hotel Bookings</h3>
+
+  <p class="svc-d">
+    Discover handpicked hotels across every budget, from luxury escapes to comfortable stays, with seamless booking and exclusive travel experiences.
+  </p>
+
+  <a href="coming-soon.html" class="svc-link">
+    Book Stay
+    <svg viewBox="0 0 14 14" fill="none">
+      <path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/>
+    </svg>
+  </a>
+</div>
+
+
+    <div class="svc-card rv d2">
+      <div class="svc-num">04</div>
+      <div class="svc-img-wrap"><img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=600&q=80" alt="Event Planning" loading="lazy"/></div>
+      <div class="svc-icon"><svg viewBox="0 0 52 52" fill="none"><rect x="10" y="16" width="32" height="26" rx="1" stroke="#C9A55A" stroke-width="1.5"/><path d="M18 16V12a8 8 0 0116 0v4" stroke="#C9A55A" stroke-width="1.5"/><path d="M22 29l3 3 6-6" stroke="#C9A55A" stroke-width="1.5"/></svg></div>
+      <h3 class="svc-n">Event Planning</h3>
+      <p class="svc-d">Weddings, corporate galas, birthdays &amp; conferences. Design, plan, and execute flawlessly.</p>
+      <a href="events.html" class="svc-link">Plan Event <svg viewBox="0 0 14 14" fill="none"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></a>
+    </div>
+    <div class="svc-card rv d3">
+      <div class="svc-num">05</div>
+      <div class="svc-img-wrap"><img src="https://images.unsplash.com/photo-1555244162-803834f70033?w=600&q=80" alt="Vendor Bookings" loading="lazy"/></div>
+      <div class="svc-icon"><svg viewBox="0 0 52 52" fill="none"><path d="M10 38V22l16-12 16 12v16" stroke="#C9A55A" stroke-width="1.5"/><rect x="20" y="28" width="12" height="10" stroke="#C9A55A" stroke-width="1.5"/></svg></div>
+      <h3 class="svc-n">Vendor Bookings</h3>
+      <p class="svc-d">Catering, AV production, sound systems, decor, photography — premium vendors booked by us.</p>
+      <a href="EMB-Vendors.html" class="svc-link">Find Vendors <svg viewBox="0 0 14 14" fill="none"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></a>
+    </div>
+    <div class="svc-card rv d4">
+      <div class="svc-num">06</div>
+      <div class="svc-img-wrap"><img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&q=80" alt="Farmhouse Villas" loading="lazy"/></div>
+      <div class="svc-icon"><svg viewBox="0 0 52 52" fill="none"><rect x="8" y="20" width="36" height="22" rx="1" stroke="#C9A55A" stroke-width="1.5"/><path d="M16 20V14a10 10 0 0120 0v6" stroke="#C9A55A" stroke-width="1.5"/></svg></div>
+      <h3 class="svc-n">Farmhouse &amp; Villas</h3>
+      <p class="svc-d">Exclusive farmhouses and villas for private parties, destination weddings, and luxury getaways.</p>
+      <a href="#" class="svc-link">Browse Venues <svg viewBox="0 0 14 14" fill="none"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- DESTINATIONS -->
+<section class="dest-sec" id="destinations">
+  <div class="dest-head rv"><div class="eye">Explore the Globe</div><h2 class="sec-t">Trending <em>Destinations</em></h2></div>
+  <div class="dest-tabs rv">
+    <button class="d-tab active">All</button>
+    <button class="d-tab">Domestic</button>
+    <button class="d-tab">International</button>
+    <button class="d-tab">Honeymoon</button>
+    <button class="d-tab">Adventure</button>
+  </div>
+  <div class="dest-grid rv">
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?w=900&q=80" alt="Santorini" loading="lazy"/>
+      <div class="dest-ov"></div>
+      <div class="dest-info"><div class="dest-tag">International · Premium</div><div class="dest-name">Santorini, Greece</div><div class="dest-det">7 nights · From ₹1,85,000 per person</div></div>
+    </div>
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&q=80" alt="Rajasthan" loading="lazy"/>
+      <div class="dest-ov"></div>
+      <div class="dest-info"><div class="dest-tag">Domestic · Trending</div><div class="dest-name">Rajasthan</div><div class="dest-det">5 nights · From ₹42,000</div></div>
+    </div>
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=600&q=80" alt="Maldives" loading="lazy"/>
+      <div class="dest-ov"></div>
+      <div class="dest-info"><div class="dest-tag">International · Exotic</div><div class="dest-name">Maldives</div><div class="dest-det">4 nights · From ₹95,000</div></div>
+    </div>
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1561361058-c24e0cd38be9?auto=format&fit=crop&w=1200&q=80" alt="Varanasi" loading="lazy">
+      <div class="dest-ov"></div>
+      <div class="dest-info"><div class="dest-tag">Domestic · Spiritual</div><div class="dest-name">Varanasi</div><div class="dest-det">3 nights · From ₹18,000</div></div>
+    </div>
+    <div class="dest-card">
+      <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=80" alt="Dubai" loading="lazy"/>
+      <div class="dest-ov"></div>
+      <div class="dest-info"><div class="dest-tag">International · Luxury</div><div class="dest-name">Dubai</div><div class="dest-det">5 nights · From ₹78,000</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section class="ev-sec" id="events">
+  <div class="ev-inner">
+    <div class="ev-visual rv">
+      <div class="ev-main"><img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=900&q=80" alt="Wedding Event" loading="lazy"/></div>
+      <div class="ev-acc"><div class="ev-num">500+</div><div class="ev-lbl">Events Executed</div></div>
+    </div>
+    <div class="ev-content rv d2">
+      <div class="eye">Events &amp; Celebrations</div>
+      <h2 class="sec-t">Every Celebration,<br><em>Perfected</em></h2>
+      <div class="divider"></div>
+      <p style="font-size:.8rem;color:var(--muted);line-height:1.9;">From intimate gatherings to grand weddings and corporate summits — orchestrated with precision and passion.</p>
+      <div class="ev-list">
+        <div class="ev-item">
+          <div class="ev-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" width="18" height="18"><path d="M10 2C6.13 2 3 5.13 3 9s3.13 7 7 7 7-3.13 7-7-3.13-7-7-7zm0 12c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/><path d="M10 6v4l3 1.5"/></svg></div>
+          <div><div class="ev-iname">Weddings &amp; Receptions</div><div class="ev-idesc">Full-service planning with vendor coordination</div></div>
+          <div class="ev-arr"><svg viewBox="0 0 14 14" fill="none" width="13"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></div>
+        </div>
+        <div class="ev-item">
+          <div class="ev-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" width="18" height="18"><rect x="3" y="4" width="14" height="13" rx="1"/><path d="M7 2v4M13 2v4M3 9h14"/></svg></div>
+          <div><div class="ev-iname">Corporate Events &amp; Galas</div><div class="ev-idesc">Conferences, product launches, award nights</div></div>
+          <div class="ev-arr"><svg viewBox="0 0 14 14" fill="none" width="13"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></div>
+        </div>
+        <div class="ev-item">
+          <div class="ev-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" width="18" height="18"><path d="M10 2l1.8 5.4H17l-4.4 3.2 1.7 5.4L10 13l-4.3 3 1.7-5.4L3 7.4h5.2z"/></svg></div>
+          <div><div class="ev-iname">Private Parties &amp; Birthdays</div><div class="ev-idesc">Farmhouses, villas, themed decor &amp; catering</div></div>
+          <div class="ev-arr"><svg viewBox="0 0 14 14" fill="none" width="13"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></div>
+        </div>
+        <div class="ev-item">
+          <div class="ev-ico"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3" width="18" height="18"><path d="M9 19V6l12-3v13M9 19c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm12 0c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2z"/></svg></div>
+          <div><div class="ev-iname">Sound &amp; AV Production</div><div class="ev-idesc">Stage, lighting, visuals, live streaming</div></div>
+          <div class="ev-arr"><svg viewBox="0 0 14 14" fill="none" width="13"><path d="M1 7H13M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VENUES -->
+<section class="venue-sec" id="venues">
+  <div class="v-head rv"><div class="eye">Exclusive Venues</div><h2 class="sec-t">Farmhouses &amp; <em>Villas</em></h2></div>
+  <div class="v-scroll rv">
+    <div class="v-track">
+      <div class="v-card"><div class="v-img"><img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500&q=80" alt="Golden Acres" loading="lazy"/><div class="v-badge">Farmhouse</div></div><div class="v-body"><div class="v-name">The Golden Acres</div><div class="v-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Jaipur, Rajasthan</div><div class="v-meta"><span>Up to 400 guests</span><span class="v-price">₹1,20,000/day</span></div></div></div>
+      <div class="v-card"><div class="v-img"><img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500&q=80" alt="Azure Villa" loading="lazy"/><div class="v-badge">Villa</div></div><div class="v-body"><div class="v-name">Azure Retreat Villa</div><div class="v-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Goa</div><div class="v-meta"><span>Up to 150 guests</span><span class="v-price">₹85,000/day</span></div></div></div>
+      <div class="v-card"><div class="v-img"><img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=500&q=80" alt="Crimson Estate" loading="lazy"/><div class="v-badge">Farmhouse</div></div><div class="v-body"><div class="v-name">Crimson Fields Estate</div><div class="v-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Delhi NCR</div><div class="v-meta"><span>Up to 600 guests</span><span class="v-price">₹2,00,000/day</span></div></div></div>
+      <div class="v-card"><div class="v-img"><img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?w=500&q=80" alt="Sapphire Villa" loading="lazy"/><div class="v-badge">Villa</div></div><div class="v-body"><div class="v-name">Sapphire Crest Villa</div><div class="v-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Udaipur</div><div class="v-meta"><span>Up to 200 guests</span><span class="v-price">₹1,50,000/day</span></div></div></div>
+      <div class="v-card"><div class="v-img"><img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=500&q=80" alt="Heritage Haveli" loading="lazy"/><div class="v-badge">Farmhouse</div></div><div class="v-body"><div class="v-name">Heritage Haveli Farm</div><div class="v-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Jodhpur</div><div class="v-meta"><span>Up to 350 guests</span><span class="v-price">₹95,000/day</span></div></div></div>
+      <div class="v-card"><div class="v-img"><img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=500&q=80" alt="Emerald Villa" loading="lazy"/><div class="v-badge">Villa</div></div><div class="v-body"><div class="v-name">Emerald Garden Villa</div><div class="v-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Lonavala</div><div class="v-meta"><span>Up to 120 guests</span><span class="v-price">₹70,000/day</span></div></div></div>
+      <!-- Loop duplicates -->
+      <div class="v-card"><div class="v-img"><img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500&q=80" alt="Golden Acres" loading="lazy"/><div class="v-badge">Farmhouse</div></div><div class="v-body"><div class="v-name">The Golden Acres</div><div class="v-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Jaipur</div><div class="v-meta"><span>Up to 400 guests</span><span class="v-price">₹1,20,000/day</span></div></div></div>
+      <div class="v-card"><div class="v-img"><img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500&q=80" alt="Azure Villa" loading="lazy"/><div class="v-badge">Villa</div></div><div class="v-body"><div class="v-name">Azure Retreat Villa</div><div class="v-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Goa</div><div class="v-meta"><span>Up to 150 guests</span><span class="v-price">₹85,000/day</span></div></div></div>
+      <div class="v-card"><div class="v-img"><img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=500&q=80" alt="Crimson" loading="lazy"/><div class="v-badge">Farmhouse</div></div><div class="v-body"><div class="v-name">Crimson Fields Estate</div><div class="v-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Delhi NCR</div><div class="v-meta"><span>Up to 600 guests</span><span class="v-price">₹2,00,000/day</span></div></div></div>
+      <div class="v-card"><div class="v-img"><img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?w=500&q=80" alt="Sapphire" loading="lazy"/><div class="v-badge">Villa</div></div><div class="v-body"><div class="v-name">Sapphire Crest Villa</div><div class="v-loc"><svg viewBox="0 0 10 12" fill="currentColor"><path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7C10 2.24 7.76 0 5 0zm0 6.5A1.5 1.5 0 115 3.5a1.5 1.5 0 010 3z"/></svg> Udaipur</div><div class="v-meta"><span>Up to 200 guests</span><span class="v-price">₹1,50,000/day</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats rv">
+  <div class="st-item"><div class="st-n" data-target="12000">0</div><div class="st-l">Happy Travellers</div></div>
+  <div class="st-item"><div class="st-n" data-target="500">0</div><div class="st-l">Events Executed</div></div>
+  <div class="st-item"><div class="st-n" data-target="80">0</div><div class="st-l">Destinations Covered</div></div>
+  <div class="st-item"><div class="st-n" data-target="200">0</div><div class="st-l">Vendor Partners</div></div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testi-sec">
+  <div class="testi-head rv"><div class="eye">Client Stories</div><h2 class="sec-t">What Our Guests <em>Say</em></h2></div>
+  <div class="testi-grid">
+    <div class="t-card rv d1">
+      <div class="t-q">"</div><div class="t-stars">★★★★★</div>
+      <p class="t-text">Our Maldives honeymoon was beyond anything we imagined. Every detail was flawlessly curated — from the seaplane transfer to the overwater villa.</p>
+      <div class="t-auth"><div class="t-av"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80" alt="Priya" loading="lazy"/></div><div><div class="t-name">Priya Sharma</div><div class="t-role">Honeymooner · Delhi</div></div></div>
+    </div>
+    <div class="t-card rv d2">
+      <div class="t-q">"</div><div class="t-stars">★★★★★</div>
+      <p class="t-text">EaseMyBooking handled our 400-guest wedding at The Golden Acres. Vendor coordination, sound setup and catering were absolutely world-class.</p>
+      <div class="t-auth"><div class="t-av"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80" alt="Rahul" loading="lazy"/></div><div><div class="t-name">Rahul &amp; Anjali</div><div class="t-role">Wedding Clients · Jaipur</div></div></div>
+    </div>
+    <div class="t-card rv d3">
+      <div class="t-q">"</div><div class="t-stars">★★★★★</div>
+      <p class="t-text">Our corporate annual gala of 200 people was managed end-to-end. The AV production was phenomenal and the venue they sourced was stunning.</p>
+      <div class="t-auth"><div class="t-av"><img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&q=80" alt="Aditya" loading="lazy"/></div><div><div class="t-name">Aditya Mehta</div><div class="t-role">CEO · TechVentures India</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec" id="contact">
+  <div class="cta-bg"></div>
+  <div class="cta-inner rv">
+    <h2 class="cta-t">Ready to Create<br><em>Something Legendary?</em></h2>
+    <p class="cta-sub">Tell us your dream — we'll make it real. From a Rajasthan road trip to a 500-person wedding gala.</p>
+    <div class="cta-btns"><button class="btn-g">Start Planning</button><button class="btn-o">Talk to an Expert</button></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-top">
+    <div>
+      <a href="#" class="ft-logo">Ease<span>My</span>Booking</a>
+      <p class="ft-tag">Your one-stop destination for premium travel packages, luxury event planning, and exclusive venue bookings across India and beyond.</p>
+      <div class="ft-soc">
+        <a href="#" class="ft-s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+        <a href="#" class="ft-s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+        <a href="#" class="ft-s"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg></a>
+      </div>
+    </div>
+    <div><div class="ft-h">Travel</div><ul class="ft-ul"><li><a href="#">Domestic Packages</a></li><li><a href="#">International Tours</a></li><li><a href="#">Flight Booking</a></li><li><a href="#">Hotel Booking</a></li><li><a href="#">Honeymoon Packages</a></li></ul></div>
+    <div><div class="ft-h">Events</div><ul class="ft-ul"><li><a href="#">Wedding Planning</a></li><li><a href="#">Corporate Events</a></li><li><a href="#">Private Parties</a></li><li><a href="#">Vendor Bookings</a></li><li><a href="#">AV &amp; Sound</a></li></ul></div>
+    <div><div class="ft-h">Company</div><ul class="ft-ul">
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="privacy-policy.html">Privacy Policy</a></li>
+      <li><a href="terms&Conditions.html">Terms & Condition</a></li>
+      <li><a href="cancellation-policy.html">Cancellation Policy</a></li>
+      <li><a href="vendor-aggrement.html">Vendor Aggrement</a></li>
+    </ul>
+  </div>
+  </div>
+  <div class="ft-bot">
+    <div class="ft-copy">© 2025 EaseMyBooking. All rights reserved.</div>
+    <div class="ft-leg"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookie Policy</a></div>
+  </div>
+</footer>
+
+<script>
+const cur=document.getElementById("cur"),ring=document.getElementById("cur-r");
+if(!("ontouchstart" in window)){
+  document.addEventListener("mousemove",e=>{
+    cur.style.left=e.clientX+"px";cur.style.top=e.clientY+"px";
+    setTimeout(()=>{ring.style.left=e.clientX+"px";ring.style.top=e.clientY+"px";},80);
+  });
+}else{if(cur)cur.style.display="none";if(ring)ring.style.display="none";}
+
+const nav=document.getElementById("nav");
+window.addEventListener("scroll",()=>nav.classList.toggle("sc",scrollY>60));
+
+const ios=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add("on");}),{threshold:.1});
+document.querySelectorAll(".rv").forEach(el=>ios.observe(el));
+
+document.querySelectorAll(".d-tab").forEach(t=>t.addEventListener("click",function(){
+  document.querySelectorAll(".d-tab").forEach(x=>x.classList.remove("active"));
+  this.classList.add("active");
+}));
+
+const statsEl=document.querySelector(".stats");
+const sio=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      document.querySelectorAll("[data-target]").forEach(el=>{
+        const target=+el.dataset.target,dur=1800;let start=0;
+        const step=ts=>{if(!start)start=ts;const p=Math.min((ts-start)/dur,1);const ease=1-Math.pow(1-p,3);
+          el.textContent=Math.floor(ease*target).toLocaleString("en-IN")+"+";if(p<1)requestAnimationFrame(step);};
+        requestAnimationFrame(step);
+      });sio.disconnect();
+    }
+  });
+},{threshold:.3});
+if(statsEl)sio.observe(statsEl);
+
+const ham=document.getElementById("ham"),mob=document.getElementById("mobNav");
+ham.addEventListener("click",()=>{ham.classList.toggle("open");mob.classList.toggle("open");document.body.style.overflow=mob.classList.contains("open")?"hidden":"";});
+function closeMob(){ham.classList.remove("open");mob.classList.remove("open");document.body.style.overflow="";}
+</script>
 </body>
 </html>
