@@ -1,455 +1,1229 @@
+<!-- =======================================
+PREMIUM FARMHOUSE LISTING PAGE - PART 1
+HTML STRUCTURE
+Paste inside farmhouse-villas.html
+======================================= -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+/>
 
-<title>Farmhouse & Villa Booking | EaseMyBooking</title>
+<title>
+Luxury Farmhouse & Villa Booking | EaseMyBooking
+</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- GOOGLE FONTS -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<style>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    /* FILTER BAR */
+<!-- FONT AWESOME -->
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+/>
 
-.filter-section{
-padding:10px 8% 20px;
-}
-
-.filter-bar{
-background:white;
-padding:18px;
-border-radius:22px;
-display:flex;
-gap:14px;
-flex-wrap:wrap;
-align-items:center;
-box-shadow:
-0 8px 30px rgba(0,0,0,0.08);
-}
-
-.filter-bar select,
-.filter-bar input{
-
-padding:14px 18px;
-border:1px solid #ddd;
-border-radius:14px;
-font-size:15px;
-min-width:180px;
-outline:none;
-font-family:'Poppins',sans-serif;
-}
-
-.filter-bar input{
-flex:1;
-min-width:220px;
-}
-
-#resetBtn{
-background:#c9a24b;
-border:none;
-padding:14px 24px;
-border-radius:14px;
-color:white;
-font-weight:600;
-cursor:pointer;
-transition:0.3s;
-}
-
-#resetBtn:hover{
-transform:translateY(-2px);
-}
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
-body{
-font-family:'Poppins',sans-serif;
-background:#f5f3ee;
-color:#222;
-}
-
-/* NAVBAR */
-
-.navbar{
-position:sticky;
-top:0;
-background:white;
-padding:18px 8%;
-display:flex;
-justify-content:space-between;
-align-items:center;
-z-index:1000;
-box-shadow:0 2px 20px rgba(0,0,0,0.05);
-}
-
-.logo{
-font-family:'Playfair Display',serif;
-font-size:34px;
-font-weight:700;
-}
-
-.nav-links{
-display:flex;
-gap:30px;
-}
-
-.nav-links a{
-text-decoration:none;
-color:#222;
-font-weight:500;
-}
-
-.quote-btn{
-background:#c9a24b;
-color:white;
-padding:12px 24px;
-border-radius:10px;
-text-decoration:none;
-font-weight:600;
-}
-
-/* HERO */
-
-/* HERO */
-
-.hero{
-height:65vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-padding:80px 8%;
-position:relative;
-overflow:hidden;
-
-/* Background Image */
-
-background:
-linear-gradient(
-rgba(0,0,0,0.45),
-rgba(0,0,0,0.45)
-),
-
-url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=2000&q=80');
-
-background-size:cover;
-background-position:center;
-background-repeat:no-repeat;
-border-radius:0 0 40px 40px;
-}
-
-.hero h1{
-font-family:'Playfair Display',serif;
-font-size:72px;
-line-height:1.1;
-margin-bottom:18px;
-color:white;
-max-width:1000px;
-}
-
-.hero p{
-font-size:22px;
-color:rgba(255,255,255,0.9);
-max-width:700px;
-}
-
-/* CARD GRID */
-
-.property-grid{
-padding:40px 8%;
-display:grid;
-grid-template-columns:
-repeat(auto-fit,minmax(320px,1fr));
-gap:28px;
-}
-
-/* CARD */
-
-.card{
-background:white;
-border-radius:22px;
-overflow:hidden;
-box-shadow:0 5px 25px rgba(0,0,0,0.08);
-transition:0.3s;
-}
-
-.card:hover{
-transform:translateY(-5px);
-}
-
-.carousel{
-position:relative;
-height:240px;
-overflow:hidden;
-}
-
-.carousel img{
-width:100%;
-height:240px;
-object-fit:cover;
-display:none;
-}
-
-.carousel img.active{
-display:block;
-}
-
-.arrow{
-position:absolute;
-top:50%;
-transform:translateY(-50%);
-background:rgba(255,255,255,0.8);
-border:none;
-width:38px;
-height:38px;
-border-radius:50%;
-cursor:pointer;
-font-size:18px;
-}
-
-.prev{
-left:12px;
-}
-
-.next{
-right:12px;
-}
-
-.card-content{
-padding:20px;
-}
-
-.location{
-font-size:14px;
-color:#777;
-margin-bottom:8px;
-}
-
-.card h3{
-font-size:24px;
-margin-bottom:12px;
-font-family:'Playfair Display',serif;
-}
-
-.capacity{
-font-size:15px;
-color:#555;
-margin-bottom:18px;
-}
-
-.btn-group{
-display:flex;
-gap:12px;
-}
-
-.quote{
-flex:1;
-background:#c9a24b;
-color:white;
-text-align:center;
-padding:12px;
-border-radius:10px;
-text-decoration:none;
-font-weight:600;
-}
-
-.whatsapp{
-flex:1;
-background:#25D366;
-color:white;
-text-align:center;
-padding:12px;
-border-radius:10px;
-text-decoration:none;
-font-weight:600;
-}
-
-/* MOBILE */
-
-@media(max-width:768px){
-
-.hero{
-height:55vh;
-padding:60px 20px;
-border-radius:0 0 25px 25px;
-}
-
-.hero h1{
-font-size:42px;
-}
-
-.hero p{
-font-size:16px;
-}
-
-}
-
-</style>
+<link rel="stylesheet" href="farmhouse-villas.css">
 </head>
 
 <body>
 
+<style>
+/* =======================================
+PREMIUM FARMHOUSE LISTING CSS - PART 2
+Save as: farmhouse-villas.css
+======================================= */
+
+:root{
+  --gold:#c9a14a;
+  --gold-dark:#b88d33;
+  --bg:#f7f3ee;
+  --card:#ffffff;
+  --text:#1f1f1f;
+  --muted:#737373;
+  --border:#ebe5db;
+  --shadow:0 15px 45px rgba(0,0,0,0.08);
+  --radius:28px;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+/* =======================
+CONTAINER
+======================= */
+
+.container{
+  width:90%;
+  max-width:1450px;
+  margin:auto;
+}
+
+/* =======================
+HEADER
+======================= */
+
+.header{
+  position:sticky;
+  top:0;
+  z-index:999;
+  backdrop-filter:blur(20px);
+  background:rgba(255,255,255,0.75);
+  border-bottom:1px solid rgba(0,0,0,0.06);
+}
+
+.nav-wrapper{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 0;
+}
+
+.logo{
+  text-decoration:none;
+  font-size:46px;
+  font-family:'Cormorant Garamond', serif;
+  color:var(--gold);
+  font-weight:700;
+}
+
+.navbar{
+  display:flex;
+  gap:42px;
+}
+
+.navbar a{
+  text-decoration:none;
+  color:#333;
+  font-size:16px;
+  font-weight:500;
+  transition:.3s;
+}
+
+.navbar a:hover,
+.navbar .active{
+  color:var(--gold);
+}
+
+.whatsapp-btn{
+  background:linear-gradient(
+      135deg,
+      var(--gold),
+      #d8b15d
+  );
+
+  color:#fff;
+  text-decoration:none;
+  padding:15px 28px;
+  border-radius:18px;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  transition:.4s;
+}
+
+.whatsapp-btn:hover{
+  transform:translateY(-3px);
+}
+
+/* =======================
+HERO
+======================= */
+
+/* HERO SECTION */
+.farmhouse-hero{
+    position: relative;
+    height: 95vh;
+    overflow: hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+/* SLIDER */
+.hero-slider{
+    position:absolute;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+}
+
+.hero-slide{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background-size:cover;
+    background-position:center;
+    opacity:0;
+    transition:opacity 1.8s ease-in-out,
+               transform 8s ease;
+    transform:scale(1.1);
+}
+
+.hero-slide.active{
+    opacity:1;
+    transform:scale(1);
+}
+
+/* OVERLAY */
+.hero-overlay{
+    position:absolute;
+    inset:0;
+    background:
+    linear-gradient(
+      rgba(0,0,0,.45),
+      rgba(0,0,0,.50)
+    );
+    z-index:1;
+}
+
+/* CONTENT */
+.hero-content{
+    position:relative;
+    z-index:2;
+    max-width:1200px;
+    width:100%;
+    text-align:center;
+    padding:120px 20px 50px;
+}
+
+.hero-tag{
+    background:rgba(255,255,255,.15);
+    backdrop-filter:blur(12px);
+    color:#f3d08f;
+    padding:12px 24px;
+    border-radius:40px;
+    font-size:14px;
+    display:inline-block;
+    margin-bottom:25px;
+    border:1px solid rgba(255,255,255,.2);
+}
+
+.hero-content h1{
+    font-size:68px;
+    line-height:1.1;
+    color:#fff;
+    margin-bottom:20px;
+    font-weight:600;
+}
+
+.hero-content p{
+    color:#f1f1f1;
+    font-size:22px;
+    max-width:850px;
+    margin:auto;
+    line-height:1.8;
+}
+
+/* SEARCH BOX */
+.hero-search-box{
+    margin-top:50px;
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:30px;
+    display:flex;
+    gap:18px;
+    padding:20px;
+    align-items:end;
+    box-shadow:0 20px 50px rgba(0,0,0,.25);
+}
+
+.search-item{
+    flex:1;
+    text-align:left;
+}
+
+.search-item label{
+    color:#fff;
+    display:block;
+    margin-bottom:8px;
+    font-size:14px;
+}
+
+.search-item input,
+.search-item select{
+    width:100%;
+    height:58px;
+    border:none;
+    border-radius:16px;
+    padding:0 16px;
+    font-size:16px;
+    outline:none;
+}
+
+.explore-btn{
+    background:#D4A94A;
+    border:none;
+    height:58px;
+    padding:0 40px;
+    border-radius:18px;
+    color:#fff;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+    white-space:nowrap;
+}
+
+.explore-btn:hover{
+    transform:translateY(-3px);
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+.hero-content{
+    padding-top:150px;
+}
+
+.hero-content h1{
+    font-size:42px;
+}
+
+.hero-content p{
+    font-size:16px;
+}
+
+.hero-search-box{
+    flex-direction:column;
+    border-radius:24px;
+}
+
+.search-item{
+    width:100%;
+}
+
+.explore-btn{
+    width:100%;
+}
+}
+
+/* =======================
+FILTER BAR
+======================= */
+
+.filter-wrapper{
+  margin-bottom:55px;
+}
+
+.filter-box{
+  background:rgba(255,255,255,0.8);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.4);
+  border-radius:30px;
+  box-shadow:var(--shadow);
+  display:grid;
+  grid-template-columns:
+  repeat(5,1fr)
+  220px;
+  gap:18px;
+  padding:25px;
+}
+
+.filter-item{
+  display:flex;
+  flex-direction:column;
+}
+
+.filter-item label{
+  font-size:13px;
+  font-weight:600;
+  margin-bottom:10px;
+  color:#555;
+}
+
+.filter-item input,
+.filter-item select{
+  height:58px;
+  border-radius:18px;
+  border:1px solid #e7dfd2;
+  padding:0 18px;
+  font-size:15px;
+  background:#fff;
+  outline:none;
+}
+
+.search-btn{
+  border:none;
+  border-radius:22px;
+  background:linear-gradient(
+      135deg,
+      var(--gold),
+      #d9b25f
+  );
+  color:#fff;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  transition:.4s;
+}
+
+.search-btn:hover{
+  transform:translateY(-3px);
+}
+
+/* ==========================
+PREMIUM ELITE LISTINGS V2
+========================== */
+
+.premium-listings-section{
+    padding:100px 6%;
+    background:#F8F4EE;
+}
+
+/* HEADER */
+
+.listing-header-wrap{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom:50px;
+    gap:30px;
+}
+
+.listing-subtitle{
+    display:inline-block;
+    padding:10px 18px;
+    border-radius:50px;
+    background:#EFE5D2;
+    color:#B88A39;
+    font-size:13px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.listing-title{
+    font-family:'Cormorant Garamond',serif;
+    font-size:58px;
+    line-height:1;
+    margin:18px 0 12px;
+    color:#1A1A1A;
+}
+
+.listing-description{
+    color:#777;
+    font-size:17px;
+    max-width:700px;
+    line-height:1.8;
+}
+
+.sort-box select{
+    height:58px;
+    border:none;
+    border-radius:18px;
+    padding:0 22px;
+    background:white;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    font-size:15px;
+}
+
+/* GRID */
+
+.premium-listings-grid{
+    display:flex;
+    flex-direction:column;
+    gap:30px;
+}
+
+/* CARD */
+
+.premium-villa-card{
+    display:grid;
+    grid-template-columns:
+    420px
+    1fr
+    260px;
+
+    background:white;
+    border-radius:32px;
+    overflow:hidden;
+
+    box-shadow:
+    0 15px 45px rgba(0,0,0,.08);
+
+    transition:.4s ease;
+}
+
+.premium-villa-card:hover{
+    transform:translateY(-6px);
+
+    box-shadow:
+    0 25px 60px rgba(0,0,0,.12);
+}
+
+/* =====================
+GALLERY
+===================== */
+
+.villa-gallery{
+    position:relative;
+    height:340px;
+    overflow:hidden;
+}
+
+.gallery-slider{
+    position:relative;
+    width:100%;
+    height:100%;
+}
+
+.gallery-images{
+    display:flex;
+    height:100%;
+    transition:transform .5s ease;
+}
+
+.gallery-images img{
+    width:420px;
+    height:340px;
+    object-fit:cover;
+    flex-shrink:0;
+}
+
+/* FEATURED */
+
+.featured-badge{
+    position:absolute;
+    top:18px;
+    left:18px;
+
+    background:white;
+    padding:10px 18px;
+
+    border-radius:50px;
+
+    font-size:13px;
+    font-weight:600;
+
+    color:#111;
+
+    box-shadow:
+    0 10px 20px rgba(0,0,0,.08);
+}
+
+/* ARROWS */
+
+.slider-btn{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+
+    width:48px;
+    height:48px;
+
+    border:none;
+    border-radius:50%;
+
+    cursor:pointer;
+
+    background:
+    rgba(255,255,255,.92);
+
+    font-size:18px;
+
+    z-index:5;
+}
+
+.prev-btn{
+    left:15px;
+}
+
+.next-btn{
+    right:15px;
+}
+
+/* DOTS */
+
+.slider-dots{
+    position:absolute;
+    bottom:18px;
+    left:50%;
+    transform:translateX(-50%);
+
+    display:flex;
+    gap:8px;
+}
+
+.slider-dots span{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+
+    background:
+    rgba(255,255,255,.55);
+}
+
+.slider-dots span.active{
+    background:white;
+}
+
+/* =====================
+DETAILS
+===================== */
+
+.villa-details{
+    padding:34px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.location-row{
+    color:#888;
+    font-size:14px;
+    margin-bottom:12px;
+}
+
+.villa-title{
+    font-family:'Cormorant Garamond',serif;
+    font-size:46px;
+    line-height:1.05;
+    color:#111;
+    margin-bottom:20px;
+}
+
+/* META */
+
+.property-meta{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:22px;
+}
+
+.meta-pill{
+    background:#F4EFE7;
+    color:#333;
+
+    padding:10px 16px;
+
+    border-radius:50px;
+
+    font-size:14px;
+    font-weight:500;
+}
+
+/* AMENITIES */
+
+.amenities-wrap{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:24px;
+}
+
+.amenity{
+    background:#FBF8F2;
+    border:1px solid #EEE4D4;
+
+    padding:9px 16px;
+    border-radius:40px;
+
+    font-size:13px;
+    color:#7D5C25;
+}
+
+/* RATING */
+
+.rating-badge{
+    display:inline-flex;
+    align-items:center;
+
+    background:#FFF7E6;
+
+    padding:12px 18px;
+    border-radius:14px;
+
+    font-weight:600;
+}
+
+/* =====================
+PRICE SECTION
+===================== */
+
+.pricing-section{
+    border-left:1px solid #EFE7DB;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+
+    padding:30px;
+}
+
+.starting-text{
+    color:#999;
+    font-size:14px;
+}
+
+.villa-price{
+    font-size:44px;
+    font-weight:700;
+    color:#111;
+
+    margin:10px 0;
+}
+
+.night-text{
+    color:#777;
+}
+
+/* BUTTONS */
+
+.villa-actions{
+    margin-top:30px;
+
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.details-btn{
+    height:56px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:
+    linear-gradient(
+    135deg,
+    #D4B06A,
+    #B88939
+    );
+
+    color:white;
+    font-weight:600;
+
+    cursor:pointer;
+}
+
+.whatsapp-btn{
+    height:56px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:#25D366;
+
+    color:white;
+    font-weight:600;
+
+    cursor:pointer;
+}
+
+/* =====================
+MOBILE
+===================== */
+
+@media(max-width:1100px){
+
+.premium-villa-card{
+    grid-template-columns:1fr;
+}
+
+.pricing-section{
+    border-left:none;
+    border-top:1px solid #EEE;
+}
+
+.gallery-images img{
+    width:100%;
+}
+
+}
+
+@media(max-width:768px){
+
+.premium-listings-section{
+    padding:70px 20px;
+}
+
+.listing-header-wrap{
+    flex-direction:column;
+    align-items:flex-start;
+}
+
+.listing-title{
+    font-size:42px;
+}
+
+.villa-gallery{
+    height:260px;
+}
+
+.gallery-images img{
+    height:260px;
+}
+
+.villa-title{
+    font-size:34px;
+}
+
+.villa-price{
+    font-size:36px;
+}
+
+}
+
+/* =======================
+LAYOUT
+======================= */
+
+.listing-grid{
+  display:grid;
+  grid-template-columns:
+  2fr
+  360px;
+  gap:35px;
+}
+
+.section-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:35px;
+}
+
+.section-top h2{
+  font-size:44px;
+  font-family:'Cormorant Garamond', serif;
+  margin-top: 50px;
+  padding-top: 20px;
+}
+
+.section-top p{
+  color:var(--muted);
+}
+
+.sort-box select{
+  border:none;
+  height:58px;
+  padding:0 22px;
+  border-radius:18px;
+  background:#fff;
+  box-shadow:var(--shadow);
+  font-size:15px;
+  margin-top: 50px;
+}
+
+/* =======================
+PROPERTY CARD
+======================= */
+
+.property-container{
+  display:flex;
+  flex-direction:column;
+  gap:26px;
+}
+
+.property-card{
+  background:#fff;
+  border-radius:32px;
+  overflow:hidden;
+  box-shadow:0 12px 40px rgba(0,0,0,.08);
+  display:grid;
+  grid-template-columns:
+  390px
+  1fr
+  250px;
+  transition:.4s;
+}
+
+.property-card:hover{
+  transform:translateY(-8px);
+}
+
+/* =======================
+IMAGE
+======================= */
+
+.property-image{
+  position:relative;
+  height:320px;
+  overflow:hidden;
+}
+
+.property-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:.6s;
+}
+
+.property-card:hover img{
+  transform:scale(1.08);
+}
+
+.featured-tag{
+  position:absolute;
+  top:20px;
+  left:20px;
+  background:#fff;
+  padding:10px 16px;
+  border-radius:100px;
+  font-size:13px;
+  font-weight:600;
+}
+
+/* =======================
+CONTENT
+======================= */
+
+.property-content{
+  padding:30px;
+}
+
+.location{
+  color:#888;
+  margin-bottom:12px;
+  font-size:14px;
+}
+
+.property-title{
+  font-size:38px;
+  font-family:'Cormorant Garamond', serif;
+  line-height:1;
+  margin-bottom:18px;
+}
+
+.property-meta{
+  display:flex;
+  gap:18px;
+  flex-wrap:wrap;
+  color:#555;
+  margin-bottom:22px;
+}
+
+.property-meta span{
+  display:flex;
+  gap:7px;
+  align-items:center;
+}
+
+.amenities{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.amenities span{
+  background:#f4efe7;
+  padding:11px 18px;
+  border-radius:100px;
+  font-size:14px;
+  color:#85601b;
+}
+
+/* =======================
+PRICE SIDE
+======================= */
+
+.property-price{
+  border-left:1px solid #f0ece5;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:28px;
+}
+
+.price{
+  font-size:44px;
+  font-weight:700;
+}
+
+.price small{
+  font-size:16px;
+}
+
+.per-night{
+  color:#777;
+  margin-top:8px;
+  margin-bottom:28px;
+}
+
+.card-buttons{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.quote-btn,
+.whatsapp-card-btn{
+  width:100%;
+  height:58px;
+  border:none;
+  border-radius:18px;
+  cursor:pointer;
+  font-size:15px;
+  font-weight:600;
+}
+
+.quote-btn{
+  background:linear-gradient(
+      135deg,
+      var(--gold),
+      #d8b15d
+  );
+  color:#fff;
+}
+
+.whatsapp-card-btn{
+  background:#25D366;
+  color:#fff;
+}
+
+/* =======================
+SIDEBAR
+======================= */
+
+.listing-sidebar{
+  position:sticky;
+  top:110px;
+  height:max-content;
+}
+
+.sidebar-card{
+  background:#fff;
+  border-radius:28px;
+  padding:28px;
+  margin-bottom:22px;
+  box-shadow:var(--shadow);
+  margin-top: 50px;
+}
+
+.card-header{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:22px;
+}
+
+.card-header a{
+  text-decoration:none;
+  color:var(--gold);
+}
+
+.offer-box{
+  padding:28px;
+  background:#f8f4ed;
+  border-radius:18px;
+  margin-bottom:15px;
+  margin-top: 20px;
+}
+
+.offer-box h4{
+  margin-bottom:8px;
+}
+
+.offer-box p{
+  color:#666;
+  line-height:1.7;
+}
+
+.lead-form{
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+  margin-top:20px;
+}
+
+.lead-form input,
+.lead-form select,
+.lead-form textarea{
+  border:1px solid #e7dfd2;
+  border-radius:18px;
+  padding:16px;
+  outline:none;
+}
+
+.lead-form button{
+  height:58px;
+  border:none;
+  border-radius:18px;
+  background:var(--gold);
+  color:#fff;
+  font-size:16px;
+  font-weight:600;
+}
+
+.trust-item{
+  display:flex;
+  gap:16px;
+  margin-top:22px;
+}
+
+.trust-item i{
+  width:55px;
+  height:55px;
+  border-radius:16px;
+  background:#f4efe7;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:var(--gold);
+  font-size:20px;
+}
+
+/* =======================
+WHATSAPP FLOAT
+======================= */
+
+.floating-whatsapp{
+  position:fixed;
+  right:28px;
+  bottom:28px;
+  width:72px;
+  height:72px;
+  border-radius:50%;
+  background:#25D366;
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:30px;
+  text-decoration:none;
+  box-shadow:0 15px 30px rgba(0,0,0,.2);
+  z-index:999;
+}
+
+/* =======================
+MOBILE
+======================= */
+
+@media(max-width:1100px){
+
+.filter-box{
+  grid-template-columns:1fr 1fr;
+}
+
+.listing-grid{
+  grid-template-columns:1fr;
+}
+
+.listing-sidebar{
+  position:relative;
+  top:0;
+}
+
+.property-card{
+  grid-template-columns:1fr;
+}
+
+.property-image{
+  height:260px;
+}
+
+.property-price{
+  border-left:none;
+  border-top:1px solid #eee;
+}
+
+.hero-content h1{
+  font-size:54px;
+}
+
+}
+
+@media(max-width:768px){
+
+.logo{
+  font-size:34px;
+}
+
+.navbar{
+  display:none;
+}
+
+.filter-box{
+  grid-template-columns:1fr;
+}
+
+.hero-content h1{
+  font-size:42px;
+}
+
+.hero-content p{
+  font-size:16px;
+}
+
+.property-title{
+  font-size:30px;
+}
+
+.price{
+  font-size:34px;
+}
+
+.section-top{
+  flex-direction:column;
+  align-items:flex-start;
+  gap:15px;
+}
+
+.floating-whatsapp{
+  width:62px;
+  height:62px;
+}
+
+}
+</style>
+
+<!-- ===========================
+HEADER
+=========================== -->
+
+<header class="header">
+
+<div class="container nav-wrapper">
+
+<a href="home.html" class="logo">
+EaseMyBooking
+</a>
+
 <nav class="navbar">
 
-<div class="logo">
-EaseMyBooking
-</div>
-
-<div class="nav-links">
-<a href="index.html">Home</a>
-<a href="#">Packages</a>
-<a href="#">Venues</a>
-</div>
-
-<a href="#" class="quote-btn">
-Get Quote
+<a href="home.html">Home</a>
+<a href="index.html">Events</a>
+<a href="farmhouse-villas.html" class="active">
+Farmhouse & Villas
 </a>
+<a href="travel.html">Travel</a>
+<a href="#contact">Contact</a>
 
 </nav>
 
-<section class="hero">
+<div class="nav-btns">
 
-<h1>
-Luxury Farmhouses & Villas
-</h1>
-
-<p>
-Curated private stays for parties,
-staycations & celebrations.
-</p>
-
-</section>
-
-<!-- FILTER BAR -->
-
-<section class="filter-section">
-
-<div class="filter-bar">
-
-<select id="cityFilter">
-<option value="">All Cities</option>
-<option value="Jaipur">Jaipur</option>
-<option value="Udaipur">Udaipur</option>
-<option value="Delhi">Delhi</option>
-</select>
-
-<select id="guestFilter">
-<option value="">Guests</option>
-<option value="20">20+ Guests</option>
-<option value="50">50+ Guests</option>
-<option value="100">100+ Guests</option>
-</select>
-
-<select id="typeFilter">
-<option value="">Property Type</option>
-<option value="Villa">Villa</option>
-<option value="Farmhouse">Farmhouse</option>
-<option value="Pool Villa">
-Pool Villa
-</option>
-</select>
-
-<select id="budgetFilter">
-<option value="">Budget</option>
-<option value="10000">Under ₹10K</option>
-<option value="20000">Under ₹20K</option>
-<option value="50000">Luxury ₹50K+</option>
-</select>
-
-<input
-type="text"
-id="searchFilter"
-placeholder="Search property...">
-
-<button id="resetBtn">
-Reset
-</button>
-
-</div>
-
-</section>
-
-<div class="property-grid"
-id="propertyGrid">
-
-</div>
-
-fetch('villas.json')<script>
-
-let villasData = [];
-
-fetch('villas.json')
-.then(res => res.json())
-.then(data => {
-
-villasData = data;
-renderProperties(villasData);
-
-});
-
-function renderProperties(data){
-
-const grid =
-document.getElementById('propertyGrid');
-
-grid.innerHTML = '';
-
-data.forEach((villa,index)=>{
-
-grid.innerHTML += `
-
-<div class="card">
-
-<div class="carousel"
-id="carousel-${index}">
-
-${villa.images.map((img,i)=>
-
-`<img src="${img}"
-class="${i===0?'active':''}">`
-
-).join('')}
-
-<button class="arrow prev"
-onclick="changeSlide(${index},-1)">
-❮
-</button>
-
-<button class="arrow next"
-onclick="changeSlide(${index},1)">
-❯
-</button>
-
-</div>
-
-<div class="card-content">
-
-<div class="location">
-📍 ${villa.city}
-</div>
-
-<h3>${villa.name}</h3>
-
-<div class="capacity">
-👥 ${villa.capacity}
-</div>
-
-<div class="btn-group">
-
-<a href="#"
-class="quote">
-Get Quote
-</a>
-
-<a href="https://wa.me/918824880979"
+<a
+href="https://wa.me/919999999999"
+class="whatsapp-btn"
 target="_blank"
-class="whatsapp">
+>
+<i class="fab fa-whatsapp"></i>
 WhatsApp
 </a>
 
@@ -457,111 +1231,706 @@ WhatsApp
 
 </div>
 
+</header>
+
+
+<!-- ===========================
+PAGE HEADER
+=========================== -->
+
+<!-- PREMIUM HERO SECTION -->
+<section class="farmhouse-hero">
+
+  <!-- Background Slider -->
+  <div class="hero-slider">
+    <div class="hero-slide active"
+      style="background-image:url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1920&auto=format&fit=crop');">
+    </div>
+
+    <div class="hero-slide"
+      style="background-image:url('https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=1920&auto=format&fit=crop');">
+    </div>
+
+    <div class="hero-slide"
+      style="background-image:url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1920&auto=format&fit=crop');">
+    </div>
+
+    <div class="hero-slide"
+      style="background-image:url('https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1920&auto=format&fit=crop');">
+    </div>
+  </div>
+
+  <!-- Dark Overlay -->
+  <div class="hero-overlay"></div>
+
+  <!-- Hero Content -->
+  <div class="hero-content">
+    <span class="hero-tag">
+      Luxury Stays Collection
+    </span>
+
+    <h1>
+      Curated Premium <br>
+      Farmhouses & Villas
+    </h1>
+
+    <p>
+      Discover celebration-ready villas, private pools,
+      luxury farmhouses and curated stay experiences across India.
+    </p>
+
+    <!-- Search Box -->
+    <div class="hero-search-box">
+
+      <div class="search-item">
+        <label>Location</label>
+        <select>
+          <option>Select City</option>
+          <option>Jaipur</option>
+          <option>Goa</option>
+          <option>Udaipur</option>
+          <option>Delhi NCR</option>
+        </select>
+      </div>
+
+      <div class="search-item">
+        <label>Check In</label>
+        <input type="date">
+      </div>
+
+      <div class="search-item">
+        <label>Check Out</label>
+        <input type="date">
+      </div>
+
+      <div class="search-item">
+        <label>Guests</label>
+        <select>
+          <option>Guests</option>
+          <option>2 Guests</option>
+          <option>5 Guests</option>
+          <option>10+ Guests</option>
+        </select>
+      </div>
+
+      <button class="explore-btn">
+        Explore Stays
+      </button>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ===========================
+LISTING SECTION
+=========================== -->
+
+<section class="listing-section">
+
+<div class="container">
+
+<div class="listing-grid">
+
+
+<!-- ===========================
+LEFT SIDE LISTINGS
+=========================== -->
+
+<div class="listing-left">
+
+<div class="section-top">
+
+<div>
+
+<h2>
+Premium Farmhouses & Villas
+</h2>
+
+<p id="propertyCount">
+Loading properties...
+</p>
+
 </div>
 
-`;
+<div class="sort-box">
 
-});
+<select>
 
+<option>
+Sort by Popularity
+</option>
+
+<option>
+Price Low to High
+</option>
+
+<option>
+Price High to Low
+</option>
+
+<option>
+Top Rated
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<!-- PROPERTY LISTINGS -->
+<div
+id="propertyContainer"
+class="property-container"
+>
+
+<!-- JSON LISTINGS WILL LOAD HERE -->
+ <!-- =========================
+PREMIUM FARMHOUSE LISTING SECTION
+========================= -->
+<section class="premium-listings-section">
+
+    <div class="listing-header-wrap">
+        <div>
+            <span class="listing-subtitle">
+                Luxury Curated Collection
+            </span>
+
+            <h2 class="listing-title">
+                Premium Farmhouses & Villas
+            </h2>
+
+            <p class="listing-description">
+                Handpicked luxury villas, private pool farmhouses,
+                party stays & curated experiences across India.
+            </p>
+        </div>
+
+        <div class="sort-box">
+            <select>
+                <option>Sort by Popularity</option>
+                <option>Price Low to High</option>
+                <option>Price High to Low</option>
+                <option>Top Rated</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Listings Container -->
+    <div id="premiumListingsContainer" class="premium-listings-grid">
+
+        <!-- Dynamic Cards via JS -->
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+PREMIUM PROPERTY CARD TEMPLATE
+(JS WILL RENDER THIS)
+========================= -->
+
+<template id="villaCardTemplate">
+
+    <div class="premium-villa-card">
+
+        <!-- LEFT IMAGE GALLERY -->
+        <div class="villa-gallery">
+
+            <div class="gallery-slider">
+
+                <!-- Images injected by JS -->
+                <div class="gallery-images"></div>
+
+                <!-- Slider Controls -->
+                <button class="slider-btn prev-btn">
+                    ❮
+                </button>
+
+                <button class="slider-btn next-btn">
+                    ❯
+                </button>
+
+                <!-- Pagination Dots -->
+                <div class="slider-dots"></div>
+
+            </div>
+
+            <!-- Featured Badge -->
+            <div class="featured-badge">
+                Featured Stay
+            </div>
+
+        </div>
+
+
+        <!-- CENTER PROPERTY DETAILS -->
+        <div class="villa-details">
+
+            <div class="location-row">
+                📍 <span class="villa-location"></span>
+            </div>
+
+            <h3 class="villa-title"></h3>
+
+            <div class="property-meta">
+
+                <span class="meta-pill">
+                    👥
+                    <span class="guest-count"></span>
+                    Guests
+                </span>
+
+                <span class="meta-pill">
+                    🛏
+                    <span class="bedroom-count"></span>
+                    Bedrooms
+                </span>
+
+                <span class="meta-pill">
+                    🛁
+                    <span class="bathroom-count"></span>
+                    Baths
+                </span>
+
+            </div>
+
+
+            <!-- Amenities -->
+            <div class="amenities-wrap">
+            </div>
+
+
+            <!-- Rating -->
+            <div class="rating-wrap">
+
+                <div class="rating-badge">
+                    ⭐ <span class="villa-rating"></span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT PRICE SECTION -->
+        <div class="pricing-section">
+
+            <div class="price-wrap">
+
+                <span class="starting-text">
+                    Starting From
+                </span>
+
+                <h2 class="villa-price"></h2>
+
+                <span class="night-text">
+                    Per Night
+                </span>
+
+            </div>
+
+
+            <!-- Buttons -->
+            <div class="villa-actions">
+
+                <button class="details-btn">
+                    View Details
+                </button>
+
+                <button class="whatsapp-btn">
+                    WhatsApp
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</template>
+
+</div>
+
+</div>
+
+
+<!-- ===========================
+RIGHT SIDEBAR
+=========================== -->
+
+<aside class="listing-sidebar">
+
+<!-- OFFERS -->
+
+<div class="sidebar-card">
+
+<div class="card-header">
+
+<h3>
+Offers & Discounts
+</h3>
+
+<a href="#">
+View All
+</a>
+
+</div>
+
+<div class="offer-box">
+
+<h4>
+Early Booking Offer
+</h4>
+
+<p>
+Get exclusive discounts
+on luxury stays when
+you book early.
+</p>
+
+</div>
+
+<div class="offer-box">
+
+<h4>
+Group Celebration Deal
+</h4>
+
+<p>
+Extra benefits on
+birthday, bachelor
+and corporate stays.
+</p>
+
+</div>
+
+</div>
+
+
+<!-- HELP FORM -->
+
+<div class="sidebar-card">
+
+<h3>
+Need Help Booking?
+</h3>
+
+<p>
+Share your details and our
+luxury stay advisor will
+contact you shortly.
+</p>
+
+<form class="lead-form">
+
+<input
+type="text"
+placeholder="Full Name"
+required
+>
+
+<input
+type="tel"
+placeholder="Mobile Number"
+required
+>
+
+<select required>
+
+<option>
+Select Requirement
+</option>
+
+<option>
+Farmhouse Booking
+</option>
+
+<option>
+Luxury Villa
+</option>
+
+<option>
+Birthday Celebration
+</option>
+
+<option>
+Corporate Retreat
+</option>
+
+</select>
+
+<textarea
+placeholder="Special Request"
+rows="4"
+></textarea>
+
+<button type="submit">
+
+Get Callback
+
+</button>
+
+</form>
+
+</div>
+
+
+<!-- TRUST -->
+
+<div class="sidebar-card trust-card">
+
+<h3>
+Why Book With EMB?
+</h3>
+
+<div class="trust-item">
+
+<i class="fa-solid fa-shield"></i>
+
+<div>
+
+<h4>
+Verified Properties
+</h4>
+
+<p>
+Only premium stays
+with trusted partners.
+</p>
+
+</div>
+
+</div>
+
+<div class="trust-item">
+
+<i class="fa-solid fa-headset"></i>
+
+<div>
+
+<h4>
+Dedicated Support
+</h4>
+
+<p>
+Travel & stay experts
+available for assistance.
+</p>
+
+</div>
+
+</div>
+
+<div class="trust-item">
+
+<i class="fa-solid fa-star"></i>
+
+<div>
+
+<h4>
+Curated Experiences
+</h4>
+
+<p>
+Celebration-ready luxury stays.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</aside>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ===========================
+WHATSAPP FLOAT
+=========================== -->
+
+<a
+href="https://wa.me/919999999999"
+class="floating-whatsapp"
+target="_blank"
+>
+
+<i class="fab fa-whatsapp"></i>
+
+</a>
+
+
+<!-- Header JS -->
+<script src="farmhouse-villas.js"></script>
+
+<script>
+const slides = document.querySelectorAll(".hero-slide");
+
+let currentSlide = 0;
+
+function changeSlide() {
+
+    slides[currentSlide].classList.remove("active");
+
+    currentSlide++;
+
+    if(currentSlide >= slides.length){
+        currentSlide = 0;
+    }
+
+    slides[currentSlide].classList.add("active");
 }
 
-/* FILTER */
+setInterval(changeSlide, 4500);
+</script>
 
-document.querySelectorAll(
-'#cityFilter,#searchFilter'
-).forEach(el => {
+<script>
+/* ==========================
+PART 3: JSON RENDERING + SLIDER
+========================== */
 
-el.addEventListener('input',
-filterProperties);
+const WHATSAPP_NUMBER = "918824880979"; // change if needed
 
-});
+let villaData = [];
+let activeSlides = {};
 
-function filterProperties(){
+async function loadPremiumListings() {
+  try {
+    const response = await fetch("farmhouses.json");
+    villaData = await response.json();
 
-const city =
-document.getElementById(
-'cityFilter'
-).value.toLowerCase();
+    const container = document.getElementById("premiumListingsContainer");
+    container.innerHTML = "";
 
-const search =
-document.getElementById(
-'searchFilter'
-).value.toLowerCase();
+    villaData.forEach((villa, index) => {
+      activeSlides[index] = 0;
 
-const filtered =
-villasData.filter(villa => {
+      const card = document.createElement("div");
+      card.className = "premium-villa-card";
 
-return (
+      card.innerHTML = `
+        <div class="villa-gallery">
+          <div class="gallery-slider">
+            <div class="gallery-images" id="gallery-${index}">
+              ${villa.images.map(img => `
+                <img src="${img}" alt="${villa.name}" loading="lazy">
+              `).join("")}
+            </div>
 
-(city === '' ||
-villa.city.toLowerCase()
-.includes(city))
+            <button class="slider-btn prev-btn" onclick="changeVillaSlide(${index}, -1)">❮</button>
+            <button class="slider-btn next-btn" onclick="changeVillaSlide(${index}, 1)">❯</button>
 
-&&
+            <div class="slider-dots" id="dots-${index}">
+              ${villa.images.map((_, i) => `
+                <span class="${i === 0 ? "active" : ""}"></span>
+              `).join("")}
+            </div>
+          </div>
 
-(search === '' ||
-villa.name.toLowerCase()
-.includes(search))
+          ${villa.featured ? `<div class="featured-badge">Featured Stay</div>` : ""}
+        </div>
 
-);
+        <div class="villa-details">
+          <div class="location-row">📍 <span>${villa.location}</span></div>
 
-});
+          <h3 class="villa-title">${villa.name}</h3>
 
-renderProperties(filtered);
+          <div class="property-meta">
+            <span class="meta-pill">👥 ${villa.guests} Guests</span>
+            <span class="meta-pill">🛏 ${villa.bedrooms} Bedrooms</span>
+            <span class="meta-pill">🛁 ${villa.bathrooms} Baths</span>
+          </div>
 
+          <div class="amenities-wrap">
+            ${villa.amenities.map(item => `
+              <span class="amenity">${item}</span>
+            `).join("")}
+          </div>
+
+          <div class="rating-wrap">
+            <div class="rating-badge">⭐ ${villa.rating}</div>
+          </div>
+        </div>
+
+        <div class="pricing-section">
+          <div class="price-wrap">
+            <span class="starting-text">Starting From</span>
+            <h2 class="villa-price">₹${villa.price}</h2>
+            <span class="night-text">Per Night</span>
+          </div>
+
+          <div class="villa-actions">
+            <button class="details-btn" onclick="viewDetails(${index})">
+              View Details
+            </button>
+
+            <button class="whatsapp-btn" onclick="sendVillaWhatsApp(${index})">
+              WhatsApp
+            </button>
+          </div>
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+
+  } catch (error) {
+    console.error("Error loading farmhouses.json:", error);
+  }
 }
 
-/* RESET */
+function changeVillaSlide(cardIndex, direction) {
+  const gallery = document.getElementById(`gallery-${cardIndex}`);
+  const dots = document.querySelectorAll(`#dots-${cardIndex} span`);
+  const total = gallery.children.length;
 
-document.getElementById(
-'resetBtn'
-).addEventListener('click',()=>{
+  activeSlides[cardIndex] += direction;
 
-document.getElementById(
-'cityFilter'
-).value='';
+  if (activeSlides[cardIndex] < 0) activeSlides[cardIndex] = total - 1;
+  if (activeSlides[cardIndex] >= total) activeSlides[cardIndex] = 0;
 
-document.getElementById(
-'searchFilter'
-).value='';
+  gallery.style.transform = `translateX(-${activeSlides[cardIndex] * 100}%)`;
 
-renderProperties(villasData);
-
-});
-
-function changeSlide(cardIndex,direction){
-
-const carousel =
-document.querySelector(
-`#carousel-${cardIndex}`
-);
-
-const images =
-carousel.querySelectorAll('img');
-
-let activeIndex =
-Array.from(images)
-.findIndex(img =>
-img.classList.contains('active')
-);
-
-images[activeIndex]
-.classList.remove('active');
-
-activeIndex += direction;
-
-if(activeIndex < 0)
-activeIndex =
-images.length - 1;
-
-if(activeIndex >= images.length)
-activeIndex = 0;
-
-images[activeIndex]
-.classList.add('active');
-
+  dots.forEach(dot => dot.classList.remove("active"));
+  dots[activeSlides[cardIndex]].classList.add("active");
 }
 
+function sendVillaWhatsApp(index) {
+  const villa = villaData[index];
+
+  const message = `Hi EaseMyBooking, I want to enquire about ${villa.name}.
+Location: ${villa.location}
+Guests: ${villa.guests}
+Price: ₹${villa.price}/Night`;
+
+  window.open(
+    `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,
+    "_blank"
+  );
+}
+
+function viewDetails(index) {
+  const villa = villaData[index];
+  alert(`${villa.name}\n\nLocation: ${villa.location}\nGuests: ${villa.guests}\nPrice: ₹${villa.price}/Night`);
+}
+
+/* Auto slider */
+setInterval(() => {
+  villaData.forEach((_, index) => {
+    changeVillaSlide(index, 1);
+  });
+}, 5000);
+
+loadPremiumListings();
 </script>
 
 </body>
