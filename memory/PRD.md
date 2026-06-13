@@ -33,12 +33,13 @@ Pure static site (HTML5 + vanilla CSS + vanilla JS).
 - [x] SEO meta tags, OG tags, semantic HTML
 
 ## What's Implemented (2026-01)
-- All 5 deliverable files created
-- 9 seeded properties with multi-image galleries
-- WhatsApp deep-link builders with formatted multi-line messages
-- Email fallback (mailto) on owner form
-- Lead popup with one-time-per-session logic
-- Tested 100% — 0 console errors, all 13 review requirements verified
+- **Villas section** (5 files): farmhouse-villas.html, property-details.html, list-property.html, style.css, script.js
+  - 9 seeded properties with multi-image galleries, filters, lead popup, FAQ, WhatsApp deep-links, owner-form WhatsApp + email submit
+  - 100% test pass on all 13 villa-side features (iteration_1.json)
+- **Travel section** (5 files added 2026-01): travel.html, domestic-package-detail.html, international-package-detail.html, travel-style.css, travel-script.js
+  - 9 seeded packages (4 domestic, 5 international) with hero slider, search filter, 4 service cards (Hotel/Visa/Insurance/Flight) opening WhatsApp directly, popular-destinations masonry, why-book, testimonials, FAQ, sticky price bar, day-wise itinerary, inclusions/exclusions, hotel cards, activities, enquiry form deep-linking to WhatsApp
+  - 100% test pass on all 17 travel-side features (iteration_2.json)
+- **10 production files total** in `/app/frontend/public/` — fully portable to GitHub Pages
 
 ## Backlog (P1)
 - Replace placeholder Unsplash images with real EaseMyBooking property photos when supplied
