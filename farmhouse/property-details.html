@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Property Details | EaseMyBooking</title>
+<meta name="description" content="View villa & farmhouse details, gallery, amenities and pricing. Book luxury private estates with EaseMyBooking." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="page--detail">
+
+<!-- ============ NAV ============ -->
+<header class="nav nav--solid" id="nav" data-testid="main-nav">
+  <div class="nav__inner">
+    <a href="farmhouse-villas.html" class="brand" data-testid="brand-logo">
+      <span class="brand__mark">E</span>
+      <span class="brand__word">EaseMy<em>Booking</em></span>
+    </a>
+    <nav class="nav__links" id="navLinks">
+      <a href="https://easemybooking.in/" data-testid="nav-home">Home</a>
+      <a href="farmhouse-villas.html" data-testid="nav-villas">Villas & Farmhouses</a>
+      <a href="list-property.html" class="btn btn--ghost" data-testid="nav-list-property">List Your Property</a>
+      <a href="https://wa.me/918824880979" target="_blank" rel="noopener" class="btn btn--gold" data-testid="nav-whatsapp"><i class="fab fa-whatsapp"></i> Enquire</a>
+    </nav>
+    <button class="nav__toggle" id="navToggle" aria-label="Menu" data-testid="nav-toggle"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main class="detail" id="detailRoot" data-testid="detail-root">
+
+  <!-- Breadcrumb -->
+  <div class="container detail__crumb" data-testid="breadcrumb">
+    <a href="farmhouse-villas.html"><i class="fas fa-arrow-left"></i> Back to Collection</a>
+  </div>
+
+  <!-- Gallery -->
+  <section class="detail__gallery container" data-testid="detail-gallery">
+    <div class="gallery__main">
+      <img id="galleryMain" src="" alt="" data-testid="gallery-main-img" />
+      <button class="gallery__nav gallery__nav--prev" id="galleryPrev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+      <button class="gallery__nav gallery__nav--next" id="galleryNext" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+      <div class="gallery__count" id="galleryCount"></div>
+    </div>
+    <div class="gallery__thumbs" id="galleryThumbs" data-testid="gallery-thumbs"></div>
+  </section>
+
+  <!-- Info + Form -->
+  <section class="container detail__layout">
+    <div class="detail__main">
+      <div class="detail__top">
+        <span class="eyebrow" id="dType">Villa</span>
+        <h1 class="detail__title" id="dTitle" data-testid="detail-title">Loading…</h1>
+        <p class="detail__loc" id="dLocation"><i class="fas fa-location-dot"></i> <span></span></p>
+        <div class="detail__quick">
+          <div><i class="fas fa-user-group"></i> <span id="dGuests"></span> guests</div>
+          <div><i class="fas fa-bed"></i> <span id="dBeds"></span> bedrooms</div>
+          <div><i class="fas fa-bath"></i> <span id="dBaths"></span> baths</div>
+          <div><i class="fas fa-star"></i> <span id="dRating"></span></div>
+        </div>
+      </div>
+
+      <div class="detail__about">
+        <h2>About this estate</h2>
+        <p id="dDescription"></p>
+      </div>
+
+      <div class="detail__amen">
+        <h2>Amenities</h2>
+        <div class="amen__grid" id="dAmenities" data-testid="amenities-grid"></div>
+      </div>
+
+      <div class="detail__rules">
+        <h2>House Rules</h2>
+        <ul>
+          <li><i class="fas fa-check"></i> Check-in 2:00 PM · Check-out 11:00 AM</li>
+          <li><i class="fas fa-check"></i> Government photo ID mandatory at check-in</li>
+          <li><i class="fas fa-check"></i> Outside guests / extra visitors only with prior approval</li>
+          <li><i class="fas fa-check"></i> No loud music after 11:00 PM (relaxable on request)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Enquiry Form -->
+    <aside class="detail__side">
+      <div class="enquiry" data-testid="enquiry-card">
+        <div class="enquiry__price">
+          <span class="enquiry__from">Starting from</span>
+          <strong id="dPrice">—</strong>
+          <span class="enquiry__per">/ night · taxes extra</span>
+        </div>
+        <form id="enquiryForm" class="enquiry__form" data-testid="enquiry-form">
+          <label>Full Name
+            <input type="text" name="name" required data-testid="enq-name" />
+          </label>
+          <label>WhatsApp Number
+            <input type="tel" name="phone" required pattern="[0-9+\-\s]{8,15}" data-testid="enq-phone" />
+          </label>
+          <label>Email
+            <input type="email" name="email" required data-testid="enq-email" />
+          </label>
+          <div class="enquiry__row">
+            <label>Check-in
+              <input type="date" name="checkin" required data-testid="enq-checkin" />
+            </label>
+            <label>Check-out
+              <input type="date" name="checkout" required data-testid="enq-checkout" />
+            </label>
+          </div>
+          <label>Guests
+            <input type="number" name="guests" min="1" max="600" value="4" required data-testid="enq-guests" />
+          </label>
+          <label>Occasion (optional)
+            <select name="occasion" data-testid="enq-occasion">
+              <option value="">Select…</option>
+              <option>Family Getaway</option>
+              <option>Wedding / Reception</option>
+              <option>Birthday Party</option>
+              <option>Corporate Offsite</option>
+              <option>Anniversary</option>
+              <option>Just a Holiday</option>
+            </select>
+          </label>
+          <label>Special requests
+            <textarea name="notes" rows="3" placeholder="Tell us about your event, dietary needs, etc." data-testid="enq-notes"></textarea>
+          </label>
+          <button type="submit" class="btn btn--gold btn--block" data-testid="enq-submit"><i class="fab fa-whatsapp"></i> Send Enquiry on WhatsApp</button>
+          <small class="enquiry__fine">By submitting, you agree to be contacted on WhatsApp. We never share your data.</small>
+        </form>
+      </div>
+    </aside>
+  </section>
+
+  <!-- Similar -->
+  <section class="container similar" data-testid="similar-section">
+    <div class="section__head">
+      <div>
+        <span class="eyebrow">You may also love</span>
+        <h2 class="section__title">Similar <em>Estates</em></h2>
+      </div>
+    </div>
+    <div class="grid" id="similarGrid" data-testid="similar-grid"></div>
+  </section>
+</main>
+
+<!-- Floating WhatsApp -->
+<a href="https://wa.me/918824880979" target="_blank" rel="noopener" class="fab" aria-label="WhatsApp" data-testid="floating-whatsapp">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- Footer (compact) -->
+<footer class="footer">
+  <div class="container footer__grid">
+    <div>
+      <a href="farmhouse-villas.html" class="brand brand--light">
+        <span class="brand__mark">E</span>
+        <span class="brand__word">EaseMy<em>Booking</em></span>
+      </a>
+      <p class="footer__about">Premium villas, farmhouses & travel experiences across India.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <a href="farmhouse-villas.html">Villas & Farmhouses</a>
+      <a href="list-property.html">List Your Property</a>
+      <a href="https://easemybooking.in/">EaseMyBooking Home</a>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <p><i class="fab fa-whatsapp"></i> +91 88248 80979</p>
+      <p><i class="fas fa-envelope"></i> info@easemybooking.in</p>
+    </div>
+  </div>
+  <div class="footer__bottom"><p>© <span id="year"></span> EaseMyBooking</p></div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

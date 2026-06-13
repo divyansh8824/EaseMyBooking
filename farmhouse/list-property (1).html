@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>List Your Property | EaseMyBooking</title>
+<meta name="description" content="Own a luxury villa, farmhouse or holiday home? List with EaseMyBooking and earn from premium bookings, weddings and corporate retreats." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="page--list">
+
+<!-- NAV -->
+<header class="nav nav--solid" id="nav" data-testid="main-nav">
+  <div class="nav__inner">
+    <a href="farmhouse-villas.html" class="brand" data-testid="brand-logo">
+      <span class="brand__mark">E</span>
+      <span class="brand__word">EaseMy<em>Booking</em></span>
+    </a>
+    <nav class="nav__links" id="navLinks">
+      <a href="https://easemybooking.in/" data-testid="nav-home">Home</a>
+      <a href="farmhouse-villas.html" data-testid="nav-villas">Villas & Farmhouses</a>
+      <a href="list-property.html" class="active" data-testid="nav-list-property">List Property</a>
+      <a href="https://wa.me/918824880979" target="_blank" rel="noopener" class="btn btn--gold" data-testid="nav-whatsapp"><i class="fab fa-whatsapp"></i> Contact</a>
+    </nav>
+    <button class="nav__toggle" id="navToggle" aria-label="Menu" data-testid="nav-toggle"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="listHero" data-testid="list-hero">
+  <div class="listHero__bg" style="background-image:url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=85')"></div>
+  <div class="listHero__veil"></div>
+  <div class="container listHero__content">
+    <span class="eyebrow">Property Owners</span>
+    <h1>List with the <em>luxury</em> brand India trusts</h1>
+    <p>Join 200+ owners earning premium nightly rates through EaseMyBooking's curated concierge network. No listing fees. Pay only when you earn.</p>
+    <div class="listHero__metrics">
+      <div><strong>₹85K</strong><span>Avg. nightly rate</span></div>
+      <div><strong>28+</strong><span>Bookings/quarter</span></div>
+      <div><strong>0%</strong><span>Listing fees</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits container" data-testid="benefits-section">
+  <div class="benefits__head">
+    <span class="eyebrow">Why partner with us</span>
+    <h2 class="section__title">Built for <em>discerning owners</em></h2>
+  </div>
+  <div class="benefits__grid">
+    <div class="benefit">
+      <i class="fas fa-crown"></i>
+      <h4>Premium positioning</h4>
+      <p>Your property featured alongside India's top luxury estates, with concierge-led discovery.</p>
+    </div>
+    <div class="benefit">
+      <i class="fas fa-headset"></i>
+      <h4>Full-stack support</h4>
+      <p>Photography, listing, pricing strategy, guest screening and 24×7 enquiry handling.</p>
+    </div>
+    <div class="benefit">
+      <i class="fas fa-ring"></i>
+      <h4>Events & weddings</h4>
+      <p>We bring you high-ticket wedding & corporate enquiries through our 500+ event clients.</p>
+    </div>
+    <div class="benefit">
+      <i class="fas fa-shield-halved"></i>
+      <h4>Vetted guests</h4>
+      <p>Every booking screened. Security deposits, ID checks and damage cover by default.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="listForm" id="listForm" data-testid="list-form-section">
+  <div class="container listForm__wrap">
+    <div class="listForm__left">
+      <span class="eyebrow">Submit your estate</span>
+      <h2 class="section__title">Tell us about <em>your property</em></h2>
+      <p>Fill in the details below and our partnerships team will reach out within 24 hours via WhatsApp & email to schedule a property visit.</p>
+      <ul class="listForm__check">
+        <li><i class="fas fa-check"></i> Free professional photography</li>
+        <li><i class="fas fa-check"></i> Listing live in 7 days</li>
+        <li><i class="fas fa-check"></i> Dedicated account manager</li>
+        <li><i class="fas fa-check"></i> Marketing across all channels</li>
+      </ul>
+    </div>
+    <form id="ownerForm" class="listForm__form" data-testid="owner-form">
+      <h3>Owner & Property Details</h3>
+
+      <div class="row">
+        <label>Owner Name<input type="text" name="ownerName" required data-testid="own-name"/></label>
+        <label>WhatsApp Number<input type="tel" name="ownerPhone" required pattern="[0-9+\-\s]{8,15}" data-testid="own-phone"/></label>
+      </div>
+      <div class="row">
+        <label>Email<input type="email" name="ownerEmail" required data-testid="own-email"/></label>
+        <label>Property Name<input type="text" name="propName" required data-testid="own-propname"/></label>
+      </div>
+
+      <div class="row">
+        <label>Property Type
+          <select name="propType" required data-testid="own-type">
+            <option value="">Select…</option>
+            <option>Villa</option>
+            <option>Farmhouse</option>
+            <option>Heritage Property</option>
+            <option>Cottage / Bungalow</option>
+            <option>Boutique Resort</option>
+          </select>
+        </label>
+        <label>City / Location<input type="text" name="propCity" required placeholder="e.g. Lonavala, Maharashtra" data-testid="own-city"/></label>
+      </div>
+
+      <label>Full Address<textarea name="propAddress" rows="2" required data-testid="own-address"></textarea></label>
+
+      <div class="row">
+        <label>Max Guests<input type="number" name="propGuests" min="1" required data-testid="own-guests"/></label>
+        <label>Bedrooms<input type="number" name="propBeds" min="1" required data-testid="own-beds"/></label>
+        <label>Bathrooms<input type="number" name="propBaths" min="1" required data-testid="own-baths"/></label>
+      </div>
+
+      <div class="row">
+        <label>Nightly Price (₹)<input type="number" name="propPrice" min="1000" required data-testid="own-price"/></label>
+        <label>Weekend Price (₹) <span class="opt">(optional)</span><input type="number" name="propPriceWknd" min="0" data-testid="own-price-wknd"/></label>
+      </div>
+
+      <fieldset class="amenSet" data-testid="own-amenities">
+        <legend>Amenities</legend>
+        <div class="amenSet__grid">
+          <label class="chk"><input type="checkbox" name="amenities" value="Private Pool"/> <span>Private Pool</span></label>
+          <label class="chk"><input type="checkbox" name="amenities" value="Jacuzzi"/> <span>Jacuzzi</span></label>
+          <label class="chk"><input type="checkbox" name="amenities" value="AC"/> <span>Air Conditioning</span></label>
+          <label class="chk"><input type="checkbox" name="amenities" value="Wi-Fi"/> <span>Wi-Fi</span></label>
+          <label class="chk"><input type="checkbox" name="amenities" value="Caretaker"/> <span>Caretaker</span></label>
+          <label class="chk"><input type="checkbox" name="amenities" value="Chef on Request"/> <span>Chef on Request</span></label>
+          <label class="chk"><input type="checkbox" name="amenities" value="Bonfire"/> <span>Bonfire / BBQ</span></label>
+          <label class="chk"><input type="checkbox" name="amenities" value="Lawn / Garden"/> <span>Lawn / Garden</span></label>
+          <label class="chk"><input type="checkbox" name="amenities" value="Parking"/> <span>Parking</span></label>
+          <label class="chk"><input type="checkbox" name="amenities" value="Pet Friendly"/> <span>Pet Friendly</span></label>
+          <label class="chk"><input type="checkbox" name="amenities" value="Indoor Games"/> <span>Indoor Games</span></label>
+          <label class="chk"><input type="checkbox" name="amenities" value="Home Theatre"/> <span>Home Theatre</span></label>
+        </div>
+      </fieldset>
+
+      <label>Property Description<textarea name="propDesc" rows="4" required placeholder="What makes your property special?" data-testid="own-desc"></textarea></label>
+
+      <label>Image Links <span class="opt">(Google Drive / Dropbox / Instagram link)</span><textarea name="propImages" rows="2" placeholder="https://drive.google.com/…" data-testid="own-images"></textarea></label>
+
+      <div class="row">
+        <label class="chk chk--full"><input type="checkbox" name="terms" required data-testid="own-terms"/> <span>I agree to be contacted by EaseMyBooking for partnership discussion.</span></label>
+      </div>
+
+      <div class="listForm__actions">
+        <button type="submit" class="btn btn--gold" data-testid="own-submit-wa"><i class="fab fa-whatsapp"></i> Submit via WhatsApp</button>
+        <button type="button" id="ownerEmailBtn" class="btn btn--outline-dark" data-testid="own-submit-email"><i class="fas fa-envelope"></i> Send via Email</button>
+      </div>
+      <small class="enquiry__fine">Your property details will be sent directly to our team. No data is stored on this site.</small>
+    </form>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" data-testid="owner-faq">
+  <div class="container faq__wrap">
+    <div class="faq__left">
+      <span class="eyebrow">Owner FAQs</span>
+      <h2 class="section__title">What you'd <em>want to know</em></h2>
+      <p class="section__lead">Common questions from property owners considering EaseMyBooking.</p>
+    </div>
+    <div class="faq__list">
+      <details class="faq__item" open>
+        <summary>What is your commission?<i class="fas fa-plus"></i></summary>
+        <p>We work on a transparent revenue-share model (typically 15-20% per confirmed booking). No upfront fees, no monthly charges — we earn only when you earn.</p>
+      </details>
+      <details class="faq__item">
+        <summary>Who handles guest enquiries?<i class="fas fa-plus"></i></summary>
+        <p>Our concierge team handles every enquiry, screens guests, and confirms bookings on your behalf. You stay focused on hosting.</p>
+      </details>
+      <details class="faq__item">
+        <summary>How long until my listing goes live?<i class="fas fa-plus"></i></summary>
+        <p>Once we visit your property and confirm onboarding, your listing typically goes live within 7 working days including professional photography.</p>
+      </details>
+      <details class="faq__item">
+        <summary>What if a guest damages my property?<i class="fas fa-plus"></i></summary>
+        <p>Every booking carries a security deposit, ID verification, and damage cover. We back you up end-to-end in case of disputes.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container footer__grid">
+    <div>
+      <a href="farmhouse-villas.html" class="brand brand--light">
+        <span class="brand__mark">E</span>
+        <span class="brand__word">EaseMy<em>Booking</em></span>
+      </a>
+      <p class="footer__about">Premium villas, farmhouses & travel experiences across India.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <a href="farmhouse-villas.html">Villas & Farmhouses</a>
+      <a href="list-property.html">List Your Property</a>
+      <a href="https://easemybooking.in/">EaseMyBooking Home</a>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <p><i class="fab fa-whatsapp"></i> +91 88248 80979</p>
+      <p><i class="fas fa-envelope"></i> info@easemybooking.in</p>
+    </div>
+  </div>
+  <div class="footer__bottom"><p>© <span id="year"></span> EaseMyBooking</p></div>
+</footer>
+
+<a href="https://wa.me/918824880979" target="_blank" rel="noopener" class="fab" aria-label="WhatsApp" data-testid="floating-whatsapp"><i class="fab fa-whatsapp"></i></a>
+
+<script src="script.js"></script>
+</body>
+</html>

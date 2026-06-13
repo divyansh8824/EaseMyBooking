@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Farmhouses & Luxury Villas | EaseMyBooking</title>
+<meta name="description" content="Hand-picked luxury farmhouses and private villas across India for weddings, retreats, corporate offsites and private getaways. Curated by EaseMyBooking." />
+<meta name="keywords" content="luxury villas India, farmhouse booking, private villa rental, destination wedding venue, Lonavala villa, Goa villa, Udaipur villa, EaseMyBooking" />
+<meta name="author" content="EaseMyBooking" />
+<meta property="og:title" content="Farmhouses & Luxury Villas | EaseMyBooking" />
+<meta property="og:description" content="Exclusive farmhouses and villas for private parties, destination weddings and luxury getaways." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1200&q=80" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav" data-testid="main-nav">
+  <div class="nav__inner">
+    <a href="farmhouse-villas.html" class="brand" data-testid="brand-logo">
+      <span class="brand__mark">E</span>
+      <span class="brand__word">EaseMy<em>Booking</em></span>
+    </a>
+    <nav class="nav__links" id="navLinks">
+      <a href="https://easemybooking.in/" data-testid="nav-home">Home</a>
+      <a href="farmhouse-villas.html" class="active" data-testid="nav-villas">Villas & Farmhouses</a>
+      <a href="#featured" data-testid="nav-featured">Featured</a>
+      <a href="#faq" data-testid="nav-faq">FAQ</a>
+      <a href="list-property.html" class="btn btn--ghost" data-testid="nav-list-property">List Your Property</a>
+      <a href="https://wa.me/918824880979" target="_blank" rel="noopener" class="btn btn--gold" data-testid="nav-whatsapp"><i class="fab fa-whatsapp"></i> Enquire</a>
+    </nav>
+    <button class="nav__toggle" id="navToggle" aria-label="Menu" data-testid="nav-toggle"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- ============ HERO SLIDER ============ -->
+<section class="hero" data-testid="hero-section">
+  <div class="hero__slides" id="heroSlides">
+    <div class="hero__slide is-active" style="background-image:url('https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1920&q=85')"></div>
+    <div class="hero__slide" style="background-image:url('https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=1920&q=85')"></div>
+    <div class="hero__slide" style="background-image:url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=85')"></div>
+    <div class="hero__slide" style="background-image:url('https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1920&q=85')"></div>
+  </div>
+  <div class="hero__veil"></div>
+  <div class="hero__grain"></div>
+  <div class="hero__content">
+    <span class="eyebrow" data-testid="hero-eyebrow">Private Villas & Farmhouses</span>
+    <h1 class="hero__title">
+      <span class="line">Where Luxury</span>
+      <span class="line"><em>Lives</em> Beyond the City</span>
+    </h1>
+    <p class="hero__sub">Curated private estates across India — heritage havelis, beachfront villas, mountain retreats and palatial farmhouses. Booked seamlessly. Lived unforgettably.</p>
+    <div class="hero__cta">
+      <a href="#listings" class="btn btn--gold" data-testid="hero-browse-btn"><i class="fas fa-compass"></i> Browse Estates</a>
+      <a href="https://wa.me/918824880979?text=Hi%20EaseMyBooking%2C%20I%27m%20interested%20in%20your%20villas%20%26%20farmhouses." target="_blank" rel="noopener" class="btn btn--outline" data-testid="hero-whatsapp-btn"><i class="fab fa-whatsapp"></i> Talk to Concierge</a>
+    </div>
+    <div class="hero__stats">
+      <div><strong>120+</strong><span>Curated Estates</span></div>
+      <div><strong>32</strong><span>Destinations</span></div>
+      <div><strong>4.9★</strong><span>Guest Rating</span></div>
+    </div>
+  </div>
+  <div class="hero__dots" id="heroDots"></div>
+  <a href="#filters" class="hero__scroll" data-testid="hero-scroll-cue"><span></span>Scroll</a>
+</section>
+
+<!-- ============ FILTERS ============ -->
+<section class="filters" id="filters" data-testid="filters-section">
+  <div class="container">
+    <div class="filters__head">
+      <span class="eyebrow">Discover</span>
+      <h2 class="section__title">Find Your <em>Private Paradise</em></h2>
+    </div>
+    <form class="filters__bar" id="filterForm" data-testid="filter-form" onsubmit="return false;">
+      <div class="field">
+        <label><i class="fas fa-location-dot"></i> Location</label>
+        <select id="fLocation" data-testid="filter-location">
+          <option value="">All Locations</option>
+          <option value="Lonavala">Lonavala</option>
+          <option value="Goa">Goa</option>
+          <option value="Udaipur">Udaipur</option>
+          <option value="Manali">Manali</option>
+          <option value="Jaipur">Jaipur</option>
+          <option value="Delhi NCR">Delhi NCR</option>
+          <option value="Jodhpur">Jodhpur</option>
+          <option value="Coorg">Coorg</option>
+        </select>
+      </div>
+      <div class="field">
+        <label><i class="fas fa-user-group"></i> Guests</label>
+        <select id="fGuests" data-testid="filter-guests">
+          <option value="0">Any</option>
+          <option value="10">10+ guests</option>
+          <option value="25">25+ guests</option>
+          <option value="50">50+ guests</option>
+          <option value="100">100+ guests</option>
+          <option value="200">200+ guests</option>
+        </select>
+      </div>
+      <div class="field">
+        <label><i class="fas fa-house-chimney"></i> Property Type</label>
+        <select id="fType" data-testid="filter-type">
+          <option value="">All Types</option>
+          <option value="Villa">Villa</option>
+          <option value="Farmhouse">Farmhouse</option>
+          <option value="Heritage">Heritage</option>
+          <option value="Cottage">Cottage</option>
+        </select>
+      </div>
+      <div class="field">
+        <label><i class="fas fa-indian-rupee-sign"></i> Budget / day</label>
+        <select id="fBudget" data-testid="filter-budget">
+          <option value="0">Any Budget</option>
+          <option value="50000">Under ₹50,000</option>
+          <option value="100000">Under ₹1,00,000</option>
+          <option value="150000">Under ₹1,50,000</option>
+          <option value="999999">₹1,50,000+</option>
+        </select>
+      </div>
+      <button type="button" id="applyFilters" class="btn btn--gold" data-testid="filter-apply-btn"><i class="fas fa-sliders"></i> Apply</button>
+      <button type="button" id="resetFilters" class="btn btn--ghost-dark" data-testid="filter-reset-btn">Reset</button>
+    </form>
+  </div>
+</section>
+
+<!-- ============ FEATURED ============ -->
+<section class="featured" id="featured" data-testid="featured-section">
+  <div class="container">
+    <div class="section__head">
+      <div>
+        <span class="eyebrow">Hand-picked</span>
+        <h2 class="section__title">Featured <em>Estates</em></h2>
+      </div>
+      <p class="section__lead">Our concierge team's monthly selection — properties that consistently earn five-star moments.</p>
+    </div>
+    <div class="featured__grid" id="featuredGrid" data-testid="featured-grid"></div>
+  </div>
+</section>
+
+<!-- ============ ALL LISTINGS ============ -->
+<section class="listings" id="listings" data-testid="listings-section">
+  <div class="container">
+    <div class="section__head">
+      <div>
+        <span class="eyebrow">The Collection</span>
+        <h2 class="section__title">All <em>Villas & Farmhouses</em></h2>
+      </div>
+      <p class="section__lead" id="resultCount">Showing all properties</p>
+    </div>
+    <div class="grid" id="propertyGrid" data-testid="property-grid"></div>
+    <div class="empty" id="emptyState" hidden data-testid="empty-state">
+      <i class="fas fa-magnifying-glass"></i>
+      <h3>No estates match your filters</h3>
+      <p>Try expanding your budget, location or guest count.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="faq" id="faq" data-testid="faq-section">
+  <div class="container faq__wrap">
+    <div class="faq__left">
+      <span class="eyebrow">Need to Know</span>
+      <h2 class="section__title">Frequently <em>Asked</em></h2>
+      <p class="section__lead">Everything you'd want to know before booking your private estate.</p>
+      <a href="https://wa.me/918824880979" target="_blank" rel="noopener" class="btn btn--gold" data-testid="faq-whatsapp-btn"><i class="fab fa-whatsapp"></i> Chat with Concierge</a>
+    </div>
+    <div class="faq__list" data-testid="faq-list">
+      <details class="faq__item" open>
+        <summary>How do I book a villa or farmhouse?<i class="fas fa-plus"></i></summary>
+        <p>Browse our curated collection, tap "Enquire Now" on any property, and submit your dates. Our concierge confirms availability over WhatsApp within 30 minutes, sends a custom quote, and secures your booking.</p>
+      </details>
+      <details class="faq__item">
+        <summary>Are meals and staff included?<i class="fas fa-plus"></i></summary>
+        <p>Most estates include a full-time caretaker and chef. Meal packages are billed separately based on the menu you choose. Premium services like in-villa bartenders, butlers, and decor are available on request.</p>
+      </details>
+      <details class="faq__item">
+        <summary>Can I host a wedding or large event?<i class="fas fa-plus"></i></summary>
+        <p>Absolutely — many of our farmhouses host 200-600 guests with full event production. Mention "Wedding / Event" in your enquiry and we'll share a tailored proposal including decor, sound, catering and vendor management.</p>
+      </details>
+      <details class="faq__item">
+        <summary>Is there a security deposit?<i class="fas fa-plus"></i></summary>
+        <p>Yes, a refundable security deposit (typically ₹25,000 – ₹1,00,000 depending on property) is collected at check-in and refunded within 7 days post-checkout subject to property condition.</p>
+      </details>
+      <details class="faq__item">
+        <summary>What is your cancellation policy?<i class="fas fa-plus"></i></summary>
+        <p>Free cancellation up to 14 days before check-in for most properties. 50% refund 7-14 days prior. No refund within 7 days. Event bookings follow a custom policy shared during quotation.</p>
+      </details>
+      <details class="faq__item">
+        <summary>Can pets stay at the property?<i class="fas fa-plus"></i></summary>
+        <p>Several of our farmhouses are pet-friendly. Look for the "Pet Friendly" amenity badge or mention your furry guest in the enquiry — we'll confirm before booking.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA STRIP ============ -->
+<section class="ctaStrip" data-testid="cta-strip">
+  <div class="container ctaStrip__inner">
+    <div>
+      <span class="eyebrow">Own a luxury property?</span>
+      <h2 class="ctaStrip__title">Earn more. Stress less. <em>List with us.</em></h2>
+    </div>
+    <a href="list-property.html" class="btn btn--gold btn--lg" data-testid="cta-list-property"><i class="fas fa-key"></i> List Your Property</a>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer" data-testid="footer">
+  <div class="container footer__grid">
+    <div>
+      <a href="farmhouse-villas.html" class="brand brand--light">
+        <span class="brand__mark">E</span>
+        <span class="brand__word">EaseMy<em>Booking</em></span>
+      </a>
+      <p class="footer__about">Premium travel & event experiences — luxury villas, farmhouses, curated travel, weddings & corporate events.</p>
+      <div class="footer__social">
+        <a href="https://wa.me/918824880979" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="mailto:info@easemybooking.in" aria-label="Email"><i class="fas fa-envelope"></i></a>
+        <a href="https://easemybooking.in/" target="_blank" rel="noopener" aria-label="Website"><i class="fas fa-globe"></i></a>
+      </div>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
+      <a href="https://easemybooking.in/">Home</a>
+      <a href="farmhouse-villas.html">Villas & Farmhouses</a>
+      <a href="list-property.html">List Your Property</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div>
+      <h4>Top Destinations</h4>
+      <a href="#" onclick="filterByLocation('Lonavala')">Lonavala</a>
+      <a href="#" onclick="filterByLocation('Goa')">Goa</a>
+      <a href="#" onclick="filterByLocation('Udaipur')">Udaipur</a>
+      <a href="#" onclick="filterByLocation('Manali')">Manali</a>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <p><i class="fab fa-whatsapp"></i> +91 88248 80979</p>
+      <p><i class="fas fa-envelope"></i> info@easemybooking.in</p>
+      <p><i class="fas fa-location-dot"></i> India</p>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <p>© <span id="year"></span> EaseMyBooking. Crafted for the extraordinary.</p>
+  </div>
+</footer>
+
+<!-- ============ LEAD POPUP ============ -->
+<div class="popup" id="leadPopup" hidden data-testid="lead-popup">
+  <div class="popup__overlay" id="popupOverlay"></div>
+  <div class="popup__card">
+    <button class="popup__close" id="popupClose" data-testid="popup-close" aria-label="Close">&times;</button>
+    <div class="popup__media" style="background-image:url('https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=900&q=80')">
+      <span class="popup__badge">Limited Offer</span>
+    </div>
+    <div class="popup__body">
+      <span class="eyebrow">Insider Access</span>
+      <h3>Unlock <em>10% off</em> your first villa booking</h3>
+      <p>Drop your details — our concierge will reach out on WhatsApp with handpicked properties & a personal discount code.</p>
+      <form id="popupForm" data-testid="popup-form">
+        <input type="text" name="name" placeholder="Your Name" required data-testid="popup-name" />
+        <input type="tel" name="phone" placeholder="WhatsApp Number" required data-testid="popup-phone" />
+        <button type="submit" class="btn btn--gold btn--block" data-testid="popup-submit"><i class="fab fa-whatsapp"></i> Claim Offer on WhatsApp</button>
+      </form>
+      <small class="popup__fine">No spam. We respect your inbox.</small>
+    </div>
+  </div>
+</div>
+
+<!-- ============ FLOATING WHATSAPP ============ -->
+<a href="https://wa.me/918824880979?text=Hi%20EaseMyBooking%2C%20I%27d%20like%20to%20enquire%20about%20a%20villa." target="_blank" rel="noopener" class="fab" aria-label="WhatsApp" data-testid="floating-whatsapp">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<script src="script.js"></script>
+</body>
+</html>
