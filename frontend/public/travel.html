@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- ==================== SEO ==================== -->
+<title>Travel Packages, Holiday Tours & Trips | EaseMyBooking</title>
+<meta name="description" content="Curated domestic & international travel packages, hotel booking, visa assistance, travel insurance and flight booking by EaseMyBooking. Get an expert-handled quote on WhatsApp in minutes." />
+<meta name="keywords" content="travel packages, India tour packages, international tour, honeymoon packages, group tours, hotel booking, visa assistance, EaseMyBooking" />
+<meta name="author" content="EaseMyBooking" />
+<meta name="robots" content="index,follow" />
+<link rel="canonical" href="https://easemybooking.in/travel.html" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Travel Packages, Holiday Tours & Trips | EaseMyBooking" />
+<meta property="og:description" content="Hand-picked domestic & international holidays with end-to-end assistance." />
+<meta property="og:image" content="https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=1600&q=85" />
+<meta property="og:url" content="https://easemybooking.in/travel.html" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<!-- ==================== FONTS / ICONS ==================== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+<!-- ==================== STYLES ==================== -->
+<!-- shared luxury theme variables + base components -->
+<link rel="stylesheet" href="style.css" />
+<!-- travel-specific styles -->
+<link rel="stylesheet" href="travel-style.css" />
+
+<!-- ==================== Structured Data ==================== -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"TravelAgency",
+  "name":"EaseMyBooking",
+  "image":"https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=1200",
+  "url":"https://easemybooking.in",
+  "telephone":"+91-88248-80979",
+  "email":"info@easemybooking.in",
+  "areaServed":"IN",
+  "priceRange":"₹₹"
+}
+</script>
+</head>
+<body class="page--travel">
+
+<!-- ============================================
+     NAVIGATION  (matches existing site nav)
+============================================ -->
+<header class="nav" id="nav" data-testid="main-nav">
+  <div class="nav__inner">
+    <a href="travel.html" class="brand" data-testid="brand-logo">
+      <span class="brand__mark">E</span>
+      <span class="brand__word">EaseMy<em>Booking</em></span>
+    </a>
+    <nav class="nav__links" id="navLinks">
+      <a href="https://easemybooking.in/" data-testid="nav-home">Home</a>
+      <a href="travel.html" class="active" data-testid="nav-travel">Travel</a>
+      <a href="farmhouse-villas.html" data-testid="nav-villas">Villas</a>
+      <a href="#services" data-testid="nav-services">Services</a>
+      <a href="#faq" data-testid="nav-faq">FAQ</a>
+      <!-- EDIT: WhatsApp number used across entire site is set in travel-script.js -->
+      <a href="https://wa.me/918824880979" target="_blank" rel="noopener" class="btn btn--gold" data-testid="nav-whatsapp"><i class="fab fa-whatsapp"></i> Get Quote</a>
+    </nav>
+    <button class="nav__toggle" id="navToggle" aria-label="Menu" data-testid="nav-toggle"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- ============================================
+     HERO
+============================================ -->
+<section class="tHero" data-testid="travel-hero">
+  <div class="tHero__slides" id="tHeroSlides">
+    <!-- EDIT: hero images — swap URLs to your own assets -->
+    <div class="tHero__slide is-active" style="background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=85')"></div>
+    <div class="tHero__slide" style="background-image:url('https://images.unsplash.com/photo-1533105079780-92b9be482077?w=1920&q=85')"></div>
+    <div class="tHero__slide" style="background-image:url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=85')"></div>
+    <div class="tHero__slide" style="background-image:url('https://images.unsplash.com/photo-1573843981267-be1999ff37cd?w=1920&q=85')"></div>
+  </div>
+  <div class="tHero__veil"></div>
+  <div class="tHero__content">
+    <span class="eyebrow" data-testid="hero-eyebrow">Curated Holidays · Expert-handled</span>
+    <h1 class="tHero__title">
+      <span class="line">Travel that feels</span>
+      <span class="line"><em>handcrafted</em>, not booked.</span>
+    </h1>
+    <p class="tHero__sub">From Kashmir to Kenya — 2,000+ travellers a year discover the world with EaseMyBooking's personal concierge service. No call-centre. No noise. Just trips that work.</p>
+
+    <!-- ==================== SEARCH / FILTER ==================== -->
+    <form class="tSearch" id="tSearchForm" data-testid="travel-search" onsubmit="return false;">
+      <div class="tSearch__field">
+        <label><i class="fas fa-suitcase-rolling"></i> Trip Type</label>
+        <select id="sType" data-testid="search-type">
+          <option value="">All Trips</option>
+          <option value="Domestic">Domestic</option>
+          <option value="International">International</option>
+          <option value="Honeymoon">Honeymoon</option>
+          <option value="Adventure">Adventure</option>
+          <option value="Beach">Beach</option>
+          <option value="Spiritual">Spiritual</option>
+        </select>
+      </div>
+      <div class="tSearch__field">
+        <label><i class="fas fa-location-dot"></i> Destination</label>
+        <input type="text" id="sDest" placeholder="Where to? e.g. Bali, Kerala" data-testid="search-destination" />
+      </div>
+      <div class="tSearch__field">
+        <label><i class="fas fa-calendar-days"></i> Duration</label>
+        <select id="sDuration" data-testid="search-duration">
+          <option value="0">Any duration</option>
+          <option value="3">Up to 3 nights</option>
+          <option value="5">Up to 5 nights</option>
+          <option value="7">Up to 7 nights</option>
+          <option value="99">7+ nights</option>
+        </select>
+      </div>
+      <div class="tSearch__field">
+        <label><i class="fas fa-indian-rupee-sign"></i> Budget</label>
+        <select id="sBudget" data-testid="search-budget">
+          <option value="0">Any budget</option>
+          <option value="30000">Under ₹30K</option>
+          <option value="60000">Under ₹60K</option>
+          <option value="100000">Under ₹1L</option>
+          <option value="200000">Under ₹2L</option>
+          <option value="999999">₹2L+</option>
+        </select>
+      </div>
+      <button type="button" id="searchApply" class="btn btn--gold" data-testid="search-apply"><i class="fas fa-magnifying-glass"></i> Search</button>
+    </form>
+
+    <div class="tHero__trust" data-testid="hero-trust">
+      <div><i class="fas fa-shield-halved"></i> Secure payments</div>
+      <div><i class="fas fa-headset"></i> 24×7 concierge</div>
+      <div><i class="fas fa-award"></i> 4.9 / 5 by 2k+ travellers</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     SERVICE CARDS (Hotel, Visa, Insurance, Flight)
+     Each opens WhatsApp with pre-filled message
+============================================ -->
+<section class="services" id="services" data-testid="services-section">
+  <div class="container">
+    <div class="section__head">
+      <div>
+        <span class="eyebrow">Everything Travel</span>
+        <h2 class="section__title">One concierge, <em>every service</em></h2>
+      </div>
+      <p class="section__lead">Beyond packages — book hotels, flights, visas and travel insurance with one human handling it all.</p>
+    </div>
+
+    <div class="services__grid" id="servicesGrid" data-testid="services-grid">
+      <!-- Cards rendered by travel-script.js — EDIT services in SERVICES array there -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     DOMESTIC PACKAGES
+============================================ -->
+<section class="packages" id="domestic" data-testid="domestic-section">
+  <div class="container">
+    <div class="section__head">
+      <div>
+        <span class="eyebrow">India · Hand-picked</span>
+        <h2 class="section__title">Domestic <em>Packages</em></h2>
+      </div>
+      <a href="#allDomestic" class="section__viewall" data-testid="view-all-domestic">View all <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="pkg__grid" id="domesticGrid" data-testid="domestic-grid">
+      <!-- Rendered from PACKAGES array (region:'Domestic') in travel-script.js -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     INTERNATIONAL PACKAGES
+============================================ -->
+<section class="packages packages--alt" id="international" data-testid="international-section">
+  <div class="container">
+    <div class="section__head">
+      <div>
+        <span class="eyebrow">World · Bucket-list</span>
+        <h2 class="section__title">International <em>Packages</em></h2>
+      </div>
+      <a href="#allIntl" class="section__viewall" data-testid="view-all-intl">View all <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="pkg__grid" id="intlGrid" data-testid="intl-grid">
+      <!-- Rendered from PACKAGES array (region:'International') in travel-script.js -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     POPULAR DESTINATIONS — visual masonry
+============================================ -->
+<section class="destinations" data-testid="destinations-section">
+  <div class="container">
+    <div class="section__head">
+      <div>
+        <span class="eyebrow">Loved by travellers</span>
+        <h2 class="section__title">Popular <em>Destinations</em></h2>
+      </div>
+      <p class="section__lead">Where our travellers keep coming back. Tap any destination to start your quote.</p>
+    </div>
+    <div class="dest__grid" id="destGrid" data-testid="destinations-grid">
+      <!-- EDIT destinations in DESTINATIONS array in travel-script.js -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     WHY BOOK WITH US
+============================================ -->
+<section class="why" data-testid="why-section">
+  <div class="container">
+    <div class="why__head">
+      <span class="eyebrow">The EaseMyBooking promise</span>
+      <h2 class="section__title">Why travellers <em>choose us</em></h2>
+    </div>
+    <div class="why__grid">
+      <div class="whyCard"><i class="fas fa-user-tie"></i><h4>Personal concierge</h4><p>One named expert handles your trip end-to-end — not a ticket queue.</p></div>
+      <div class="whyCard"><i class="fas fa-route"></i><h4>Hand-crafted itineraries</h4><p>Every package built around your dates, vibe and budget — not a fixed template.</p></div>
+      <div class="whyCard"><i class="fas fa-hand-holding-dollar"></i><h4>Best-price guarantee</h4><p>Find a better quote? We'll match it — and add a complimentary upgrade.</p></div>
+      <div class="whyCard"><i class="fas fa-circle-check"></i><h4>Verified partners</h4><p>4-star+ hotels, licensed guides, vetted transfers. No surprises on the ground.</p></div>
+      <div class="whyCard"><i class="fas fa-clock"></i><h4>30-min quote SLA</h4><p>Drop an enquiry on WhatsApp — get a tailored quote in under 30 minutes.</p></div>
+      <div class="whyCard"><i class="fas fa-life-ring"></i><h4>24×7 on-trip support</h4><p>A real human reachable on WhatsApp through your entire holiday.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     TESTIMONIALS
+============================================ -->
+<section class="tTesti" data-testid="testimonials-section">
+  <div class="container">
+    <div class="section__head">
+      <div>
+        <span class="eyebrow">Guest stories</span>
+        <h2 class="section__title">What travellers <em>say</em></h2>
+      </div>
+    </div>
+    <div class="tTesti__grid" id="testiGrid">
+      <!-- EDIT testimonials in TESTIMONIALS array in travel-script.js -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     CTA STRIP
+============================================ -->
+<section class="tCta" data-testid="cta-strip">
+  <div class="container tCta__inner">
+    <div>
+      <span class="eyebrow">Ready when you are</span>
+      <h2 class="tCta__title">Tell us your dream trip. <em>We'll quote in 30 minutes.</em></h2>
+      <p>No call-centre. No spam. Just a real human, on WhatsApp.</p>
+    </div>
+    <a href="https://wa.me/918824880979?text=Hi%20EaseMyBooking%2C%20I%27d%20like%20a%20custom%20travel%20quote." target="_blank" rel="noopener" class="btn btn--gold btn--lg" data-testid="cta-quote-btn"><i class="fab fa-whatsapp"></i> Get My Quote</a>
+  </div>
+</section>
+
+<!-- ============================================
+     FAQ
+============================================ -->
+<section class="faq" id="faq" data-testid="faq-section">
+  <div class="container faq__wrap">
+    <div class="faq__left">
+      <span class="eyebrow">FAQ</span>
+      <h2 class="section__title">Before you <em>book</em></h2>
+      <p class="section__lead">Real questions our travellers ask us before saying yes.</p>
+      <a href="https://wa.me/918824880979" target="_blank" rel="noopener" class="btn btn--gold" data-testid="faq-whatsapp-btn"><i class="fab fa-whatsapp"></i> Ask on WhatsApp</a>
+    </div>
+    <div class="faq__list">
+      <details class="faq__item" open>
+        <summary>Are the package prices final?<i class="fas fa-plus"></i></summary>
+        <p>The price shown is a "starts from" indicative cost per person on twin sharing for the standard category. Your final quote depends on travel dates, hotel category, group size and customisations — we send a transparent itemised quote on WhatsApp within 30 minutes of your enquiry.</p>
+      </details>
+      <details class="faq__item">
+        <summary>Can you customise these packages?<i class="fas fa-plus"></i></summary>
+        <p>Absolutely. 90% of our bookings are customised — extra nights, hotel upgrades, private transfers, specific experiences, dietary preferences. Just share what you want and we'll redesign the itinerary.</p>
+      </details>
+      <details class="faq__item">
+        <summary>What is included in the package?<i class="fas fa-plus"></i></summary>
+        <p>A standard package includes accommodation, daily breakfast, airport transfers, sightseeing on private/SIC basis, and 24×7 concierge support. Flights, visas and travel insurance are optional add-ons (we book those too).</p>
+      </details>
+      <details class="faq__item">
+        <summary>How do I pay?<i class="fas fa-plus"></i></summary>
+        <p>We accept UPI, NEFT, all major credit/debit cards and EMI on most cards. A 25% booking advance secures your trip — balance 7 days before departure.</p>
+      </details>
+      <details class="faq__item">
+        <summary>What about visa & insurance?<i class="fas fa-plus"></i></summary>
+        <p>We provide complete visa assistance (document checklist, application, appointment, follow-up) for 60+ countries and bundle Bajaj/HDFC ERGO travel insurance with every international booking.</p>
+      </details>
+      <details class="faq__item">
+        <summary>What is your cancellation policy?<i class="fas fa-plus"></i></summary>
+        <p>Free cancellation up to 30 days before departure on most packages. 50% refund 15-30 days prior, no refund within 15 days. Flight, visa and insurance fees are non-refundable per provider rules. Detailed policy shared with your quote.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================
+     FOOTER
+============================================ -->
+<footer class="footer" data-testid="footer">
+  <div class="container footer__grid">
+    <div>
+      <a href="travel.html" class="brand brand--light">
+        <span class="brand__mark">E</span>
+        <span class="brand__word">EaseMy<em>Booking</em></span>
+      </a>
+      <p class="footer__about">Premium travel & event experiences — curated holidays, luxury villas, weddings & corporate events.</p>
+      <div class="footer__social">
+        <a href="https://wa.me/918824880979" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="mailto:info@easemybooking.in" aria-label="Email"><i class="fas fa-envelope"></i></a>
+        <a href="https://easemybooking.in/" target="_blank" rel="noopener" aria-label="Website"><i class="fas fa-globe"></i></a>
+      </div>
+    </div>
+    <div>
+      <h4>Travel</h4>
+      <a href="#domestic">Domestic Packages</a>
+      <a href="#international">International Packages</a>
+      <a href="#destinations">Popular Destinations</a>
+      <a href="#services">Services</a>
+    </div>
+    <div>
+      <h4>Other</h4>
+      <a href="https://easemybooking.in/">Home</a>
+      <a href="farmhouse-villas.html">Villas & Farmhouses</a>
+      <a href="list-property.html">List Your Property</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <p><i class="fab fa-whatsapp"></i> +91 88248 80979</p>
+      <p><i class="fas fa-envelope"></i> info@easemybooking.in</p>
+      <p><i class="fas fa-location-dot"></i> India</p>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <p>© <span id="year"></span> EaseMyBooking. Crafted for the extraordinary.</p>
+  </div>
+</footer>
+
+<!-- ============================================
+     FLOATING WHATSAPP
+============================================ -->
+<a href="https://wa.me/918824880979?text=Hi%20EaseMyBooking%2C%20I%27d%20like%20a%20travel%20quote." target="_blank" rel="noopener" class="fab" aria-label="WhatsApp" data-testid="floating-whatsapp">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- ============================================
+     JAVASCRIPT
+============================================ -->
+<script src="travel-script.js"></script>
+</body>
+</html>
