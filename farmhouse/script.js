@@ -9,17 +9,17 @@ const OWNER_EMAIL = 'info@easemybooking.in';
 /* ----------------- PROPERTY DATA ----------------- */
 const PROPERTIES = [
   {
-    id: 'azure-retreat',
-    name: 'Azure Retreat Villa',
-    type: 'Villa',
-    location: 'Goa',
-    state: 'North Goa',
-    guests: 14, beds: 5, baths: 5, rating: 4.9,
-    price: 85000, currency: '₹',
-    featured: true,
-    badge: 'Beachfront',
-    amenities: ['Private Pool','Jacuzzi','Chef','Beach Access','Wi-Fi','AC','Bonfire','Caretaker'],
-    description: 'A modernist beachfront sanctuary in Goa with five suites opening onto an infinity pool. Curated linens, in-villa chef, and a private path to the Arabian Sea.',
+    id: 'ramalaya',
+    name: 'Ramalaya',
+    type: 'Farm House',
+    location: 'Jaipur',
+    state: 'Jaipur',
+    guests: 3, beds: 1, baths: 1, rating: 4.9,
+    price: 4200, currency: '₹',
+    featured: false,
+    // badge: 'Beachfront',
+    amenities: ['Parking','Wi-fi','Balcony','Airconditioning','Geyser','AC','Bonfire','Caretaker', 'TV', ],
+    description: 'Experience the charm of Jaipur like never before in this exclusive 1-room retreat. With a private balcony offering write views of the surroundings and a spacious ensuite bathroom, every moment here feels like a true escape. The shared living area, adorned with elegant decor and a peaceful book corner, provides the perfect space to unwind. What sets this retreat apart is the exceptional 5-star service, where every detail is tailored to make you feel like royalty—guided by the spirit of Atithi Devo Bhava.',
     images: [
       'https://cpjlcwamma.cloudimg.io/ARP_00050_HDR_9906d3fbc0.webp?width=1900&height=1200&func=boundmin&force_format=webp&q=80,
       'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=1400&q=85',
