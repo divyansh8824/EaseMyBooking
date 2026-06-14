@@ -21,7 +21,7 @@ const PROPERTIES = [
     amenities: ['Parking','Wi-fi','Balcony','Airconditioning','Geyser','AC','Bonfire','Caretaker', 'TV', ],
     description: 'Experience the charm of Jaipur like never before in this exclusive 1-room retreat. With a private balcony offering write views of the surroundings and a spacious ensuite bathroom, every moment here feels like a true escape. The shared living area, adorned with elegant decor and a peaceful book corner, provides the perfect space to unwind. What sets this retreat apart is the exceptional 5-star service, where every detail is tailored to make you feel like royalty—guided by the spirit of Atithi Devo Bhava.',
     images: [
-      'https://cpjlcwamma.cloudimg.io/ARP_00050_HDR_9906d3fbc0.webp?width=1900&height=1200&func=boundmin&force_format=webp&q=80',
+      'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=1400&q=85',
       'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=1400&q=85',
       'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1400&q=85',
       'https://images.unsplash.com/photo-1540541338287-41700207dee6?w=1400&q=85',
