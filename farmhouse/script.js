@@ -11,7 +11,7 @@ const PROPERTIES = [
   {
     id: 'ramalaya',
     name: 'Ramalaya',
-    type: 'Farm House',
+    type: 'FarmHouse',
     location: 'Jaipur',
     state: 'Jaipur',
     guests: 3, beds: 1, baths: 1, rating: 4.9,
@@ -409,6 +409,9 @@ function initCardSliders(){
   $('#dTitle').textContent = p.name;
   $('#dAddress').textContent = p.address;
   $('#dLocation').querySelector('span').textContent = `${p.location}, ${p.state}`;
+
+  const addressEl = $('#dAddress');
+  if (addressEl) addressEl.textContent = p.address || '';
   $('#dGuests').textContent = p.guests;
   $('#dBeds').textContent = p.beds;
   $('#dBaths').textContent = p.baths;
