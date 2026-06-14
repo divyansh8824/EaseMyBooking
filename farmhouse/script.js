@@ -21,7 +21,7 @@ const PROPERTIES = [
     amenities: ['Private Pool','Jacuzzi','Chef','Beach Access','Wi-Fi','AC','Bonfire','Caretaker'],
     description: 'A modernist beachfront sanctuary in Goa with five suites opening onto an infinity pool. Curated linens, in-villa chef, and a private path to the Arabian Sea.',
     images: [
-      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1400&q=85',
+      'https://cpjlcwamma.cloudimg.io/ARP_00050_HDR_9906d3fbc0.webp?width=1900&height=1200&func=boundmin&force_format=webp&q=80,
       'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=1400&q=85',
       'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1400&q=85',
       'https://images.unsplash.com/photo-1540541338287-41700207dee6?w=1400&q=85',
