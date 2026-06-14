@@ -407,6 +407,7 @@ function initCardSliders(){
   // Info fields
   $('#dType').textContent = p.type;
   $('#dTitle').textContent = p.name;
+  $('#dAddress').textContent = p.address;
   $('#dLocation').querySelector('span').textContent = `${p.location}, ${p.state}`;
   $('#dGuests').textContent = p.guests;
   $('#dBeds').textContent = p.beds;
