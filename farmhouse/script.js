@@ -62,7 +62,7 @@ const PROPERTIES = [
     location: 'Jaipur',
     state: 'Rajasthan',
     guests: 6, beds: 2, baths: 3, rating: 4.9,
-    price: 7700, currency: '₹',
+    price: 22210, currency: '₹',
     featured: true,
     // badge: 'Lakefront',
     amenities: ['Private Pool','Garden','Balcony','Caretaker','Wi-Fi','AC','Hygiene kit','Parking'],
