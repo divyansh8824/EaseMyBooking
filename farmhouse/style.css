@@ -4,21 +4,14 @@
    ============================================================ */
 
 :root{
-  --bg:           #0e0c0a;          /* near-black espresso */
-  --bg-2:         #161310;
-  --ink:          #f6f1e6;          /* warm cream */
-  --ink-dim:      #c6bba6;
-  --muted:        #8a8170;
-  --line:         rgba(246,241,230,.12);
-  --line-strong:  rgba(246,241,230,.22);
-  --gold:         #c9a24a;          /* signature gold */
-  --gold-2:       #e8c87b;
-  --gold-soft:    rgba(201,162,74,.14);
-  --paper:        #f5efe2;          /* light section */
-  --paper-2:      #ebe3d1;
-  --ink-dark:     #1c1812;
-  --ink-dark-2:   #4a4034;
-  --shadow:       0 30px 80px -30px rgba(0,0,0,.55);
+ --primary:#6B8E6E;
+  --secondary:#2E5E4E;
+  --accent:#F7F3EA;
+  --white:#ffffff;
+  --text:#1f1f1f;
+  --muted:#737373;
+  --border:#e6ded2;
+  --shadow:0 15px 45px rgba(0,0,0,0.08);
   --radius:       18px;
   --radius-sm:    10px;
   --t:            cubic-bezier(.22,.61,.36,1);
