@@ -77,6 +77,18 @@ const PROPERTIES = [
       'Jamun-Farms/7.webp',
       'Jamun-Farms/8.webp',
       'Jamun-Farms/9.webp',
+      'Jamun-Farms/10.webp',
+      'Jamun-Farms/11.webp',
+      'Jamun-Farms/12.webp',
+      'Jamun-Farms/13.webp',
+      'Jamun-Farms/14.webp',
+      'Jamun-Farms/15.webp',
+      'Jamun-Farms/16.webp',
+      'Jamun-Farms/17.webp',
+      'Jamun-Farms/18.webp',
+      'Jamun-Farms/19.webp',
+      'Jamun-Farms/20.webp',
+      'Jamun-Farms/21.webp',
     ]
   },
   {
